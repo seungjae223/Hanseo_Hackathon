@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# 🎓 작당 모의 
+> 한서대 학생들을 위한 **공모전 · 스터디 · 대외활동 · 공간 예약 통합 웹서비스**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-React-blue?logo=react" />
+  <img src="https://img.shields.io/badge/State-Zustand-593D88?logo=zustand" />
+  <img src="https://img.shields.io/badge/Language-JSX-orange" />
+  <img src="https://img.shields.io/badge/Features-LazyLoading-yellow" />
+  <img src="https://img.shields.io/badge/Responsive-Mobile%20CSS-green" />
+</p>
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📌 서비스 개요
+- **목표**: 한서대 학생들이 공모전·스터디·대외활동에 쉽게 참여하고, 교내 공간 예약까지 원스톱으로 해결  
+- **대상**: 한서대 재학생 (학교 이메일 `@hanseo.ac.kr` 인증 필수)  
+- **특징**: 커뮤니티 + 모임 매칭 + 장소 예약 + 학과 네트워킹  
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 주요 기능
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 📝 커뮤니티 & 게시판
+- 익명/실명 게시판 분리 (자유게시판 / 학과·전공 게시판 / 공모전 / 스터디 / 중고장터)
+- 좋아요 👍, 댓글 💬, 대댓글 ↩, 멘션 알림 🔔
+- 주간 인기 글/모임 TOP 5 자동 집계
+- 욕설·스팸 자동 필터링, 신고/블라인드 처리
 
-### `npm test`
+### 🤝 모임 생성 & 참여
+- 모집글 작성 시 **인원/기간/주제/역량** 설정
+- 참여 버튼 클릭 한 번으로 신청  
+- 신청자 목록 공개/비공개 설정
+- **신뢰도 제도**: 성실 참여자 상위 노출 / 불참 시 제재
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 💬 실시간 소통
+- 그룹 채팅 자동 생성 (공지, 파일, 투표 기능 지원)
+- **자동 리마인드 알림** (모임 하루 전 & 당일 오전)
+- 장소 예약 정보와 연동
 
-### `npm run build`
+### 🏫 공간 예약 시스템
+- 빈 강의실·스터디룸·동아리방 예약 현황 대시보드
+- 모집 시 공간 예약 연동
+- 예약자 관리 기능 (출석 체크, 일정 변경)
+- 학번 기준 예약 횟수 제한 & 불참 시 신뢰도 차감
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📱 프론트엔드 특징
+- **React (JSX 기반 컴포넌트 구조)**  
+- **Zustand**: 전역 상태 관리 (간단하고 가벼운 Store)  
+- **Lazy Loading**: 필요한 화면만 로드해 속도 최적화  
+- **Responsive Design (모바일 CSS 대응)**  
+- **재사용 가능한 컴포넌트 구조화**  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🔐 접근 & 인증
+- 한서대 이메일(`@hanseo.ac.kr`) 인증 → 재학생 전용 보장  
+- 학생증 인증 → 공모전/학과 게시판 등 신뢰성 강화  
+- 자유게시판(익명 허용) vs 공식 게시판(실명 필수)  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🌟 기대 효과
+✅ 학생 생활 편의성 향상: 모임+참여+예약 통합  
+✅ 교내 활동 활성화: 공모전·스터디·대외활동 참여율 ↑  
+✅ 건전한 커뮤니티 문화: 필터링 & 신뢰도 시스템  
+✅ 학과/전공 네트워킹 강화  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## ⚡ 기술 스택
 
-## Learn More
+### Frontend
+- React (JSX)
+- Zustand (상태관리)
+- Lazy Loading
+- Responsive CSS (모바일 최적화)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Backend (예상)
+- Node.js (Express) + Flask API
+- DB: PostgreSQL / MongoDB
+- Firebase Hosting / AWS 배포
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 📂 프로젝트 구조 (예시)
+```bash
+frontend/
+ ├── src/
+ │   ├── components/   # 재사용 가능한 컴포넌트
+ │   ├── pages/        # 주요 페이지
+ │   ├── store/        # Zustand 전역 상태
+ │   ├── styles/       # 모바일 대응 CSS
+ │   └── api/          # 백엔드 연동
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
