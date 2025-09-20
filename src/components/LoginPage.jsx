@@ -3,15 +3,13 @@ import useAuthStore from "../store/AuthStore";
 
 function LoginPage() {
   const { login, logout, isLoggedIn, user } = useAuthStore();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // 로그인 요청
-  const handleLogin = async () => {
-    const result = await login(username, password);
+  const handleLogin = () => {
+    const result = login(username, password);
     if (!result.success) {
-      alert("로그인 실패: " + result.message);
+      alert(result.message);
     }
   };
 

@@ -1,57 +1,26 @@
+// src/store/AuthStore.jsx
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-// JWT 기반 로그인 상태 관리
-const useAuthStore = create(
-  persist(
-    (set) => ({
-      user: null,           // 사용자 정보
-      token: null,          // JWT 토큰
-      isLoggedIn: false,    // 로그인 여부
+const useAuthStore = create((set) => ({
+  user: null,
+  token: null,
+  isLoggedIn: false,
 
-      // 로그인 (API 요청 → JWT 토큰 저장)
-      login: async (username, password) => {
-        try {
-          const response = await fetch("https://your-api.com/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-          });
-
-          if (!response.ok) {
-            throw new Error("로그인 실패");
-          }
-
-          const data = await response.json();
-
-          // JWT 토큰 + 유저 정보 저장
-          set({
-            token: data.token,
-            user: data.user,
-            isLoggedIn: true,
-          });
-
-          return { success: true };
-        } catch (error) {
-          console.error("로그인 에러:", error);
-          return { success: false, message: error.message };
-        }
-      },
-
-      // 로그아웃 (스토어 초기화)
-      logout: () =>
-        set({
-          token: null,
-          user: null,
-          isLoggedIn: false,
-        }),
-    }),
-    {
-      name: "auth-storage", // localStorage에 자동 저장
+  // 임시 로그인 (API 대신 하드코딩)
+  login: (username, password) => {
+    if (username === "test" && password === "1234") {
+      set({
+        user: { name: "테스트유저" },
+        token: "fake-jwt-token",
+        isLoggedIn: true,
+      });
+      return { success: true };
+    } else {
+      return { success: false, message: "아이디/비밀번호가 틀립니다." };
     }
-  )
-);
+  },
+
+  logout: () => set({ user: null, token: null, isLoggedIn: false }),
+}));
 
 export default useAuthStore;
