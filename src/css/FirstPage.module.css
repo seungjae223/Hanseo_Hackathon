@@ -1,0 +1,118 @@
+/* ===== 레이아웃: 모바일 안전영역 + 주소창 높이 대응 ===== */
+.container {
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding:
+    max(16px, 4vw)
+    max(16px, 4vw)
+    calc(max(16px, 4vw) + env(safe-area-inset-bottom))
+    max(16px, 4vw);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 3.5vw, 24px);
+}
+
+/* ===== 로고/일러스트 ===== */
+.logoWrap {
+  position: relative;
+  width: clamp(140px, 64vw, 320px);
+  max-width: 420px;
+  bottom: 120px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 메인 링: 얇게! */
+.base {
+    position: relative;
+  fill: none;
+  stroke: url(#ringGrad);
+  stroke-linecap: round;
+  /* 이전보다 한 단계 얇게: 3~6px */
+  stroke-width: clamp(3px, 0.9vw, 6px);
+}
+
+/* 회전 아크: 메인 링보다 더 얇게 + 짧게 */
+.arc {
+  fill: none;
+  stroke: url(#arcGrad);
+  stroke-linecap: round;
+  /* 2~4px 정도의 아주 얇은 선 */
+  stroke-width: clamp(2px, 0.7vw, 4px);
+  /* 단일 아크만 보이게 (pathLength=100 기준) */
+  stroke-dasharray: 22 78;   /* ← 더 짧고 가늘게 보이는 값 */
+  stroke-dashoffset: 0;
+  opacity: 0.8;
+  filter: none;
+}
+
+/* 회전 속도는 그대로 */
+.spinner {
+  animation: spin 2.0s linear infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 안쪽 일러스트 */
+.illustration {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* ===== 타이포 ===== */
+.title {
+    position: relative;
+  font-weight: 800;
+  bottom: 130px;
+  font-size: clamp(28px, 9vw, 44px);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+    position: relative;
+    bottom: 120px;
+  font-size: clamp(12px, 3.8vw, 16px);
+  color: #000000;
+  opacity: 0.9;
+}
+
+/* ===== 접근성/환경 대응 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}
+
+
+
+/* ===== 브레이크포인트 ===== */
+@media (max-width: 360px) {
+  .title { font-size: clamp(24px, 9.5vw, 32px); }
+  .subtitle { font-size: clamp(11px, 3.6vw, 14px); }
+  /* 초소형 기기에서도 얇게 유지 */
+  .base { stroke-width: clamp(4px, 1.4vw, 6px); }
+  .arc  { stroke-width: calc(clamp(4px, 1.4vw, 6px) - 1px); }
+}
+
+@media (min-width: 768px) {
+  .container { gap: clamp(16px, 2.6vw, 28px); }
+  .logoWrap { width: clamp(240px, 36vw, 420px); }
+}
+
+@media (orientation: landscape) and (max-height: 480px) {
+  .container {
+    justify-content: flex-start;
+    padding-top: max(16px, 6vh);
+  }
+}
