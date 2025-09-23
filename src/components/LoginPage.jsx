@@ -1,58 +1,40 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import useAuthStore from "../store/AuthStore";
-import "../css/LoginPage.css";
+import React from "react";
+import styles from "../css/LoginPage.module.css";
 
-function LoginPage() {
-  const { login, logout, isLoggedIn, user } = useAuthStore();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    const result = login(username, password);
-    if (!result.success) {
-      alert(result.message);
-    }
-  };
-
+const LoginPage = () => {
   return (
-    <div className="login-container">
-      {isLoggedIn ? (
-        <div className="welcome-box">
-          <h2>{user?.name} 님 환영합니다 🎉</h2>
-          <button className="logout-btn" onClick={logout}>
-            로그아웃
-          </button>
-        </div>
-      ) : (
-        <div className="login-box">
-          <h2 className="login-title">로그인</h2>
-          <input
-            type="text"
-            placeholder="아이디"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="login-input"
-          />
-          <input
-            type="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="login-input"
-          />
-          <button className="login-btn" onClick={handleLogin}>
-            로그인
-          </button>
+    <main className={styles.container}>
+      <div className={styles.card}>
+        {/* 로고 텍스트 */}
+        <h1 className={styles.title}>작당모의</h1>
 
-          {/* 회원가입으로 이동하는 링크 */}
-          <p className="signup-link">
-            아직 계정이 없으신가요? 👉 <Link to="/signup">회원가입</Link>
-          </p>
-        </div>
-      )}
-    </div>
+        {/* 이메일 입력 */}
+        <label className={styles.label} htmlFor="email">
+          한서대학교 웹메일
+        </label>
+        <input
+          id="email"
+          type="email"
+          placeholder="이메일 입력"
+          className={styles.input}
+        />
+
+        {/* 비밀번호 입력 */}
+        <label className={styles.label} htmlFor="password">
+          비밀번호
+        </label>
+        <input
+          id="password"
+          type="password"
+          placeholder="비밀번호 입력"
+          className={styles.input}
+        />
+
+        {/* 하단 링크 */}
+        <p className={styles.link}>회원가입 / 비밀번호 찾기</p>
+      </div>
+    </main>
   );
-}
+};
 
 export default LoginPage;
