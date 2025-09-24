@@ -1,0 +1,85 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #eaf5f8;
+  border-radius: 20px;
+  padding: 24px;
+  width: 50%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.logoWrapModal {
+  margin-bottom: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.inputGroup label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.inputGroup input {
+  width: 95%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ddd;
+  font-size: 14px;
+}
+
+.loginBtn {
+  background: #ffdb00;
+  border: none;
+  padding: 10px 0;
+  width: 40%;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 12px 0;
+  cursor: pointer;
+}
+.Modal_logo {
+  width: 170px;
+  height: 90px;
+}
+.links {
+  font-size: 14px;
+  margin-top: 8px;
+  color: #000;
+}
+/* 📱 모바일 대응 */
+@media (max-width: 480px) {
+  .modalContent {
+    width: 70%;        /* 화면의 90% */
+    max-width: 320px;  /* 너무 넓지 않게 제한 */
+    padding: 20px;
+  }
+
+  .Modal_logo {
+    width: 175px;
+    height: 70px;
+  }
+
+  .loginBtn {
+    width: 94px;   /* 모바일에서도 고정 크기 */
+    height: 34px;
+  }
+}

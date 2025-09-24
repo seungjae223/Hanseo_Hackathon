@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../css/MainPage.module.css";
+
+/* ===== 컴포넌트 ===== */
+import Header from "../components/Header";
+import LoginModal from "../components/LoginModal";
 
 /* ===== 아이콘 ===== */
 import RightArrow from "../assets/VectorRight.png";
@@ -8,13 +12,15 @@ import SearchIcon from "../assets/Search.png";
 import PopularIcon from "../assets/인기글.png";
 
 export default function MainPage() {
+  const [showLogin, setShowLogin] = useState(false);
+
   return (
     <div className={styles.container}>
       {/* 배너 */}
       <section className={styles.banner}>
-          <p className={styles.bannerText}>
-    당신의 아이디어, 지금 함께 실행할 팀을 만나보세요!
-  </p>
+        <p className={styles.bannerText}>
+          당신의 아이디어, 지금 함께 실행할 팀을 만나보세요!
+        </p>
       </section>
 
       {/* 네비 아이콘 */}
@@ -64,6 +70,9 @@ export default function MainPage() {
         <div className={styles.popularItem}></div>
         <div className={styles.popularItem}></div>
       </div>
+
+      {/* 로그인 모달 */}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </div>
   );
 }

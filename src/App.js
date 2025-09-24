@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./components/LoginModal";
-import SignupPage from "../src/components/SignUp"
+import SignupPage from "../src/components/SignUpModal"
 import FirstPage from "./components/FirstPage";
 import MainPage from "./components/MainPage";
 import Header from "./components/Header";
