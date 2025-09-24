@@ -11,7 +11,7 @@ const FirstPage = () => {
   useEffect(() => {
     // 3초 후 로그인 페이지로 이동
     const timer = setTimeout(() => {
-      navigate("/login"); // 로그인 라우트 경로에 맞게 수정
+      navigate("/Mainpage"); // 로그인 라우트 경로에 맞게 수정
     }, 10000);
 
     return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 제거
@@ -25,11 +25,11 @@ const FirstPage = () => {
             <linearGradient id="ringGrad" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stopColor="#d0d1d4" />
               <stop offset="60%" stopColor="#bfe8ff" />
-              <stop offset="100%" stopColor="#7ec5eb" />
+              <stop offset="100%" stopColor="#81CEEB" />
             </linearGradient>
             <linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#c8efff" />
-              <stop offset="100%" stopColor="#5bb8eb" />
+              <stop offset="100%" stopColor="#81CEEB" />
             </linearGradient>
           </defs>
 

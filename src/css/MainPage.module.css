@@ -1,0 +1,209 @@
+.container {
+  max-width: 480px;   /* 모바일 기준 최대 너비 */
+  margin: 0 auto;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.loginBtn {
+  background: #ffdb00;
+  border: none;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.mypage {
+  color: #333;
+}
+
+/* ===== Banner ===== */
+.banner {
+  background: #81CEEA;
+  border-radius: 2px;
+  margin-top: 30px;
+  margin: 0 -11px;
+  padding: 10px 16px;   /* 텍스트 주위 여백만 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bannerText {
+  color: #222;
+  font-size: 15px;       /* 글씨 크기 줄임 */
+  font-weight: 400;      /* 너무 굵지 않게 */
+  text-align: center;
+  line-height: 1.5;      /* 줄간격 */
+  max-width: 90%;        /* 모바일 대응 */
+  word-break: keep-all;  /* 단어 단위 줄바꿈 (한글 자연스럽게) */
+}
+
+/* ===== Nav ===== */
+.nav {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.circle {
+  width: 70px;
+  height: 70px;
+  background: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+/* ===== Search ===== */
+.searchBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: 16px 0;
+  background: #fff;
+}
+
+.searchBox input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+.searchIcon {
+  width: 20px;
+  margin-right: 6px;
+}
+
+/* ===== Project Section ===== */
+.projectSection {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.projectList {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.projectCard {
+  width: 80px;
+  height: 100px;
+  background: #e0f0f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.arrowBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.arrowBtn img {
+  width: 28px;
+  height: 28px;
+}
+
+/* ===== Gallery ===== */
+.gallery {
+  background: #e0f0f5;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.galleryItem {
+  background: #c4dfe6;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+}
+
+/* ===== Popular Section ===== */
+.popularHeader {
+  margin: 16px 0 8px;
+}
+
+.popularHeader img {
+  height: 32px;
+}
+
+.popularList {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  background: #e0f0f5;
+  padding: 12px;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.popularItem {
+  width: 50px;
+  height: 50px;
+  background: #c4dfe6;
+  border-radius: 6px;
+}
+
+/* ===== 반응형 추가 ===== */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .banner {
+    width: 98%;
+    height: 90px;  /* 모바일에서 배너 높이 줄임 */
+  }
+
+  .circle {
+    width: 60px;
+    height: 60px;
+    font-size: 12px;
+  }
+
+  .projectCard {
+    width: 70px;
+    height: 90px;
+  }
+
+  .galleryItem {
+    height: 70px;
+  }
+
+  .popularItem {
+    width: 40px;
+    height: 40px;
+  }
+}
