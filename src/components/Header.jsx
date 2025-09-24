@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import styles from "../css/Header.module.css";
-
-/* 이미지 */
 import Logo from "../assets/작당모의.png";
 import LoginBtnImg from "../assets/로그인.png";
 
-/* 모달들 */
+/* 모달 컴포넌트 */
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
+import FindPasswordModal from "../components/FindpassWordModal"; // ✅ 추가
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [showFindPassword, setShowFindPassword] = useState(false); // ✅ 추가
 
   return (
     <header className={styles.header}>
@@ -39,6 +39,10 @@ export default function Header() {
             setShowLogin(false);
             setShowSignUp(true);
           }}
+          onFindPasswordClick={() => {
+            setShowLogin(false);
+            setShowFindPassword(true);
+          }}
         />
       )}
 
@@ -46,6 +50,13 @@ export default function Header() {
       {showSignUp && (
         <SignUpModal
           onClose={() => setShowSignUp(false)}
+        />
+      )}
+
+      {/* 비밀번호 찾기 모달 */}
+      {showFindPassword && (
+        <FindPasswordModal
+          onClose={() => setShowFindPassword(false)}
         />
       )}
     </header>

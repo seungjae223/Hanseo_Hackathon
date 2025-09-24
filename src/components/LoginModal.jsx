@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../css/LoginModal.module.css";
 import Logo from "../assets/작당모의.png";
 
-export default function LoginModal({ onClose, onSignUpClick }) {
+export default function LoginModal({ onClose, onSignUpClick, onFindPasswordClick }) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div
@@ -28,9 +28,15 @@ export default function LoginModal({ onClose, onSignUpClick }) {
         <button className={styles.loginBtn}>로그인</button>
 
         {/* 회원가입 / 비밀번호 찾기 */}
-        <p className={styles.links} onClick={onSignUpClick}>
-          회원가입 / 비밀번호 찾기
-        </p>
+        <div className={styles.links}>
+          <span onClick={onSignUpClick} style={{ cursor: "pointer" }}>
+            회원가입
+          </span>
+          {" / "}
+          <span onClick={onFindPasswordClick} style={{ cursor: "pointer" }}>
+            비밀번호 찾기
+          </span>
+        </div>
       </div>
     </div>
   );
