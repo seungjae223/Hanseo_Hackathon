@@ -15,8 +15,8 @@
 .wrap{ width:min(480px,92vw); margin:12px auto 80px; font-family:var(--font-sans); }
 
 /* 검색 */
-.searchBox{ display:flex; align-items:center; gap:10px; height:48px; padding:0 14px; border:2px solid #111; border-radius:var(--radius-pill); background:var(--surface); box-shadow:var(--shadow-2); margin-bottom:14px; }
-.searchIcon{ width:18px; height:18px; opacity:.85; flex:0 0 18px; }
+.searchBox{ display:flex; align-items:center; gap:5px; height:30px; padding:0 14px; border:2px solid #111; border-radius:var(--radius-pill); background:var(--surface); box-shadow:var(--shadow-2); margin-bottom:14px; }
+.searchIcon{ width:18px; height:24px; opacity:.85; flex:0 0 18px; }
 .searchInput{ flex:1; font-size:14px; border:0; outline:0; background:transparent; }
 .searchInput::placeholder{ color:#9aa7ac; }
 
@@ -32,7 +32,7 @@
 .highlightViewport{
   position:relative;
   overflow:hidden;                 /* 티커 한 줄만 보이도록 */
-  height:44px;                     /* 캡슐 전체 높이 */
+  height:50px;                     /* 캡슐 전체 높이 */
   background:#f1f1f1;              /* 연한 배경 */
   border-radius:10px;
 }
@@ -47,7 +47,7 @@
   position:absolute;
   left:28px; right:28px;           /* 위 바보다 더 짧게 */
   top:30px;                        /* 아래로 내려 간격 확보 */
-  height:10px;
+  height:30px;
   background:#d3d4d6;
   border-radius:12px;
   box-shadow:0 1px 2px rgba(0,0,0,.06);
@@ -59,7 +59,7 @@
   position:absolute;
   left:18px; right:18px;           /* 받침보다 넓게 */
   top:8px;
-  height:30px;
+  height:40px;
   background:#aeb1b3;
   border-radius:10px;
   padding:0 36px 0 16px;           /* 우측 하트 자리 */
@@ -78,7 +78,8 @@
 
 /* 하트 — 진한 바 안쪽 우상단 */
 .highlightHeart{
-  position:absolute; right:18px; top:10px; width:16px; height:16px; z-index:3;
+  position:relative; 
+  right:58px; top:10px; width:16px; height:16px; z-index:3;
   filter:brightness(1.05) sepia(1) saturate(6) hue-rotate(330deg); /* 노란 느낌 */
 }
 

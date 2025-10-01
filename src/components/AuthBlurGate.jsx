@@ -7,8 +7,8 @@ export default function AuthBlurGate({
   isVerified,
   blurPx = 10,
   overlayColor = "rgba(0,0,0,0.25)",
-  showNotice = false,            // ✅ 추가: 배너 보이기/숨기기
-  children,
+  showNotice = false,
+  children, // ✅ children을 매개변수로 받아서 no-undef 해결
 }) {
   const locked = !(isAuthenticated && isVerified);
 
@@ -16,17 +16,32 @@ export default function AuthBlurGate({
     if (!locked) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [locked]);
 
+  // ✅ no-useless-computed-key 해결: 문자열 리터럴 키 사용
   const styleVars = useMemo(
-    () => ({ ["--blurPx"]: `${blurPx}px`, ["--overlayColor"]: overlayColor }),
+    () => ({
+      "--blurPx": `${blurPx}px`,
+      "--overlayColor": overlayColor,
+    }),
     [blurPx, overlayColor]
   );
 
   return (
-    <div className={styles.gateRoot} style={styleVars} aria-busy={locked} aria-live="polite">
-      <div className={`${styles.content} ${locked ? styles.blurred : styles.clear}`}>
+    <div
+      className={styles.gateRoot}
+      style={styleVars}
+      aria-busy={locked}
+      aria-live="polite"
+    >
+      <div
+        className={`${styles.content} ${
+          locked ? styles.blurred : styles.clear
+        }`}
+      >
         {children}
       </div>
 
@@ -36,7 +51,9 @@ export default function AuthBlurGate({
           {showNotice && (
             <div className={styles.panel}>
               <h2 className={styles.title}>접근을 위해 인증이 필요합니다</h2>
-              <p className={styles.sub}>로그인 후 인증을 완료하면 화면이 해제됩니다.</p>
+              <p className={styles.sub}>
+                로그인 후 인증을 완료하면 화면이 해제됩니다.
+              </p>
             </div>
           )}
         </div>
@@ -50,6 +67,6 @@ AuthBlurGate.propTypes = {
   isVerified: PropTypes.bool.isRequired,
   blurPx: PropTypes.number,
   overlayColor: PropTypes.string,
-  showNotice: PropTypes.bool,      // ✅ 추가
-  children: PropTypes.node,
+  showNotice: PropTypes.bool,
+  children: PropTypes.node, // ✅ 정의 유지
 };

@@ -168,7 +168,7 @@ export default function RecruitListPanel({ savedItems }) {
           </div>
         </div>
       ) : (
-        /* 펼친 상태: 오른쪽 그림처럼 ‘패널’로 확장되고 내부는 스크롤 */
+        /* 펼친 상태: 패널로 확장되고 내부는 스크롤 */
         <div className={styles.highlightPanel}>
           <div className={styles.panelHeader}>
             <span className={styles.panelTitle}>찜한 게시글</span>
@@ -200,7 +200,10 @@ export default function RecruitListPanel({ savedItems }) {
           {["전체", "공모전", "프로젝트", "스터디"].map((t) => (
             <button
               key={t}
-              className={`${styles.chip} ${selected === t ? styles.chipActive : ""}`}
+              className={`${styles.chip} ${styles.chipTile} ${
+                selected === t ? styles.chipActiveTile : ""
+              }`}
+              aria-pressed={selected === t}
               onClick={() => setSelected(t)}
             >
               {t}

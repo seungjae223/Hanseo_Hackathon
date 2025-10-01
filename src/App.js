@@ -1,25 +1,33 @@
+// src/App.js
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import LoginPage from "./components/LoginModal";
-import SignupPage from "../src/components/SignUpModal"
-import FirstPage from "./components/FirstPage";
-import MainPage from "./components/MainPage";
-import Header from "./components/Header";
-import AuthBlurGate from "./components/AuthBlurGate";
-function App() {
-   const isAuthenticated = false; // !!user
-  const isVerified = false;      // user?.emailVerified === true
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Lazy, { LazyBoundary } from "./components/common/LazyLoading";
 
+function App() {
   return (
     <Router>
-    <Header/>
-      <Routes>
-        <Route path="/" element={<FirstPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/Mainpage" element={<MainPage />} />
-      </Routes>
+      <LazyBoundary>
+        {/* 공통 헤더 */}
+        <Lazy.Header />
+
+        <Routes>
+          <Route path="/" element={<Lazy.FirstPage />} />
+          <Route path="/login" element={<Lazy.LoginModal />} />
+          <Route path="/signup" element={<Lazy.SignUpModal />} />
+          <Route path="/Mainpage" element={<Lazy.MainPage />} />
+          {/* 보호 라우트가 필요하면 아래 참고
+          <Route
+            path="/protected"
+            element={
+              <Lazy.AuthBlurGate isAuthed={true} isVerified={true}>
+                <Lazy.ProtectedPage />
+              </Lazy.AuthBlurGate>
+            }
+          />
+          */}
+        </Routes>
+      </LazyBoundary>
     </Router>
   );
 }
