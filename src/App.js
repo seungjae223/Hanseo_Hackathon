@@ -1,11 +1,16 @@
 import React from "react";
+import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./components/LoginModal";
 import SignupPage from "../src/components/SignUpModal"
 import FirstPage from "./components/FirstPage";
 import MainPage from "./components/MainPage";
 import Header from "./components/Header";
+import AuthBlurGate from "./components/AuthBlurGate";
 function App() {
+   const isAuthenticated = false; // !!user
+  const isVerified = false;      // user?.emailVerified === true
+
   return (
     <Router>
     <Header/>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "../css/Header.module.css";
 import Logo from "../assets/작당모의.png";
 import LoginBtnImg from "../assets/로그인.png";
@@ -6,19 +7,21 @@ import LoginBtnImg from "../assets/로그인.png";
 /* 모달 컴포넌트 */
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
-import FindPasswordModal from "../components/FindpassWordModal"; // ✅ 추가
+import FindPasswordModal from "../components/FindpassWordModal"; 
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-  const [showFindPassword, setShowFindPassword] = useState(false); // ✅ 추가
+  const [showFindPassword, setShowFindPassword] = useState(false); 
 
   return (
     <header className={styles.header}>
       {/* 좌측 로고 */}
-      <div className={styles.logoWrap}>
-        <img src={Logo} alt="작당모의 로고" className={styles.logo} />
-      </div>
+     <div className={styles.logoWrap}>
+  <Link to="/Mainpage" aria-label="메인으로 이동">
+    <img src={Logo} alt="작당모의 로고" className={styles.logo} />
+  </Link>
+</div>
 
       {/* 우측 버튼들 */}
       <div className={styles.rightMenu}>

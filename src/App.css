@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+/* ===== emergency scroll fix ===== */
+/* 문서 스크롤 강제 허용 */
+html, body, #root {
+  position: static !important;
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* 루트 직속 자식들이 100vh/overflow로 막는 경우 해제 */
+#root > * {
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
+}
+
+/* 흔한 가해자들: .App/.page/.wrapper 등에서 100vh + hidden */
+.App, .page, .wrapper {
+  height: auto !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+}
+
+/* 인라인 스타일이나 컴포넌트 CSS에서 overflow: hidden이 남아있는 경우 무력화 */
+*[style*="overflow: hidden"] { overflow: visible !important; }
+
+/* 모달 열릴 때 body 잠금이 남아있다면, 그때만 이 클래스를 쓰고 평소엔 해제 */
+body.scroll-lock { overflow: hidden !important; }

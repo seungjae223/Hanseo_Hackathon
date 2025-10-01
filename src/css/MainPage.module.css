@@ -1,209 +1,261 @@
-.container {
-  max-width: 480px;   /* 모바일 기준 최대 너비 */
-  margin: 0 auto;
-  padding: 16px;
-  font-family: sans-serif;
+:root{
+  --brand-blue:#81CEEA;  /* 배너 */
+  --ink:#0f0f10;
+  --muted:#7a7a7a;
+  --line:#e2e4e6;
+  --soft:#f7f8f8;
+  --pill:#eef7fa;
+  --card:#eaf5f8;
+}
+
+/* ===== 전체 레이아웃 ===== */
+.frame{
+  width:100%;
+  max-width:603px;        /* 목업 최대폭 */
+  margin:0 auto;
+  background:#fff;
+  color:var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto,
+    "Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+
+/* ===== 히어로 ===== */
+.hero{
+  background:var(--brand-blue);
+  padding:clamp(28px, 7vw, 46px) clamp(16px, 5vw, 28px);
+  text-align:center;
+}
+.heroTitle{
+  margin:0;
+  font-weight:800;
+  font-size:clamp(22px, 6vw, 36px);
+  line-height:1.28;
+  letter-spacing:-0.4px;
+}
+
+/* ===== 원형 카테고리 ===== */
+.pillRow{
+  display:flex;
+  justify-content:space-between;
+  gap:clamp(8px, 3vw, 20px);
+  padding:clamp(14px, 4vw, 26px) clamp(16px, 8vw, 48px) clamp(8px, 2.6vw, 14px);
+}
+.pill{
+  width:clamp(72px, 18vw, 118px);
+  height:clamp(72px, 18vw, 118px);
+  border-radius:50%;
+  background:#e9eef1;
+  border:1px solid #d3d7da;
+  display:grid; place-items:center;
+  font-size:clamp(14px, 3.8vw, 26px);
+  font-weight:800;
+  letter-spacing:-0.3px;
+  color:#121212;
+}
+.pillPlus{ font-size:clamp(22px, 6vw, 48px); font-weight:900; }
+
+/* ===== 시그널(실시간) 박스 ===== */
+.signalBox{
+  margin:clamp(6px, 2vw, 8px) clamp(12px, 5vw, 30px) clamp(16px, 4vw, 28px);
+  border-radius:16px;
+  background:#f7f8f8;
+  border:1px solid #e3e5e6;
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+  padding:clamp(10px, 2.6vw, 14px);
+}
+.signalTopBar{
+  display:flex; align-items:center; justify-content:space-between;
+  background:#ececec;
+  border-radius:10px;
+  padding:clamp(8px, 2.5vw, 12px) clamp(10px, 3vw, 16px);
+  border:1px solid #e1e1e1;
+}
+.signalTitle{ font-weight:800; font-size:clamp(14px, 3.2vw, 18px); color:#3b3b3b; }
+.signalGuide{ font-weight:800; font-size:clamp(12px, 3vw, 16px); color:#7b7b7b; }
+
+.signalMeta{
+  display:flex; gap:clamp(8px, 2.6vw, 14px); align-items:center; flex-wrap:wrap;
+  padding:clamp(8px, 2.4vw, 10px) 4px clamp(4px, 1.6vw, 6px) clamp(6px, 2vw, 6px);
+  font-size:clamp(11px, 3vw, 13px);
+}
+.signalDate{ color:#0ea5b7; font-weight:800; }
+.signalHelp{ color:#8b8b8b; font-weight:600; }
+
+.signalContent{
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #e0e0e0;
+  padding:clamp(10px, 2.8vw, 14px) clamp(12px, 3vw, 16px);
+}
+.signalGrid{
+  display:grid;
+  grid-template-columns: 1fr 32px 1fr;
+  row-gap:clamp(6px, 2.4vw, 10px);
+  column-gap:8px;
+  font-size:clamp(14px, 3.8vw, 18px);
+  line-height:1.45;
+  letter-spacing:-0.2px;
+}
+.mid{
+  text-align:center;
+  color:#2f2f2f;
+  font-weight:700;
+}
+
+/* ===== 검색창(슬림) ===== */
+.searchWrap{ padding:clamp(10px, 3vw, 18px) clamp(16px, 4.8vw, 28px) clamp(6px, 2.4vw, 12px); }
+
+.searchBox{
+  position:relative;
+  height:clamp(36px, 9.3vw, 56px);
+  border:clamp(1px, .35vw, 2px) solid #111;
+  border-radius:999px;
+  display:flex; align-items:center;
+  box-shadow: 0 10px 28px rgba(0,0,0,.06);
+  background:#fff;
+}
+.searchIcon{
+  position:absolute; left:clamp(10px, 3vw, 18px); top:50%; transform:translateY(-50%);
+  width:clamp(14px, 3.6vw, 22px);
+  height:clamp(14px, 3.6vw, 22px);
+  opacity:.95;
+}
+.searchInput{
+  flex:1; height:100%;
+  border:none; outline:none; background:transparent;
+  padding:0 clamp(12px, 3.6vw, 20px) 0 clamp(36px, 9vw, 54px);
+  font-size:clamp(13px, 4.2vw, 22px);
+  font-weight:800;
+  color:#666;
+  letter-spacing:-0.3px;
+}
+
+/* ===== 캐러셀 ===== */
+.carousel {
+  position: relative;
+  width: 100%;
+  padding: 24px 32px;           /* 좌우 여백 */
   box-sizing: border-box;
 }
 
-/* ===== Header ===== */
-.header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.loginBtn {
-  background: #ffdb00;
-  border: none;
-  padding: 6px 12px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.mypage {
-  color: #333;
-}
-
-/* ===== Banner ===== */
-.banner {
-  background: #81CEEA;
-  border-radius: 2px;
-  margin-top: 30px;
-  margin: 0 -11px;
-  padding: 10px 16px;   /* 텍스트 주위 여백만 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bannerText {
-  color: #222;
-  font-size: 15px;       /* 글씨 크기 줄임 */
-  font-weight: 400;      /* 너무 굵지 않게 */
+.carouselTitle {
+  margin: 0 0 12px 0;           /* 타이틀이 ‘위’에 오도록 여백 */
   text-align: center;
-  line-height: 1.5;      /* 줄간격 */
-  max-width: 90%;        /* 모바일 대응 */
-  word-break: keep-all;  /* 단어 단위 줄바꿈 (한글 자연스럽게) */
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e2a32;
 }
 
-/* ===== Nav ===== */
-.nav {
+/* 트랙+버튼을 감싸는 뷰포트: 버튼 수직 중앙 정렬 기준 */
+.carouselViewport {
+  position: relative;
+  width: 100%;
+  height: 176px;                 /* 스크린샷 비율 */
   display: flex;
-  justify-content: space-around;
-  margin: 16px 0;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.circle {
-  width: 70px;
-  height: 70px;
-  background: #ddd;
-  border-radius: 50%;
-  display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  font-size: 14px;
 }
 
-/* ===== Search ===== */
-.searchBox {
-  display: flex;
-  align-items: center;
-  border: 1px solid #000;
-  border-radius: 20px;
-  padding: 4px 8px;
-  margin: 16px 0;
-  background: #fff;
-}
-
-.searchBox input {
-  border: none;
-  outline: none;
-  flex: 1;
-  padding: 6px 8px;
-  font-size: 14px;
-}
-
-.searchIcon {
-  width: 20px;
-  margin-right: 6px;
-}
-
-/* ===== Project Section ===== */
-.projectSection {
-  display: flex;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.projectList {
-  display: flex;
-  gap: 8px;
-  flex: 1;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.projectCard {
-  width: 80px;
-  height: 100px;
-  background: #e0f0f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-}
-
-.arrowBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.arrowBtn img {
-  width: 28px;
-  height: 28px;
-}
-
-/* ===== Gallery ===== */
-.gallery {
-  background: #e0f0f5;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  border-radius: 8px;
-  margin: 20px 0;
-}
-
-.galleryItem {
-  background: #c4dfe6;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-}
-
-/* ===== Popular Section ===== */
-.popularHeader {
-  margin: 16px 0 8px;
-}
-
-.popularHeader img {
+/* 좌우 작은 회색 동그라미 버튼 (그림자 X) */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
   height: 32px;
+  border-radius: 9999px;
+  border: none;
+  background: #6b6b6b;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: none;              /* 오른쪽 시안처럼 큰 그림자 금지 */
+  padding: 0;
 }
+.navBtn img {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+.navLeft { left: 8px; }
+.navRight { right: 8px; }
 
-.popularList {
+/* 카드 트랙: 가로 정렬 + 고정 간격, 버튼과 겹치지 않도록 좌우 패딩 */
+.rail {
   display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  background: #e0f0f5;
-  padding: 12px;
+  gap: 24px;                     /* 카드 간격 (왼쪽 느낌) */
+  overflow: hidden;              /* 1차: 슬라이드만, 스크롤바 숨김 */
+  padding: 0 48px;               /* 버튼과 카드 사이 여유 */
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+/* 카드: 옅은 하늘색, 그림자 없음 */
+.card {
+  width: 116px;
+  height: 156px;
   border-radius: 8px;
-  flex-wrap: wrap;
+  background: #eaf5f7;
+  box-shadow: none;              /* 평평하게 */
+  flex: 0 0 auto;
+}
+.carouselTitle{
+  margin-top:clamp(6px, 2.4vw, 10px);
+  text-align:center;
+  font-size:clamp(14px, 3.6vw, 18px);
+  font-weight:800;
+  color:#1d1d1f;
 }
 
-.popularItem {
-  width: 50px;
-  height: 50px;
-  background: #c4dfe6;
-  border-radius: 6px;
+/* 좌우 네비 */
+.navBtn{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:clamp(28px, 7vw, 38px);
+  height:clamp(28px, 7vw, 38px);
+  border-radius:50%;
+  background:#7a7a7a; border:none; padding:0;
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+.navBtn img{
+  width:clamp(14px, 3.8vw, 20px);
+  height:clamp(14px, 3.8vw, 20px);
+}
+.navLeft{ left:8px; }
+.navRight{ right:8px; }
+
+/* ===== 하단 갤러리 ===== */
+.galleryWrap{ padding:0 clamp(16px, 4.8vw, 28px) clamp(26px, 7vw, 52px); }
+.gallery{
+  background:var(--card);
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.05);
+  padding:clamp(14px, 4vw, 22px);
+}
+.gGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(10px, 3.6vw, 16px);
+}
+.gCell{
+  height:clamp(88px, 22vw, 118px);
+  background:#d2e6ec;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.06);
+}
+.gCaption{
+  text-align:center;
+  margin-top:clamp(6px, 2.6vw, 10px);
+  font-size:clamp(14px, 3.6vw, 18px);
+  font-weight:800;
+  color:#1f1f1f;
 }
 
-/* ===== 반응형 추가 ===== */
-@media (max-width: 480px) {
-  .container {
-    padding: 12px;
-  }
-
-  .banner {
-    width: 98%;
-    height: 90px;  /* 모바일에서 배너 높이 줄임 */
-  }
-
-  .circle {
-    width: 60px;
-    height: 60px;
-    font-size: 12px;
-  }
-
-  .projectCard {
-    width: 70px;
-    height: 90px;
-  }
-
-  .galleryItem {
-    height: 70px;
-  }
-
-  .popularItem {
-    width: 40px;
-    height: 40px;
-  }
+/* 접근성 & 모션 감소 */
+button{ font: inherit; color: inherit; background: none; border: none; padding: 0; }
+button:focus{ outline: 2px solid #000; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce){
+  .rail{ scroll-behavior: auto; }
 }

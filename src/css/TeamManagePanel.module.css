@@ -1,0 +1,91 @@
+:root {
+  --mint: #e8f3f5;      /* 카드 배경 */
+  --block: #cfdfe3;     /* 큰 회색 블록 */
+  --thumb: #c7d6da;     /* 썸네일 박스 */
+  --badge: #d7ecef;     /* 배지 배경 */
+  --line: #d9e6ea;      /* 구분선 */
+}
+
+.card {
+  background: var(--mint);
+  align-items: center;
+  border-radius: 24px;
+  padding: 16px 18px 18px;
+  width: 90%;
+  box-sizing: border-box;
+  margin-left: 18px;
+}
+
+/* 상단 작은 배지 라인 */
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.badge,
+.badgeLight {
+  display: inline-block;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  background: var(--badge);
+  color: #4b5b62;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.badgeLight::after {
+  content: "";
+}
+
+/* 썸네일 + 큰 블록 나란히 */
+.blockRow,
+.blockRowLast {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.blockRowLast { margin-bottom: 0; }
+
+.thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  background: var(--thumb);
+}
+
+.bigBlockTitle,
+.bigBlock {
+  height: 64px;
+  border-radius: 10px;
+  background: var(--block);
+}
+
+.bigBlockTitle {
+  display: grid;
+  place-items: center;
+  color: #333;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.hr {
+  height: 1px;
+  border: 0;
+  background: var(--line);
+  margin: 16px 0;
+}
+
+/* 반응형 살짝 */
+@media (max-width: 480px) {
+  .blockRow, .blockRowLast {
+    grid-template-columns: 60px 1fr;
+  }
+  .thumb { width: 60px; height: 60px; }
+  .bigBlockTitle, .bigBlock { height: 56px; }
+}

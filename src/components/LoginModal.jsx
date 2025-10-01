@@ -1,10 +1,30 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../css/LoginModal.module.css";
 import Logo from "../assets/작당모의.png";
 
 export default function LoginModal({ onClose, onSignUpClick, onFindPasswordClick }) {
+  const navigate = useNavigate();
+
+  const handleOverlayClose = () => {
+    if (onClose) return onClose();
+    // 중첩 라우트라면 상위(/Mainpage)로 복귀
+    try { navigate("..", { replace: true }); } catch (e) {}
+  };
+
+  const goSignup = () => {
+    if (onSignUpClick) return onSignUpClick();
+    // /Mainpage 하위 라우팅 기준 상대 이동
+    navigate("signup", { replace: true });
+  };
+
+  const goForgot = () => {
+    if (onFindPasswordClick) return onFindPasswordClick();
+    navigate("forgot", { replace: true });
+  };
+
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClose}>
       <div
         className={styles.modalContent}
         onClick={(e) => e.stopPropagation()}
@@ -29,11 +49,11 @@ export default function LoginModal({ onClose, onSignUpClick, onFindPasswordClick
 
         {/* 회원가입 / 비밀번호 찾기 */}
         <div className={styles.links}>
-          <span onClick={onSignUpClick} style={{ cursor: "pointer" }}>
+          <span onClick={goSignup} style={{ cursor: "pointer" }}>
             회원가입
           </span>
           {" / "}
-          <span onClick={onFindPasswordClick} style={{ cursor: "pointer" }}>
+          <span onClick={goForgot} style={{ cursor: "pointer" }}>
             비밀번호 찾기
           </span>
         </div>
