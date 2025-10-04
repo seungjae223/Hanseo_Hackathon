@@ -69,6 +69,34 @@
   z-index: 3;
 }
 
+.pfi1{
+  width: 93px;
+  height: 150px;
+  top: 10px;
+  left: 25%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+.pfi2{
+  width: 100px;
+  height: 150px;
+  top: 10px;
+  left: 23%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+.pfi3{
+  width: 100px;
+  height: 150px;
+  top: 10px;
+  left: 23%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+
 .pf-btn{
   position: absolute;
   width: 90px;

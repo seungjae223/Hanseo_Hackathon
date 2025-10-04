@@ -4,8 +4,12 @@ import bg1 from '../image/background1.png';
 import bg2 from '../image/background2.png';
 import back from '../image/back.png';
 import set from '../image/setting.png';
+import pfi1 from '../image/pfi1.png';
+import pfi2 from '../image/pfi2.png';
+import pfi3 from '../image/pfi3.png';
 
 export default function Mypage() {
+  const profileImages = [pfi1, pfi2, pfi3]; // 프로필 이미지 배열
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
     name: "주노",
@@ -13,11 +17,20 @@ export default function Mypage() {
     grade: "3학년",
     dept: "컴퓨터공학과",
     email: "juno@hanseo.ac.kr",
-    tags: ["#태그1", "#태그2", "#태그3"]
+    tags: ["#태그1", "#태그2", "#태그3"],
+    profileImage: pfi1 // 기본 프로필 이미지
   });
 
+  // 프로필 정보 변경
   const handleChange = (e, field) => {
     setProfile({ ...profile, [field]: e.target.value });
+  };
+
+  // 프로필 이미지 변경 (순환)
+  const handleImageChange = () => {
+    const currentIndex = profileImages.indexOf(profile.profileImage);
+    const nextIndex = (currentIndex + 1) % profileImages.length;
+    setProfile({ ...profile, profileImage: profileImages[nextIndex] });
   };
 
   return (
@@ -27,7 +40,23 @@ export default function Mypage() {
       <img src={back} alt="뒤로가기" className="back"/>
       <img src={set} alt="설정 아이콘" className="setting"/>
       <p className="pf">프로필 설정</p>
-      <div className="white"></div>
+
+      {/* 대표 프로필 이미지 (흰 칸 클릭 시 변경) */}
+      <div 
+        className="white"
+        onClick={editing ? handleImageChange : undefined}
+        style={{cursor: editing ? "pointer" : "default"}}
+      >
+        <img 
+          src={profile.profileImage} 
+          alt="프로필"
+          className={
+            profile.profileImage === pfi1 ? "pfi1" :
+            profile.profileImage === pfi2 ? "pfi2" : "pfi3"
+          }
+        />
+      </div>
+
       <div className="pf-btn" onClick={() => setEditing(true)}>
         <p>프로필 설정</p>
       </div>
@@ -71,9 +100,18 @@ export default function Mypage() {
         <div className="row">
           <span className="label">관심태그</span>
           {editing ? 
-            <input type="text" value={profile.tags.join(", ")} onChange={(e) => setProfile({...profile, tags: e.target.value.split(", ")})} /> :
+            <input 
+              type="text" 
+              value={profile.tags.join(", ")} 
+              onChange={(e) => setProfile({
+                ...profile, 
+                tags: e.target.value.split(", ")
+              })} 
+            /> :
             <div className="tags">
-              {profile.tags.map((tag, idx) => <span key={idx} className="tag">{tag}</span>)}
+              {profile.tags.map((tag, idx) => 
+                <span key={idx} className="tag">{tag}</span>
+              )}
             </div>
           }
         </div>
