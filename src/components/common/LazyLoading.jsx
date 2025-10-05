@@ -1,7 +1,7 @@
-// src/components/common/LazyLoading.jsx
+
 import React, { lazy, Suspense } from "react";
 
-/** 기본 로딩 UI */
+
 export function DefaultFallback() {
   return (
     <div
@@ -17,7 +17,7 @@ export function DefaultFallback() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          border: "4px solid rgba(0,0,0,.1)",
+          border: "4px solid rgba(0, 0, 0, 0.1)",
           borderTopColor: "currentColor",
           animation: "spin 1s linear infinite",
         }}
@@ -67,8 +67,8 @@ export const Lazy = {
   LoadingSpinner: lazyRetry(() => import(/* webpackChunkName: "loading-spinner" */ "../Loadingspinner.jsx")),
 };
 
-/** 프리패치(선택) */
-export const prefetchSeungjae = {
+/** 프리패치*/
+export const prefetch = {
   first: () => import(/* webpackPrefetch: true */ "../FirstPage.jsx"),
   main: () => import(/* webpackPrefetch: true */ "../MainPage.jsx"),
   recruit: () => import(/* webpackPrefetch: true */ "../RecruitListPanel.jsx"),

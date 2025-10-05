@@ -41,6 +41,7 @@
   padding:clamp(14px, 4vw, 26px) clamp(16px, 8vw, 48px) clamp(8px, 2.6vw, 14px);
 }
 .pill{
+  position:relative;                 /* 애니메이션용 */
   width:clamp(72px, 18vw, 118px);
   height:clamp(72px, 18vw, 118px);
   border-radius:50%;
@@ -51,7 +52,52 @@
   font-weight:800;
   letter-spacing:-0.3px;
   color:#121212;
+
+  /* 클릭 이펙트 기본 설정 */
+  overflow:hidden;                   /* 링이 밖으로 안 새게 */
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .12s ease, box-shadow .12s ease;
 }
+/* 살짝 눌림 */
+.pill:active{
+  transform:scale(.96);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+
+
+/* 클릭 시 바깥 링 퍼짐 */
+.pill.isPulsing::after{
+  content:"";
+  position:absolute;
+  inset:-4px;                        /* 버튼보다 약간 크게 */
+  border-radius:50%;
+  border:3px solid #111;             /* 바깥 검은 링 */
+  opacity:1;
+  animation:ring-pop .45s ease-out forwards;
+}
+/* 내부 얇은 링 페이드(옵션) */
+.pill.isPulsing::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:50%;
+  border:2px solid rgba(0,0,0,.15);
+  opacity:0;
+  animation:inner-fade .45s ease-out forwards;
+}
+
+@keyframes ring-pop{
+  0%   { transform:scale(.9);  opacity:.9; }
+  70%  { transform:scale(1.15); opacity:.5; }
+  100% { transform:scale(1.25); opacity:0; }
+}
+@keyframes inner-fade{
+  0%   { opacity:.6; }
+  100% { opacity:0; }
+}
+
 .pillPlus{ font-size:clamp(22px, 6vw, 48px); font-weight:900; }
 
 /* ===== 시그널(실시간) 박스 ===== */

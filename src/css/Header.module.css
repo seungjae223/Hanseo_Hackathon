@@ -7,10 +7,25 @@
 }
 
 .logo {
+  display: block;
+
     width: 108px;
   height: 41.93px;
 }
+@keyframes pop-bounce {
+  0%   { transform: scale(1) rotate(0deg); }
+  35%  { transform: scale(0.92) rotate(-1.5deg); }
+  65%  { transform: scale(1.08) rotate(0.6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.logoBounce{
+  animation: pop-bounce .32s ease-out both;
+}
 
+/* 선택사항: 누르는 순간의 작은 피드백 */
+.logoBtn:active .logo{
+  transform: scale(0.96);
+}
 .rightMenu {
   display: flex;
   align-items: center;
@@ -18,10 +33,14 @@
 }
 
 .loginBtn {
-  border: none;
   background: none;
+  border: 0;
+  padding: 0;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
+
 .Login-img {
   width: 63px;        /* ✅ 버튼 고정 크기 */
   height: 27px;

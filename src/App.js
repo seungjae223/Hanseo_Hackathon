@@ -1,7 +1,7 @@
 // src/App.js
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Lazy, { LazyBoundary } from "./components/common/LazyLoading";
 
 function App() {
@@ -16,16 +16,10 @@ function App() {
           <Route path="/login" element={<Lazy.LoginModal />} />
           <Route path="/signup" element={<Lazy.SignUpModal />} />
           <Route path="/Mainpage" element={<Lazy.MainPage />} />
-          {/* 보호 라우트가 필요하면 아래 참고
-          <Route
-            path="/protected"
-            element={
-              <Lazy.AuthBlurGate isAuthed={true} isVerified={true}>
-                <Lazy.ProtectedPage />
-              </Lazy.AuthBlurGate>
-            }
-          />
-          */}
+          <Route path="/recruit/:id" element={<Lazy.RecruitDetail />} />
+
+          {/* 존재하지 않는 경로 → 홈으로 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </LazyBoundary>
     </Router>

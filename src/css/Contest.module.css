@@ -1,0 +1,76 @@
+:root{
+  --border:#101010;       /* 검색창 테두리(얇고 선명) */
+  --skeleton:#d9d9d9;     /* 회색 블록 톤 */
+}
+
+/* 시안 폭/여백 */
+.wrap{
+  width:min(520px, 92vw);
+  margin:12px auto 100px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;               /* 블록 사이 간격 */
+}
+
+/* ───────── 검색바: 얇은 테두리, 작은 아이콘, 둥근 24px ───────── */
+.searchBar{
+  height:48px;
+  border:1.5px solid var(--border);
+  border-radius:24px;
+  display:flex; align-items:center;
+  padding:0 14px;
+  background:#fff;
+  box-shadow:none;        /* 그림자 없음 (시안처럼 플랫) */
+}
+.searchIcon{
+  width:18px; height:18px; object-fit:contain;
+  margin-right:12px;
+  opacity:.95;
+}
+.searchInput{
+  width:100%; height:100%;
+  border:none; outline:none; background:transparent;
+  font-size:14px; color:#202020;
+}
+
+/* ───────── 카드/칩: 그림자 제거, 라운드 작게 ───────── */
+.cardXL{
+  height:182px;                   /* 상단 큰 카드 높이 */
+  background:var(--skeleton);
+  border-radius:12px;
+}
+.centerText{
+  display:flex; align-items:center; justify-content:center;
+  height:100%;
+  font-weight:700; font-size:24px; color:#222; letter-spacing:-.2px;
+}
+
+.cardLG{
+  height:168px;                   /* 중/하단 카드 높이 */
+  background:var(--skeleton);
+  border-radius:12px;
+}
+
+.chipsRow{
+  display:flex; gap:20px;
+  padding:0 6px;
+}
+.chip{
+  height:36px;
+  background:var(--skeleton);
+  border-radius:9999px;
+}
+/* 칩 폭을 조금씩 다르게 해서 시안 비례 맞춤 */
+.chipSm{ width:96px; }
+.chipMd{ width:120px; }
+
+/* 모바일에서도 같은 비례 유지 */
+@media (max-width:420px){
+  .wrap{ gap:16px; }
+  .searchBar{ height:46px; border-radius:22px; }
+  .cardXL{ height:176px; }
+  .cardLG{ height:160px; }
+  .chip{ height:34px; }
+  .chipSm{ width:92px; }
+  .chipMd{ width:112px; }
+}

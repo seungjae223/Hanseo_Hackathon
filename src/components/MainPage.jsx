@@ -1,16 +1,37 @@
-import React, { useRef, useState } from "react";
+// src/pages/MainPage.jsx
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../css/MainPage.module.css";
 
 import SearchIcon from "../assets/Search.png";
 import LeftIcon from "../assets/left.png";
 import RightIcon from "../assets/VectorRight.png";
+
 import TeamManagePanel from "./TeamManagePanel";
 import RecruitListPanel from "./RecruitListPanel";
+import Contest from "./Contest";
+import Matching from "./Matching";
 
 export default function MainPage() {
   const railRef = useRef(null);
   const [query, setQuery] = useState("");
-  const [tab, setTab] = useState("default"); // 'default' = 기존 화면, 'team' = 팀관리, 'recruit' = 모집
+  // 'default' = 기본, 'team' = 팀관리, 'recruit' = 모집, 'contest' = 공모전, 'matching' = 장소 매칭
+  const [tab, setTab] = useState("default");
+
+  // ▼ 헤더 로고에서 navigate("/Mainpage", { state: { reset: Date.now() } })
+  //    형태로 보낸 "리셋 신호"를 감지해 첫 화면 상태로 초기화
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.state?.reset) {
+      setTab("default");
+      setQuery("");
+      // 스크롤 맨 위로
+      window.scrollTo({ top: 0, behavior: "instant" });
+      // 한 번 처리 후 state 제거(뒤로가기 시 중복 리셋 방지)
+      navigate(".", { replace: true, state: null });
+    }
+  }, [location.state, navigate]);
 
   const scrollByStep = (dx) => {
     railRef.current?.scrollBy({ left: dx, behavior: "smooth" });
@@ -47,6 +68,12 @@ export default function MainPage() {
         >
           공모전
         </button>
+        <button
+          className={`${styles.pill} ${tab === "matching" ? styles.pillActive : ""}`}
+          onClick={() => setTab("matching")}
+        >
+          장소 매칭
+        </button>
       </section>
 
       {/* ▼ 탭별 화면 전환 */}
@@ -56,9 +83,19 @@ export default function MainPage() {
           <TeamManagePanel />
         </section>
       ) : tab === "recruit" ? (
-        /* ✅ 모집 전용 화면 */
+        /* 모집 전용 화면 */
         <section className={styles.teamPanelArea}>
           <RecruitListPanel />
+        </section>
+      ) : tab === "contest" ? (
+        /* 공모전 전용 화면 */
+        <section className={styles.teamPanelArea}>
+          <Contest />
+        </section>
+      ) : tab === "matching" ? (
+        /* 장소 매칭 전용 화면 */
+        <section className={styles.teamPanelArea}>
+          <Matching />
         </section>
       ) : (
         /* 기본 화면 */
