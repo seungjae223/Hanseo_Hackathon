@@ -1,43 +1,43 @@
-// src/components/TeamManagePanel.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../css/TeamManagePanel.module.css";
 
+// 포스터 목업 이미지(원하는 파일로 교체)
+import Poster from "../assets/contest_poster.png";
+
+const MOCK = [
+  { id: 1, tag: "스터디", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 2, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 3, tag: "스터디", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 4, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+];
+
 export default function TeamManagePanel() {
-  // ✅ 섹션 구성만 추가해서, 카드 안에서 여러 블록이 보이고 스크롤되게 처리
-  const SECTIONS = [
-    { key: "design", label: "디자인", bigTitle: true },   // "요청사항" 큰 타이틀
-    { key: "fe", label: "프론트엔드", bigTitle: false },  // 일반 블록
-    { key: "etc1", label: "", bigTitle: false },          // 동그란 작은 배지(빈 라벨)
-    { key: "etc2", label: "", bigTitle: false },          // 한 섹션 더
-  ];
+  const navigate = useNavigate();
 
   return (
-    <section className={styles.card}>
-      {/* ✅ CSS 수정 없이 내부만 세로 스크롤되도록 */}
-      <div style={{ maxHeight: "78vh", overflowY: "auto", paddingRight: 2 }}>
-        {SECTIONS.map((sec, idx) => (
-          <React.Fragment key={sec.key}>
-            <div className={styles.row}>
-              {sec.label ? (
-                <span className={styles.badge}>{sec.label}</span>
-              ) : (
-                <span className={styles.badgeLight} />
-              )}
+    <section className={styles.wrap} aria-label="상단 포스터 그리드">
+      <div className={styles.grid}>
+        {MOCK.map((it) => (
+          <article
+            key={it.id}
+            className={styles.item}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/team/${it.id}`)}
+            onKeyDown={(e) => e.key === "Enter" && navigate(`/team/${it.id}`)}
+          >
+            <div className={styles.thumbWrap}>
+              <img src={it.img} alt="" className={styles.thumb} />
             </div>
 
-            {/* 섹션의 본문 한 줄 */}
-            <div className={idx === SECTIONS.length - 1 ? styles.blockRowLast : styles.blockRow}>
-              <div className={styles.thumb} />
-              {sec.bigTitle ? (
-                <div className={styles.bigBlockTitle}>요청사항</div>
-              ) : (
-                <div className={styles.bigBlock} />
-              )}
+            <div className={styles.meta}>
+              <span className={styles.chip}>{it.tag}</span>
+              <h3 className={styles.title}>{it.title}</h3>
+              <p className={styles.dday}>D-{it.dday}</p>
             </div>
-
-            {/* 마지막 섹션 전까지만 구분선 */}
-            {idx !== SECTIONS.length - 1 && <hr className={styles.hr} />}
-          </React.Fragment>
+          </article>
         ))}
       </div>
     </section>

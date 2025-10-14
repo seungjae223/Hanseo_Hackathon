@@ -1,0 +1,153 @@
+:root{
+  --brand-blue:#FED800;  /* 배너 */
+  --ink:#0f0f10;
+  --muted:#7a7a7a;
+  --line:#e2e4e6;
+  --soft:#f7f8f8;
+  --pill:#eef7fa;
+  --card:#eaf5f8;
+}
+
+/* ===== 전체 레이아웃 ===== */
+.frame{
+  width:100%;
+  max-width:603px;        /* 목업 최대폭 */
+  margin:0 auto;
+  background:#fff;
+  color:var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto,
+    "Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+
+
+/* ===== 히어로 ===== */
+.hero{
+  background:var(--brand-blue);
+  padding: 20px 16px 30px 16px;
+  text-align:left;
+}
+.heroTitle{
+  margin:0;
+  font-weight:800;
+  font-size: 24px;
+  line-height:1.3;
+  letter-spacing:-0.4px;
+  color: #000;
+}
+
+/* ===== 메인 콘텐츠 영역 ===== */
+.mainContent{
+  background:#fff;
+  padding: 20px 16px;
+  min-height: calc(100vh - 200px);
+}
+
+.cardContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.card{
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.cardHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cardInfo{
+  flex: 1;
+}
+
+.cardTitle{
+  font-size: 16px;
+  font-weight: 800;
+  color: #000;
+  margin: 0 0 2px 0;
+}
+
+.cardSubtitle{
+  font-size: 12px;
+  color: #000;
+  margin: 0;
+}
+
+.cardAvatar{
+  width: 40px;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatarIcon{
+  width: 24px;
+  height: 24px;
+  background: #666;
+  border-radius: 4px;
+  position: relative;
+}
+
+.avatarIcon::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 4px;
+  background: #666;
+  border-radius: 2px 2px 0 0;
+}
+
+.avatarIcon::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 3px;
+  background: #666;
+  border-radius: 1px 1px 0 0;
+  margin-left: 1px;
+}
+
+.cardDivider{
+  height: 1px;
+  background: #e0e0e0;
+  margin: 8px 0;
+}
+
+.cardTags{
+  display: flex;
+  gap: 6px;
+}
+
+.tag{
+  width: 50px;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+}
+
+.tag:nth-child(2){
+  width: 65px;
+}
+
+.tag:nth-child(3){
+  width: 55px;
+}

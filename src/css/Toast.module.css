@@ -1,0 +1,110 @@
+:root{
+  --toast-bg: #efefef;
+  --toast-ink: var(--ink, #111);
+  --toast-shadow: 0 18px 40px rgba(0,0,0,.15);
+}
+
+/* ===== 토스트 ===== */
+.viewport{
+  position: fixed;
+  top: clamp(8px, 3.2vw, 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toastWrap{
+  position: relative; /* 컨페티 기준 */
+  display: flex;
+  justify-content: center;
+}
+
+.toast{
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px 14px 28px;
+  border-radius: 9999px;
+  background: var(--toast-bg);
+  color: var(--toast-ink);
+  box-shadow: var(--toast-shadow);
+  border: 0;
+  font: 600 18px/1.2 var(--font-sans, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif);
+  cursor: pointer;
+  user-select: none;
+  transform-origin: top center;
+  transition: transform .2s ease, opacity .2s ease, filter .2s ease;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.02));
+}
+
+.msg{ white-space: nowrap; }
+.iconImg{
+  display:block;
+  width:22px;
+  height:22px;
+  object-fit:contain;
+}
+
+/* 🔔 흔들림 애니메이션 */
+@keyframes bellRing {
+  0%   { transform: rotate(0deg) }
+  10%  { transform: rotate(14deg) }
+  20%  { transform: rotate(-12deg) }
+  30%  { transform: rotate(10deg) }
+  40%  { transform: rotate(-8deg) }
+  50%  { transform: rotate(6deg) }
+  60%  { transform: rotate(-4deg) }
+  70%  { transform: rotate(2deg) }
+  80%  { transform: rotate(-1deg) }
+  100% { transform: rotate(0deg) }
+}
+
+.ringing{
+  /* 이미지의 윗부분을 축으로 살짝 흔들리도록 */
+  transform-origin: 50% 10%;
+  animation: bellRing 1.1s ease-in-out infinite;
+}
+
+/* 접근성: 모션 줄이기 설정일 경우 정지 */
+@media (prefers-reduced-motion: reduce){
+  .ringing{ animation: none !important; }
+}
+/* 등장 애니메이션 */
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-12px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.toast[data-enter]{ animation: slideDownFade .28s ease-out both; }
+.toast:active{ transform: translateY(-2px) scale(.995); opacity: .85; }
+
+/* ===== 컨페티 이미지 ===== */
+.confettiBox{
+  position: absolute;
+  left: 50%;
+  top: -6px;                    /* 토스트 바로 위 */
+  transform: translateX(-50%);
+  width: 480px;                 /* 흩어지는 범위 */
+  height: 120px;                /* 낙하 높이 */
+  pointer-events: none;
+  overflow: visible;
+}
+
+.pieceImg{
+  position: absolute;
+  top: 0;
+  height: auto;
+  opacity: .95;
+  animation-name: confettiFall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+/* 낙하 + 회전 */
+@keyframes confettiFall{
+  0%   { transform: translateY(-8px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(110px) rotate(540deg); opacity: .45; }
+}

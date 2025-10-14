@@ -39,4 +39,3 @@ html, body, #root {
 *[style*="overflow: hidden"] { overflow: visible !important; }
 
 /* 모달 열릴 때 body 잠금이 남아있다면, 그때만 이 클래스를 쓰고 평소엔 해제 */
-body.scroll-lock { overflow: hidden !important; }

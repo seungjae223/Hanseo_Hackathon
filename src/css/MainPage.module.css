@@ -1,5 +1,5 @@
 :root{
-  --brand-blue:#81CEEA;  /* 배너 */
+  --brand-blue:#FED800;  /* 배너 */
   --ink:#0f0f10;
   --muted:#7a7a7a;
   --line:#e2e4e6;
@@ -33,13 +33,48 @@
   letter-spacing:-0.4px;
 }
 
-/* ===== 원형 카테고리 ===== */
+/* ===================================================== */
+/* ========== ▼ 아이콘 3개 섹션(스샷과 동일) ▼ ========= */
+/* 히어로와 겹쳐 보이는 흰색 라운드 면 */
+.surface{
+  background:#fff;
+  margin-top:-18px;                 /* 배너 위로 살짝 겹치기 */
+  border-radius:24px 24px 0 0;
+  padding:18px 14px 6px;
+  box-shadow:0 -4px 0 rgba(0,0,0,0.02);
+}
+
+/* 아이콘 3개 줄 */
+.featureRow{
+  list-style:none; padding:0; margin:4px 0 18px;
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:12px; place-items:center;
+}
+
+/* 각각의 아이콘 버튼 */
+.feature{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  background:transparent; border:none; padding:0; cursor:pointer;
+}
+.featureCircle{
+  width:72px; height:72px; border-radius:50%;
+  background:#fff; display:grid; place-items:center;
+  box-shadow:0 10px 26px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.06) inset;
+}
+.featureCircle img{ width:44px; height:auto; display:block; }
+.featureLabel{ font-size:13px; color:var(--ink); font-weight:800; }
+/* ===================================================== */
+/* ========== ▲ 아이콘 3개 섹션(스샷과 동일) ▲ ========= */
+
+/* ===== 원형 카테고리 (기존 pill 스타일은 보존) ===== */
 .pillRow{
   display:flex;
   justify-content:space-between;
   gap:clamp(8px, 3vw, 20px);
   padding:clamp(14px, 4vw, 26px) clamp(16px, 8vw, 48px) clamp(8px, 2.6vw, 14px);
 }
+
+/* ★ 다이내믹 애니메이션 적용 */
 .pill{
   position:relative;                 /* 애니메이션용 */
   width:clamp(72px, 18vw, 118px);
@@ -52,44 +87,83 @@
   font-weight:800;
   letter-spacing:-0.3px;
   color:#121212;
-
-  /* 클릭 이펙트 기본 설정 */
   overflow:hidden;                   /* 링이 밖으로 안 새게 */
   user-select:none;
   -webkit-tap-highlight-color:transparent;
-  transition:transform .12s ease, box-shadow .12s ease;
+
+  /* 움직임 부드럽게 */
+  transition:
+    transform .18s cubic-bezier(.2,.9,.25,1),
+    box-shadow .22s ease,
+    border-color .22s ease,
+    background-color .22s ease;
+  will-change: transform, box-shadow;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
-/* 살짝 눌림 */
-.pill:active{
-  transform:scale(.96);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+
+/* 호버: 비활성일 때만 살짝 떠오름 */
+.pill:hover:not(.pillActive){
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
 }
 
+/* 눌림: 비활성일 때만 살짝 눌림 */
+.pill:active:not(.pillActive){
+  transform: translateY(0) scale(.96);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+}
 
+/* ✅ 활성 탭(선택됨): 올라간 상태 유지 */
+.pillActive{
+  border-color:#0ea5b7;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(0,0,0,.10), 0 0 0 3px rgba(14,165,183,.10);
+}
 
-/* 클릭 시 바깥 링 퍼짐 */
+/* 활성 + 호버: 조금 더 떠오름 */
+.pillActive:hover{
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 18px 36px rgba(0,0,0,.12), 0 0 0 3px rgba(14,165,183,.12);
+}
+
+/* 활성 + 클릭: 여전히 위로 유지하며 살짝만 눌림 */
+.pillActive:active{
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10), 0 0 0 3px rgba(14,165,183,.12);
+}
+
+/* 클릭 시 팝-바운스 + 이중 링 */
+.pill.isPulsing{
+  animation: pill-pop .46s cubic-bezier(.22,1.4,.3,1) both;
+}
 .pill.isPulsing::after{
   content:"";
   position:absolute;
-  inset:-4px;                        /* 버튼보다 약간 크게 */
+  inset:-4px;
   border-radius:50%;
-  border:3px solid #111;             /* 바깥 검은 링 */
-  opacity:1;
+  border:3px solid rgba(0,0,0,.55);
   animation:ring-pop .45s ease-out forwards;
 }
-/* 내부 얇은 링 페이드(옵션) */
 .pill.isPulsing::before{
   content:"";
   position:absolute;
-  inset:8px;
+  inset:10px;
   border-radius:50%;
-  border:2px solid rgba(0,0,0,.15);
-  opacity:0;
+  border:2px solid rgba(0,0,0,.22);
   animation:inner-fade .45s ease-out forwards;
 }
 
+/* 팝-바운스(튕겼다 자리 잡기) — 활성 느낌으로 착지 */
+@keyframes pill-pop{
+  0%   { transform: translateY(0)    scale(.96); }
+  48%  { transform: translateY(-6px) scale(1.08); }
+  78%  { transform: translateY(2px)  scale(.98);  }
+  100% { transform: translateY(-4px) scale(1.02); } /* ← 유지 */
+}
+
+/* 바깥/안쪽 링 */
 @keyframes ring-pop{
-  0%   { transform:scale(.9);  opacity:.9; }
+  0%   { transform:scale(.9);   opacity:.9; }
   70%  { transform:scale(1.15); opacity:.5; }
   100% { transform:scale(1.25); opacity:0; }
 }
@@ -150,14 +224,12 @@
 
 /* ===== 검색창(슬림) ===== */
 .searchWrap{ padding:clamp(10px, 3vw, 18px) clamp(16px, 4.8vw, 28px) clamp(6px, 2.4vw, 12px); }
-
 .searchBox{
   position:relative;
   height:clamp(36px, 9.3vw, 56px);
-  border:clamp(1px, .35vw, 2px) solid #111;
   border-radius:999px;
   display:flex; align-items:center;
-  box-shadow: 0 10px 28px rgba(0,0,0,.06);
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
   background:#fff;
 }
 .searchIcon{
@@ -177,100 +249,78 @@
 }
 
 /* ===== 캐러셀 ===== */
-.carousel {
-  position: relative;
-  width: 100%;
-  padding: 24px 32px;           /* 좌우 여백 */
-  box-sizing: border-box;
+.carousel{
+  position:relative;
+  width:100%;
+  padding:24px 32px;
+  box-sizing:border-box;
 }
 
-.carouselTitle {
-  margin: 0 0 12px 0;           /* 타이틀이 ‘위’에 오도록 여백 */
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1e2a32;
-}
-
-/* 트랙+버튼을 감싸는 뷰포트: 버튼 수직 중앙 정렬 기준 */
-.carouselViewport {
-  position: relative;
-  width: 100%;
-  height: 176px;                 /* 스크린샷 비율 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 좌우 작은 회색 동그라미 버튼 (그림자 X) */
-.navBtn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 9999px;
-  border: none;
-  background: #6b6b6b;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  box-shadow: none;              /* 오른쪽 시안처럼 큰 그림자 금지 */
-  padding: 0;
-}
-.navBtn img {
-  width: 14px;
-  height: 14px;
-  display: block;
-}
-.navLeft { left: 8px; }
-.navRight { right: 8px; }
-
-/* 카드 트랙: 가로 정렬 + 고정 간격, 버튼과 겹치지 않도록 좌우 패딩 */
-.rail {
-  display: flex;
-  gap: 24px;                     /* 카드 간격 (왼쪽 느낌) */
-  overflow: hidden;              /* 1차: 슬라이드만, 스크롤바 숨김 */
-  padding: 0 48px;               /* 버튼과 카드 사이 여유 */
-  width: 100%;
-  box-sizing: border-box;
-  align-items: center;
-}
-
-/* 카드: 옅은 하늘색, 그림자 없음 */
-.card {
-  width: 116px;
-  height: 156px;
-  border-radius: 8px;
-  background: #eaf5f7;
-  box-shadow: none;              /* 평평하게 */
-  flex: 0 0 auto;
-}
 .carouselTitle{
-  margin-top:clamp(6px, 2.4vw, 10px);
+  margin:0 0 12px 0;
   text-align:center;
-  font-size:clamp(14px, 3.6vw, 18px);
-  font-weight:800;
-  color:#1d1d1f;
+  font-size:18px;
+  font-weight:700;
+  color:#1e2a32;
 }
 
-/* 좌우 네비 */
+/* 버튼 기준이 되는 뷰포트 */
+.carouselViewport{
+  position:relative;
+  width:100%;
+  height:176px;
+  display:flex;
+  align-items:center;
+  justify-content:center;     
+}
+
+/* 좌우 네비(중복 정리 + z-index 추가) */
 .navBtn{
-  position:absolute; top:50%; transform:translateY(-50%);
-  width:clamp(28px, 7vw, 38px);
-  height:clamp(28px, 7vw, 38px);
-  border-radius:50%;
-  background:#7a7a7a; border:none; padding:0;
-  display:grid; place-items:center; cursor:pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;
+  height:32px;
+  border-radius:9999px;
+  border:none;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  box-shadow:none;          /* 큰 그림자 금지 */
+  padding:0;
+  z-index:5;               /* ← 트랙/카드 위에 놓기 */
 }
 .navBtn img{
-  width:clamp(14px, 3.8vw, 20px);
-  height:clamp(14px, 3.8vw, 20px);
+  width:25px;
+  height:25px;
+  display:block;
 }
 .navLeft{ left:8px; }
 .navRight{ right:8px; }
+
+/* 트랙: 버튼과 레이어 분리 */
+.rail{
+  position:relative;
+  z-index:1;                 /* ← 버튼보다 낮게 */
+  display:flex;
+  gap:24px;                  /* 카드 간격 */
+  overflow:hidden;           /* 스크롤바 숨김 */
+  padding:0 48px;            /* 버튼과 카드 사이 여유 */
+  width:100%;
+  box-sizing:border-box;
+  align-items:center;
+}
+
+/* 카드: 옅은 하늘색, 그림자 없음 */
+.card{
+  width:116px;
+  height:156px;
+  border-radius:8px;
+  background:#eaf5f7;
+  box-shadow:none;
+  flex:0 0 auto;
+}
 
 /* ===== 하단 갤러리 ===== */
 .galleryWrap{ padding:0 clamp(16px, 4.8vw, 28px) clamp(26px, 7vw, 52px); }
@@ -299,9 +349,41 @@
   color:#1f1f1f;
 }
 
-/* 접근성 & 모션 감소 */
+/* ─────────────────────────────────────────────
+   접근성 & 모션 감소 + 포커스 링 커스텀
+   ───────────────────────────────────────────── */
 button{ font: inherit; color: inherit; background: none; border: none; padding: 0; }
-button:focus{ outline: 2px solid #000; outline-offset: 2px; }
+
+/* 1) 기본 outline 제거 (마우스 클릭 포함) */
+:where(button, input, select, textarea):focus{ outline: none; }
+
+/* 2) 키보드 탐색(Tab)일 때만 부드러운 포커스 링 표시 */
+:where(button, input, select, textarea):focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14,165,183,.35);
+  transition: box-shadow .2s ease;
+}
+
+/* 컴포넌트별 보강 */
+.pill:focus-visible{
+  box-shadow: 0 6px 24px rgba(0,0,0,.08), 0 0 0 4px rgba(14,165,183,.45);
+  border-color:#0ea5b7;
+}
+.searchBox .searchInput:focus-visible{
+  box-shadow: 0 0 0 3px rgba(14,165,183,.35);
+  border-color:#0ea5b7;
+}
+.navBtn:focus-visible{
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(14,165,183,.55);
+}
+
+/* 모션 최소화 환경 배려 */
 @media (prefers-reduced-motion: reduce){
+  .pill,
+  .pill:hover,
+  .pill:active{ transition:none; }
+  .pill.isPulsing,
+  .pill.isPulsing::before,
+  .pill.isPulsing::after{ animation:none; }
   .rail{ scroll-behavior: auto; }
 }
