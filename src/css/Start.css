@@ -1,0 +1,109 @@
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+  position: relative; /* 배경 이미지 겹치기 기준 */
+  height: 932px; /* 필요에 따라 높이 조정 */
+}
+
+.wallpaper {
+  width: 100%;
+  height: 100vh; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* 배경 뒤로 보내기 */
+}
+
+.hanseo{
+    width: 93px;
+    height: 98px;
+    right: 20px;
+    top: 10px;
+    position: absolute;
+    z-index: 2;
+}
+
+.line{
+    width: 2px;
+    height: 328px;
+    top: 0px;
+    left: 51%;
+    position: absolute;
+    z-index: 2;
+    background-color: black;
+}
+.title{
+    transform: translate(-50%, -50%); /* 자기 크기만큼 반 이동 → 완전 중앙 */
+    width: 360px;
+    height: 80px;
+    left: 50%;
+    top: 26%;
+    position: absolute;
+    z-index: 6;
+}
+
+.wallpaper h1{
+    position: absolute;
+    font-size: 20px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    right: -30%;
+    top: 34%;
+    z-index: 4;
+}
+
+.sircle1{
+    top: 40%;
+    left: 51.5%;
+    transform: translate(-50%, -50%); /* 자기 크기만큼 반 이동 → 완전 중앙 */
+    position: absolute;
+    z-index: 2;
+}
+
+.sircle2{
+    top: 46%;
+    left: 51.5%;
+    transform: translate(-50%, -50%); /* 자기 크기만큼 반 이동 → 완전 중앙 */
+    position: absolute;
+    z-index: 2;
+}
+
+.start-btn {
+  position: absolute;
+  top: 48%;
+  left: 51.5%;
+  transform: translate(-50%, -50%);
+  width: 176px;
+  height: 56px;
+  border-radius: 11px;
+  background-color: white;
+  opacity: 0.7;
+  z-index: 9999;
+  cursor: pointer; /* 커서 손모양 */
+  pointer-events: auto; /* 클릭 가능 */
+}
+
+
+.start-btn h1{
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 48%;   /* 버튼 안에서 위쪽 여백 */
+  left: 60%;  /* 버튼 안에서 왼쪽 여백 */
+  font-size: 24px;
+  margin: 0;
+  color: black;
+}
+
+.character{
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    position: absolute;
+      pointer-events: none; /* 🔥 이거 꼭 추가 (이미지는 클릭 통과) */
+    z-index: 2;
+}
