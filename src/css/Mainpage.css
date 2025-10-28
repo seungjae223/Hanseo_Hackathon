@@ -8,7 +8,7 @@
   height: 932px; /* 필요에 따라 높이 조정 */
 }
 
-.wallpaper {
+.wallpaper1 {
   width: 100%;
   height: 100vh; /* 화면(viewport) 전체 높이 */
   background-color: #FED800;
@@ -39,17 +39,17 @@
   z-index: 0; /* 배경 뒤로 보내기 */
 }
 
-.wallpaper h1{
+.wallpaper1 h1{
     position: absolute;
     font-size: 38px;
     font-weight: 500;
     transform: translate(-50%, -50%);
-    left: 47%;
+    left: 37%;
     top: 10%;
     z-index: 4;
 }
 
-.wallpaper h2{
+.wallpaper1 h2{
     position: absolute;
     white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
     font-size: 26px;
@@ -60,7 +60,7 @@
     z-index: 4;
 }
 
-.wallpaper h3{
+.wallpaper1 h3{
     position: absolute;
     white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
     font-size: 25px;
@@ -143,7 +143,7 @@
     font-size: 14px;
     font-weight: 500;
     transform: translate(-50%, -50%);
-    left: 54.2%;
+    left: 21.2%;
     top: 12%;
     z-index: 4;
 }

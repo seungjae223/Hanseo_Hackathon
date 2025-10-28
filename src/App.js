@@ -11,6 +11,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Start />} />
             <Route path="/main" element={<Mainpage />} /> {/* ✅ 경로 분리 */}
+            <Route path="/my" element={<Mypage />} />
           </Routes>
         </BrowserRouter>
     </div>

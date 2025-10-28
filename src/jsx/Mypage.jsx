@@ -7,8 +7,15 @@ import set from '../image/setting.png';
 import pfi1 from '../image/pfi1.png';
 import pfi2 from '../image/pfi2.png';
 import pfi3 from '../image/pfi3.png';
+import { useNavigate } from "react-router-dom";
 
 export default function Mypage() {
+
+        const navigate = useNavigate();
+
+  const handleStartClick = () => {
+    navigate("/main"); // ✅ 이동 경로
+  };
   const profileImages = [pfi1, pfi2, pfi3]; // 프로필 이미지 배열
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
@@ -37,7 +44,7 @@ export default function Mypage() {
     <div className="container">
       <img src={bg1} alt="뒷배경1" className="background1"/>
       <img src={bg2} alt="뒷배경2" className="background2"/>
-      <img src={back} alt="뒤로가기" className="back"/>
+      <img src={back} alt="뒤로가기" className="back" onClick={handleStartClick}/>
       <img src={set} alt="설정 아이콘" className="setting"/>
       <p className="pf">프로필 설정</p>
 
