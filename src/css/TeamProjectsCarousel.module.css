@@ -1,0 +1,104 @@
+/* ===== 래퍼: 정확히 3장 폭 ===== */
+:root{
+  --tp-card-w: 200px;
+  --tp-card-h: 180px;
+  --tp-gap: 16px;
+}
+
+.wrap{
+  position: relative;
+  /* 갭(틈) 색을 래퍼에 칠한다 */
+  background:#F6F6F6;
+  border-radius:18px;
+  isolation:isolate;
+
+  padding:10px 0; /* 그림자 공간 + 상하 여백 */
+  width: calc(var(--tp-card-w)*3 + var(--tp-gap)*2); /* 3장 + 간격 */
+  margin: 0 auto;                                   /* 중앙 */
+}
+
+/* ===== 행: 3장만 보이도록 강제 ===== */
+.row{
+  list-style:none; margin:0; padding:0;
+  display:grid;
+  grid-template-columns: repeat(3, var(--tp-card-w));
+  gap: var(--tp-gap);
+  justify-content:center;
+  align-items:stretch;
+  width:100%;
+  background:transparent;  /* 갭 색은 wrap이 담당 */
+  overflow:visible;
+}
+
+/* 혹시 4번째 이상이 렌더되더라도 숨김(방어) */
+.row > *:nth-child(n+4){ display: none !important; }
+
+/* ===== 카드 ===== */
+.card{
+  box-sizing: border-box;
+  width: var(--tp-card-w);
+  height: var(--tp-card-h);
+  background: #fff;
+  border-radius: 14px;
+
+  /* 옆으로 번지는 box-shadow 대신 아래쪽 drop-shadow 사용 */
+  box-shadow: none;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.10));
+
+  background-clip: padding-box;             /* 경계선 번짐 최소화 */
+  outline: 1px solid rgba(0,0,0,0.02);      /* 미세한 경계 보정 */
+
+  padding: 14px 12px;
+  display: flex; flex-direction: column;
+}
+
+.hash{
+  font-size: 10px; color: #9a9a9a; margin-bottom: 10px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.title{
+  margin: 0; font-size: 14px; font-weight: 700; line-height: 1.4; color: #111;
+  flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; word-break: keep-all;
+}
+.footer{ margin-top: 12px; font-size: 10px; color: #6f6f6f; }
+
+.nav{ display: none; }
+
+/* ===== 모바일: 가로 스크롤형(잘림 방지) ===== */
+@media (max-width: 700px){
+  .wrap{
+    padding:10px 16px;
+    width:auto; max-width:none;
+    background:#F6F6F6;        /* 갭 색 유지 */
+    border-radius:16px;
+  }
+  .row{
+    display:flex;
+    gap:12px;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; overscroll-behavior-x:contain;
+  }
+  .row::-webkit-scrollbar{ height:0; }
+  .row{ scrollbar-width:none; }
+  .row > *{ display:block !important; }  /* 모바일에선 숨김 해제 */
+
+  .card{
+    width:184px; height:172px;
+    border-radius:12px;
+    padding:12px 10px;
+    scroll-snap-align:start;
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,.10)); /* 아래쪽만 */
+  }
+  .title{ font-size:13px; }
+  .footer{ font-size:9.5px; }
+}
+@media (max-width:700px){
+  .wrap{
+    padding:10px 16px;
+    width:auto; max-width:none;
+    background:#F6F6F6;
+    border-radius:16px;
+    margin: -30px auto 0;  /* ✅ 모바일 보정 */
+  }
+}

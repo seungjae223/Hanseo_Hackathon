@@ -86,8 +86,9 @@ export default function LoginModal({ onClose, onSignUpClick, onFindPasswordClick
         {/* ✅ 폼으로 감싸 브라우저 경고 제거 & Enter 제출 지원 */}
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <label>한서대학교 웹메일</label>
+            <label htmlFor="emailInput">한서대학교 웹메일</label>
             <input
+              id="emailInput" // 라벨과 연결
               type="email"
               placeholder="이메일 입력"
               value={email}
@@ -98,8 +99,9 @@ export default function LoginModal({ onClose, onSignUpClick, onFindPasswordClick
           </div>
 
           <div className={styles.inputGroup}>
-            <label>비밀번호</label>
+            <label htmlFor="passwordInput">비밀번호</label>
             <input
+              id="passwordInput" // 라벨과 연결
               type="password"
               placeholder="비밀번호 입력"
               value={password}

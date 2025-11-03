@@ -4,8 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../css/MainPage.module.css";
 
 import SearchIcon from "../assets/Search.png";
-import LeftIcon from "../assets/left.png";
-import RightIcon from "../assets/VectorRight.png";
 
 import TeamManagePanel from "./TeamManagePanel";
 import RecruitListPanel from "./RecruitListPanel";
@@ -16,6 +14,12 @@ import Matching from "./Matching";
 import TeamIcon from "../assets/team.png";
 import RecruitIcon from "../assets/Recruit.png";
 import MatchingIcon from "../assets/matching.png";
+
+/* 달력 카드 */
+import CalendarCard from "../components/CalendarCard";
+
+/* 팀 프로젝트 카드 캐러셀(랜덤 3개 자동 순환) */
+import TeamProjectsCarousel from "../components/TeamProjectsCarousel";
 
 export default function MainPage() {
   const railRef = useRef(null);
@@ -33,7 +37,21 @@ export default function MainPage() {
     }
   }, [location.state, navigate]);
 
-  const scrollByStep = (dx) => railRef.current?.scrollBy({ left: dx, behavior: "smooth" });
+  // 달력 일정 (API 연동 전 목업)
+  const calendarEvents = [
+    { date: "2025-10-06", title: "사자팀 디자이너 회의", place: "인문관 213호" },
+    { date: "2025-10-02", title: "공모전 킥오프", place: "도서관 세미나실" },
+    { date: "2025-10-12", title: "기획 리뷰", place: "창업보육센터" },
+  ];
+
+  // 팀 프로젝트(공모전 모집) 카드 데이터 — API 연동 전 목업
+  const mockContestRecruit = [
+    { id: 1, tags: ["공모전", "디자이너"], title: "AI 해커톤 같이 나갈 디자이너/개발자", period: "2025-09-27 ~ 10-4" },
+    { id: 2, tags: ["공모전", "기획"], title: "캡스톤 포스터 제작 팀원 모집", period: "2025-10-02 ~ 10-10" },
+    { id: 3, tags: ["스터디", "한서대"], title: "웹접근성 리뉴얼 스터디", period: "2025-10-05 ~ 12-20" },
+    { id: 4, tags: ["공모전", "콘텐츠"], title: "숏폼 공모전 촬영·편집 팀", period: "2025-10-07 ~ 10-30" },
+    { id: 5, tags: ["공모전", "개발자"], title: "대학생 앱개발 공모전 팀업", period: "2025-10-12 ~ 11-1" },
+  ];
 
   return (
     <main className={styles.frame}>
@@ -46,7 +64,7 @@ export default function MainPage() {
         </h1>
       </section>
 
-      {/* 아이콘 3개: 팀관리 / 모집 / 매칭 (스샷과 동일 톤) */}
+      {/* 아이콘 3개: 팀관리 / 모집 / 매칭 */}
       {tab === "default" && (
         <section className={styles.surface}>
           <ul className={styles.featureRow}>
@@ -130,50 +148,19 @@ export default function MainPage() {
               </div>
             </div>
           </section>
-
-          {/* 검색창 */}
-          <section className={styles.searchWrap}>
-            <div className={styles.searchBox}>
-              <img className={styles.searchIcon} src={SearchIcon} alt="검색" />
-              <input
-                className={styles.searchInput}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                aria-label="팀 프로젝트 검색"
-              />
-            </div>
-          </section>
-
-          {/* 캐러셀 */}
+          {/* 팀 프로젝트: 오른쪽 카드 UI + 랜덤 3개 자동 순환 */}
           <section className={styles.carousel}>
-            <h2 className={styles.carouselTitle}>팀 프로젝트</h2>
-            <div className={styles.carouselViewport}>
-              <button className={`${styles.navBtn} ${styles.navLeft}`} onClick={() => scrollByStep(-140)} aria-label="이전">
-                <img src={LeftIcon} alt="" />
-              </button>
-              <div className={styles.rail} ref={railRef}>
-                <div className={styles.card} /><div className={styles.card} /><div className={styles.card} />
-                <div className={styles.card} /><div className={styles.card} />
-              </div>
-              <button className={`${styles.navBtn} ${styles.navRight}`} onClick={() => scrollByStep(140)} aria-label="다음">
-                <img src={RightIcon} alt="" />
-              </button>
-            </div>
+            <TeamProjectsCarousel items={mockContestRecruit} intervalMs={4000} />
           </section>
 
-          {/* 하단 갤러리 */}
-          <section className={styles.galleryWrap}>
-            <div className={styles.gallery}>
-              <div className={styles.gGrid}>
-                <div className={styles.gCell} /><div className={styles.gCell} />
-                <div className={styles.gCell} /><div className={styles.gCell} />
-              </div>
-              <div className={styles.gCaption}>공모전 관련 사진</div>
+          {/* ▼ 하단: 달력 카드 단독 표시 */}
+          <section className={styles.calendarWrap}>
+            <div className={styles.calendarBox}>
+              <CalendarCard events={calendarEvents} />
             </div>
           </section>
         </>
       )}
     </main>
-  );
+  );  
 }

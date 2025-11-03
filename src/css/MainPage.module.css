@@ -13,7 +13,7 @@
   width:100%;
   max-width:603px;        /* 목업 최대폭 */
   margin:0 auto;
-  background:#fff;
+  background:#F6F6F6;
   color:var(--ink);
   font-family: system-ui, -apple-system, Segoe UI, Roboto,
     "Apple SD Gothic Neo","Noto Sans KR",sans-serif;
@@ -37,7 +37,7 @@
 /* ========== ▼ 아이콘 3개 섹션(스샷과 동일) ▼ ========= */
 /* 히어로와 겹쳐 보이는 흰색 라운드 면 */
 .surface{
-  background:#fff;
+  background:#F6F6F6;
   margin-top:-18px;                 /* 배너 위로 살짝 겹치기 */
   border-radius:24px 24px 0 0;
   padding:18px 14px 6px;
@@ -152,7 +152,46 @@
   border:2px solid rgba(0,0,0,.22);
   animation:inner-fade .45s ease-out forwards;
 }
+/* ✅ 캐러셀 섹션: 예전 페이드/마스크/오버플로우 제거 */
+.carousel{
+  overflow: visible !important;
+  position: relative;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.carousel::before,
+.carousel::after{
+  content: none !important;
+}
 
+/* 혹시 내부에 남아있는 예전 뷰포트/레일 스타일 무력화 */
+.carousel *{
+  -webkit-mask-image: none ;
+  mask-image: none;
+}
+.carouselViewport,
+.carouselViewport::before,
+.carouselViewport::after{
+  overflow: visible ;
+  -webkit-mask-image: none ;
+  mask-image: none ;
+  content: none ;
+}
+
+/* ✅ 카드 3장(200px) + 간격(16px×2) 만큼만 정확히 가운데 배치 */
+.carouselInner{
+  width: calc(200px * 3 + 16px * 2);
+  margin: 0 auto;              /* 가운데 정렬 */
+  overflow: visible;
+}
+
+/* 모바일에서는 폭 제한 해제 */
+@media (max-width: 700px){
+  .carouselInner{
+    width: auto;
+    padding: 0 16px;
+  }
+}
 /* 팝-바운스(튕겼다 자리 잡기) — 활성 느낌으로 착지 */
 @keyframes pill-pop{
   0%   { transform: translateY(0)    scale(.96); }

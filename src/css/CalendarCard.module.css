@@ -1,0 +1,89 @@
+:root{
+  --surface:#fff;
+  --ink:#111;
+  --muted:#6b6b6b;
+  --line:#e9e9e9;
+  --shadow:0 12px 28px rgba(0,0,0,.08);
+  --dot:#ff9257;
+}
+
+/* 카드 & 헤더는 직전 상태 유지해도 되고, 아래 핵심은 날짜 구역 */
+
+.card{
+  width:100%;
+  max-width:340px;
+  margin:0 auto;
+  background:var(--surface);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:14px 16px 12px;
+  color:var(--ink);
+}
+.header{
+  display:grid;
+  grid-template-columns:24px 1fr 24px;
+  align-items:center;
+  gap:6px;
+}
+.title{ margin:0; font-size:20px; font-weight:800; }
+.arrow{
+  width:24px; height:24px; border:none; background:transparent;
+  font-size:18px; line-height:1; cursor:pointer;
+}
+.divider{ height:2px; background:#000; margin:6px 0 8px; }
+
+/* ===== 날짜 영역 (목업과 동일) ===== */
+.dayWrap{
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap:8px;
+  row-gap:8px;
+  padding:4px 0 0;
+}
+
+/* 위 줄(1~7) : 클릭 가능 알약 */
+.day{
+  height:60px;
+  min-width:36px;
+  border:none;
+  border-radius:16px;
+  background:#f3f3f3;
+  color:var(--ink);
+  font-weight:800;
+  font-size:13px;
+  display:grid; 
+  place-items:top;
+  position:relative;
+  cursor:pointer;
+}
+.day.hasEvent::after{
+  content:"";
+  position:absolute; right:6px; top:6px;
+  width:5px; height:5px; border-radius:50%;
+  background:var(--dot);
+}
+/* 목업은 선택 윤곽선 거의 없음 → 살짝 진해 보이게만 */
+.day.selected{ background:#fff; outline:none; }
+
+/* 아래 줄(모두 ‘2’) : 비활성 알약 */
+.countPill{
+  height:40px;
+  min-width:36px;
+  border-radius:16px;
+  background:#f3f3f3;
+  color:#9a9a9a;            /* 회색 텍스트 */
+  font-weight:800;
+  font-size:13px;
+  display:grid; place-items:center;
+  pointer-events:none;      /* 클릭 불가 */
+}
+
+/* 토글/상세 */
+.toggle{ margin:8px auto 4px; display:block; border:none; background:transparent; cursor:pointer; }
+.toggleIcon{ font-size:14px; color:#7b7b7b; }
+.detail{ margin-top:4px; padding:2px 0 6px; }
+.detailDate{ font-size:14px; font-weight:800; margin-bottom:4px; }
+.detailTitle{ font-size:13px; font-weight:800; margin-bottom:4px; }
+.detailPlace{ font-size:11px; color:var(--muted); }
+.chev{ text-align:center; font-size:14px; opacity:.6; margin-top:4px; }
+.hint{ color:var(--muted); }
