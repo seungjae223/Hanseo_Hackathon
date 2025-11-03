@@ -1,7 +1,10 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../css/TeamMemberDetail.module.css";
-import FooterNav from "./FooterNav";
+
+// 캐릭터 이미지들
+import Bunny from "../assets/캐릭터.png";
+import Cat from "../assets/캐릭터2.png";
 
 export default function TeamMemberDetail(){
   const { id } = useParams();
@@ -9,59 +12,49 @@ export default function TeamMemberDetail(){
 
   return (
     <main className={styles.frame}>
-      {/* 히어로 배너 (노랑) */}
-      <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>
-          당신의 아이디어, 지금 함께
-          <br />
-          실행할 팀을 만나보세요!
-        </h1>
-      </section>
+      {/* 상단 텍스트 */}
+      <div className={styles.heroText}>
+        <h1>당신의 아이디어, 지금 함께 실행할 팀을 만나보세요!</h1>
+      </div>
 
-      {/* 메인 콘텐츠 영역 */}
-      <section className={styles.mainContent}>
-        {/* 카드들 */}
-        <div className={styles.cardContainer}>
-          <div className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardInfo}>
-                <h3 className={styles.cardTitle}>가나다</h3>
-                <p className={styles.cardSubtitle}>가나다</p>
-              </div>
-              <div className={styles.cardAvatar}>
-                <div className={styles.avatarIcon}></div>
-              </div>
+      {/* 카드들 */}
+      <div className={styles.cardContainer}>
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardInfo}>
+              <h3 className={styles.cardTitle}>가나다</h3>
+              <p className={styles.cardSubtitle}>가나다</p>
             </div>
-            <div className={styles.cardDivider}></div>
-            <div className={styles.cardTags}>
-              <div className={styles.tag}></div>
-              <div className={styles.tag}></div>
-              <div className={styles.tag}></div>
+            <div className={styles.cardAvatar}>
+              <img src={Bunny} alt="토끼 캐릭터" className={styles.characterIcon} />
             </div>
           </div>
-          
-          <div className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardInfo}>
-                <h3 className={styles.cardTitle}>가나다</h3>
-                <p className={styles.cardSubtitle}>가나다</p>
-              </div>
-              <div className={styles.cardAvatar}>
-                <div className={styles.avatarIcon}></div>
-              </div>
-            </div>
-            <div className={styles.cardDivider}></div>
-            <div className={styles.cardTags}>
-              <div className={styles.tag}></div>
-              <div className={styles.tag}></div>
-              <div className={styles.tag}></div>
-            </div>
+          <div className={styles.cardDivider}></div>
+          <div className={styles.cardTags}>
+            <div className={styles.tag}></div>
+            <div className={styles.tag}></div>
+            <div className={styles.tag}></div>
           </div>
         </div>
-      </section>
-
-      {/* 푸터 */}
-      <FooterNav />
+        
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardInfo}>
+              <h3 className={styles.cardTitle}>가나다</h3>
+              <p className={styles.cardSubtitle}>가나다</p>
+            </div>
+            <div className={styles.cardAvatar}>
+              <img src={Cat} alt="고양이 캐릭터" className={styles.characterIcon} />
+            </div>
+          </div>
+          <div className={styles.cardDivider}></div>
+          <div className={styles.cardTags}>
+            <div className={styles.tag}></div>
+            <div className={styles.tag}></div>
+            <div className={styles.tag}></div>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

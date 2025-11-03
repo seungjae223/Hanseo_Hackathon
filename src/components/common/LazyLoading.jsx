@@ -16,7 +16,7 @@ export function DefaultFallback() {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          border: "4px solid rgba(0, 0, 0, 0.1)",
+          border: "4px solid rgba(246, 228, 41, 1)",
           borderTopColor: "currentColor",
           animation: "spin 1s linear infinite",
         }}
@@ -58,7 +58,7 @@ export const Lazy = {
 
   /* 추가 라우트 */
   Matching:         lazyRetry(() => import(/* webpackChunkName: "matching" */         "../Matching.jsx")),
-  // RecruitDetail:    lazyRetry(() => import(/* webpackChunkName: "recruit-detail" */   "../RecruitDetail.jsx")),
+  RecruitDetail:    lazyRetry(() => import(/* webpackChunkName: "recruit-detail" */   "../RecruitDetail.jsx")),
   TeamMemberDetail: lazyRetry(() => import(/* webpackChunkName: "team-member-detail" */"../TeamMemberDetail.jsx")),
 
   /* 공통 컴포넌트 */
@@ -79,7 +79,7 @@ export const prefetch = {
   team:             () => import(/* webpackPrefetch: true */ "../TeamManagePanel.jsx"),
   protected:        () => import(/* webpackPrefetch: true */ "../ProtectedPage.jsx"),
   matching:         () => import(/* webpackPrefetch: true */ "../Matching.jsx"),
-  // recruitDetail:    () => import(/* webpackPrefetch: true */ "../RecruitDetail.jsx"),
+  recruitDetail:    () => import(/* webpackPrefetch: true */ "../RecruitDetail.jsx"),
   teamMemberDetail: () => import(/* webpackPrefetch: true */ "../TeamMemberDetail.jsx"),
 };
 

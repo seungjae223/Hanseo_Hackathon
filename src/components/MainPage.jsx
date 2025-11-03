@@ -51,7 +51,10 @@ export default function MainPage() {
         <section className={styles.surface}>
           <ul className={styles.featureRow}>
             <li>
-              <button className={styles.feature} onClick={() => setTab("team")}>
+              <button
+                className={styles.feature}
+                onClick={() => setTimeout(() => navigate("/TeamManage"), 160)}
+              >
                 <span className={styles.featureCircle}>
                   <img src={TeamIcon} alt="" />
                 </span>
@@ -59,7 +62,10 @@ export default function MainPage() {
               </button>
             </li>
             <li>
-              <button className={styles.feature} onClick={() => setTab("recruit")}>
+              <button
+                className={styles.feature}
+                onClick={() => setTimeout(() => navigate("/Recruit"), 160)}
+              >
                 <span className={styles.featureCircle}>
                   <img src={RecruitIcon} alt="" />
                 </span>
@@ -67,7 +73,10 @@ export default function MainPage() {
               </button>
             </li>
             <li>
-              <button className={styles.feature} onClick={() => setTab("matching")}>
+              <button
+                className={styles.feature}
+                onClick={() => setTimeout(() => navigate("/Matching"), 160)}
+              >
                 <span className={styles.featureCircle}>
                   <img src={MatchingIcon} alt="" />
                 </span>

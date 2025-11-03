@@ -1,48 +1,83 @@
+// src/EmailVerifyModal.jsx  (현재 위치 그대로 사용 중이라 가정)
 import React, { useState } from "react";
 import shell from "../css/LoginModal.module.css";        // ✅ 로그인 모달의 쉘 재사용 (overlay, content, 로고 등)
 import styles from "../css/EmailVerifyModal.module.css"; // ✅ 사진과 동일하게 보이는 전용 스타일
 import Logo from "../assets/작당모의.png";
+import { apiFetch } from "./utils/api.js";               // ✅ 백엔드 연동
 
 export default function EmailVerifyModal({
   defaultEmail = "",
-  onVerified,   // (email) => void
+  onVerified,   // (info) => void  // info: { email, verificationCode }
   onClose,      // 오버레이 클릭 시 닫기
 }) {
   const [email, setEmail] = useState(defaultEmail);
   const [code, setCode]   = useState("");
   const [sent, setSent]   = useState(false);
-  const [sentCode, setSentCode] = useState(""); // (목업) 발급된 코드
   const [loading, setLoading]   = useState(false);
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState(false); // UI용 플래그(다음 버튼 활성)
+  const [err, setErr] = useState("");
 
-  const disabledNext = !verified;
+  // '다음' 버튼 활성화 조건: 코드요청 완료 + 이메일 + 코드 입력
+  const disabledNext = !(sent && email && code && !loading);
 
+  // 1) 인증코드 발송: POST /api/email/verification-requests
   const handleSendCode = async () => {
-    if (!email) return alert("웹메일을 입력해주세요.");
-    setLoading(true);
-    // TODO: 실제 API 연결
-    const mock = String(Math.floor(100000 + Math.random() * 900000));
-    setSentCode(mock);
-    setSent(true);
-    setLoading(false);
-    alert(`(목업) 인증코드 발송: ${mock}`);
+    setErr("");
+    if (!email) return setErr("웹메일을 입력해주세요.");
+
+    // ✅ 이메일 자동 보정(@office.hanseo.ac.kr)
+    const trimmed = email.trim().toLowerCase();
+    const normEmail = trimmed.includes("@")
+      ? trimmed
+      : `${trimmed}@office.hanseo.ac.kr`;
+
+    try {
+      setLoading(true);
+      await apiFetch("/api/email/verification-requests", {
+        method: "POST",
+        auth: false,                 // ✅ 공개 엔드포인트: 토큰 제거
+        body: { email: normEmail },  // ✅ 서버가 기대하는 키/값
+      });
+      setSent(true);
+      // UI상 '확인하기' 클릭 없이도 바로 다음으로 갈 수 있도록 verified 처리
+      setVerified(true);
+      alert("인증코드를 이메일로 발송했습니다. 메일함을 확인해주세요.");
+    } catch (e) {
+      setErr(e.message || "인증코드 발송 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerify = async () => {
-    if (!sent) return alert("먼저 인증요청을 해주세요.");
-    if (!code) return alert("인증코드를 입력해주세요.");
-    setLoading(true);
-    // TODO: 실제 API 연결
-    const ok = code === sentCode;
-    setLoading(false);
-    if (!ok) return alert("인증코드가 올바르지 않습니다.");
+  // 2) 로컬 확인 버튼(선택): 서버는 /api/signup 시 최종 검증하므로 여기선 입력 체크만
+  const handleVerify = () => {
+    setErr("");
+    if (!sent) return setErr("먼저 인증요청을 해주세요.");
+    if (!code) return setErr("인증코드를 입력해주세요.");
     setVerified(true);
-    onVerified?.(email);
+    alert("코드 입력 확인되었습니다. '다음'을 눌러 진행하세요.");
+  };
+
+  // 3) 다음: 부모로 email + verificationCode 넘겨주기
+  const handleNext = () => {
+    setErr("");
+    if (disabledNext) return;
+
+    // ✅ 부모로 넘길 때도 동일한 이메일 보정
+    const trimmed = email.trim().toLowerCase();
+    const normEmail = trimmed.includes("@")
+      ? trimmed
+      : `${trimmed}@office.hanseo.ac.kr`;
+
+    onVerified?.({ email: normEmail, verificationCode: code });
   };
 
   return (
     <div className={shell.modalOverlay} onClick={onClose}>
-      <div className={`${shell.modalContent} ${styles.card}`} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`${shell.modalContent} ${styles.card}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* 로고 영역 (로그인 모달과 동일) */}
         <div className={shell.logoWrap}>
           <img src={Logo} alt="작당모의" className={shell.Modal_logo} />
@@ -58,14 +93,14 @@ export default function EmailVerifyModal({
               placeholder="이메일 입력"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={verified}
+              disabled={loading}
             />
             <button
               className={styles.rightBtn}
               onClick={handleSendCode}
-              disabled={loading || verified}
+              disabled={loading || !email}
             >
-              인증요청
+              {loading ? "발송중..." : "인증요청"}
             </button>
           </div>
         </div>
@@ -80,33 +115,29 @@ export default function EmailVerifyModal({
               placeholder="인증코드 입력"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              disabled={verified}
+              disabled={loading}
             />
             <button
               className={styles.rightBtn}
               onClick={handleVerify}
-              disabled={loading || verified}
+              disabled={loading || !sent || !code}
             >
               확인하기
             </button>
           </div>
         </div>
 
+        {/* 에러 메시지 */}
+        {err && <p className={styles.errorText}>{err}</p>}
+
         {/* 다음 버튼 – 사진과 동일한 큰 라운드 화이트 버튼 */}
         <button
           className={`${styles.nextBtn} ${disabledNext ? styles.nextBtnDisabled : ""}`}
           disabled={disabledNext}
-          onClick={() => onVerified?.(email)}
+          onClick={handleNext}
         >
           다음
         </button>
-
-        {/* (목업) 발급 코드 안내 */}
-        {sent && !verified && (
-          <div className={styles.hint}>
-            (목업) 발급된 인증코드: <b>{sentCode}</b>
-          </div>
-        )}
       </div>
     </div>
   );

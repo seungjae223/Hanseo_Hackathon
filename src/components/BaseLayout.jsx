@@ -7,41 +7,38 @@ export default function BaseLayout() {
   const { pathname } = useLocation();
 
   // 메인(/, /Mainpage)에서는 푸터 숨김
-const hideFooter = false; // ★임시: 어디서나 푸터 보이게
+  const hideFooter = pathname === "/" || pathname === "/Mainpage";
+
+  // 스크롤 보장
+  React.useEffect(() => {
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+    document.body.style.overflowY = "scroll";
+    document.documentElement.style.overflow = "auto";
+    document.documentElement.style.height = "auto";
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.height = "";
+      document.body.style.overflowY = "";
+      document.documentElement.style.overflow = "";
+      document.documentElement.style.height = "";
+    };
+  }, []);
 
 
   // 활성 탭 계산(필요한 페이지만 지정)
   let active = "home";
-  if (pathname.startsWith("/TeamManage")) active = "team";
+  if (pathname.startsWith("/TeamManage") || pathname.startsWith("/team/")) active = "team";
   else if (pathname.startsWith("/Recruit")) active = "recruit";
   else if (pathname.startsWith("/Matching")) active = "matching";
 
-  // 디버그 점: 레이아웃이 렌더되는지 확인 (보이면 BaseLayout은 정상 마운트)
-  // 필요 없으면 삭제하세요.
-  const DebugDot = (
-    <div
-      style={{
-        position: "fixed",
-        right: 6,
-        bottom: 6,
-        width: 8,
-        height: 8,
-        borderRadius: "50%",
-        background: hideFooter ? "lime" : "red",
-        zIndex: 2147483647,
-      }}
-    />
-  );
-
   return (
-    <>
-      <main className={hideFooter ? "" : "page-with-footer"}>
+    <div style={{ display: "flex", flexDirection: "column", position: "relative", minHeight: "100vh" }}>
+      <main style={{ flex: 1, paddingBottom: !hideFooter ? "120px" : "0" }}>
         <Outlet />
       </main>
 
       {!hideFooter && <FooterNav active={active} />}
-
-      {DebugDot}
-    </>
+    </div>
   );
 }

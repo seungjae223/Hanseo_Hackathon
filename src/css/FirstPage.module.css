@@ -147,6 +147,48 @@
   box-shadow:
     0 12px 26px rgba(0,0,0,.18),
     inset 0 1px 0 rgba(255,255,255,.8);
+  transition: transform .18s ease, box-shadow .18s ease;
+  position: relative; overflow: hidden; /* 리플 표시 영역 */
+}
+.cta:active{
+  transform: translateX(-50%) scale(.97);
+}
+/* 클릭 후 짧은 팝 애니메이션 */
+.play{
+  animation: ctaPop .32s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes ctaPop{
+  0%{ transform: translateX(-50%) scale(1); box-shadow: 0 12px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.8); }
+  50%{ transform: translateX(-50%) scale(1.1); box-shadow: 0 18px 34px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.9); }
+  100%{ transform: translateX(-50%) scale(1); box-shadow: 0 12px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.8); }
+}
+
+/* 버튼 내부 라디얼 리플 */
+.cta::after{
+  content: "";
+  position: absolute; left:50%; top:50%;
+  transform: translate(-50%,-50%) scale(0);
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  box-shadow: 0 0 0 0 rgba(255,255,255,.6);
+}
+.play.cta::after{
+  animation: ripple .55s ease-out forwards;
+}
+@keyframes ripple{
+  0%{ transform: translate(-50%,-50%) scale(.2); opacity: .9; box-shadow: 0 0 0 0 rgba(255,255,255,.6); }
+  70%{ opacity:.6; box-shadow: 0 0 0 18px rgba(255,255,255,.35); }
+  100%{ transform: translate(-50%,-50%) scale(10); opacity: 0; box-shadow: 0 0 0 32px rgba(255,255,255,0); }
+}
+
+/* 페이지 전체 밝기 펄스 */
+.playing{
+  animation: glowPulse .55s ease-out;
+}
+@keyframes glowPulse{
+  0%{ filter: brightness(1); }
+  45%{ filter: brightness(1.08); }
+  100%{ filter: brightness(1); }
 }
 
 /* ── 하단 캐릭터 + 테이블 ── */

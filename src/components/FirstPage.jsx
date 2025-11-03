@@ -12,8 +12,16 @@ import TitleImg from "../assets/작당모의.png";
 
 export default function FirstPage() {
   const nav = useNavigate();
+  const [playing, setPlaying] = React.useState(false);
+
+  const onStartClick = () => {
+    if (playing) return;
+    setPlaying(true);
+    // 애니메이션이 보이도록 대기 후 이동
+    setTimeout(() => nav("/Mainpage"), 600);
+  };
   return (
-    <main className={styles.container}>
+    <main className={`${styles.container} ${playing ? styles.playing : ""}`}>
       <div className={styles.uni}><img src={Uni} alt="한서대학교" /></div>
 
       {/* ▼ 전등: 마스크 래퍼 안에 이미지 배치 */}
@@ -26,7 +34,13 @@ export default function FirstPage() {
       <img src={TitleImg} alt="작당모의" className={styles.titleImg} />
       <p className={styles.subtitle}>한서대학교 팀프로젝트, 이제는 똑똑하게!</p>
 
-      <button className={styles.cta} onClick={() => nav("/Mainpage")}>시작하기</button>
+      <button
+        className={`${styles.cta} ${playing ? styles.play : ""}`}
+        onClick={onStartClick}
+        disabled={playing}
+      >
+        시작하기
+      </button>
       <img src={Meeting} alt="" className={styles.meeting} />
     </main>
   );

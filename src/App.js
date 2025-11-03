@@ -2,10 +2,11 @@
 import React from "react";
 import "./App.css";
 import { ToastProvider } from "./components/Toast";
-import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Lazy, { LazyBoundary } from "./components/common/LazyLoading";
 import BaseLayout from "./components/BaseLayout";
 import "./components/FooterNav";
+
 
 function App() {
   return (

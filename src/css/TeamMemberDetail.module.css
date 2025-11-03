@@ -11,12 +11,31 @@
 /* ===== 전체 레이아웃 ===== */
 .frame{
   width:100%;
-  max-width:603px;        /* 목업 최대폭 */
-  margin:0 auto;
-  background:#fff;
+  margin:0;
+  background:#f8f8f8;     /* 연한 회색 배경 */
   color:var(--ink);
   font-family: system-ui, -apple-system, Segoe UI, Roboto,
     "Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  overflow: visible;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* ===== 상단 텍스트 ===== */
+.heroText{
+  background: #fff;        /* 흰색 배경 */
+  padding: 32px 20px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.heroText h1{
+  margin: 0;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+  color: #000;
 }
 
 
@@ -39,23 +58,23 @@
 .mainContent{
   background:#fff;
   padding: 20px 16px;
-  min-height: calc(100vh - 200px);
 }
 
 .cardContainer{
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 400px;
-  margin: 0 auto;
+  gap: 20px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 20px 0 20px;
 }
 
 .card{
   background: #fff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: none;
 }
 
 .cardHeader{
@@ -83,10 +102,10 @@
 }
 
 .cardAvatar{
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: #f0f0f0;
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,10 +145,17 @@
   margin-left: 1px;
 }
 
+/* ===== 캐릭터 아이콘 ===== */
+.characterIcon{
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
 .cardDivider{
   height: 1px;
-  background: #e0e0e0;
-  margin: 8px 0;
+  background: #f0f0f0;
+  margin: 16px 0;
 }
 
 .cardTags{
@@ -138,16 +164,33 @@
 }
 
 .tag{
-  width: 50px;
-  height: 6px;
-  background: #e0e0e0;
-  border-radius: 3px;
+  width: 60px;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
 }
 
 .tag:nth-child(2){
-  width: 65px;
+  width: 75px;
 }
 
 .tag:nth-child(3){
-  width: 55px;
+  width: 65px;
+}
+
+/* ===== 하단 버튼들 ===== */
+.buttonContainer{
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 100%;
+  margin: 0;
+  padding: 40px 16px 16px 16px;
+}
+
+.button{
+  flex: 1;
+  height: 40px;
+  background: #e8e8e8;
+  border-radius: 8px;
 }

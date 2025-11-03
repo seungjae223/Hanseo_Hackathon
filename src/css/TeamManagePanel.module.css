@@ -9,6 +9,7 @@
 .wrap{
   width:min(960px,92vw);
   margin:16px auto 0;
+  padding-bottom: 100px;
   color:var(--ink);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;
 }
