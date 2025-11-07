@@ -1,0 +1,410 @@
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+  position: relative; /* 배경 이미지 겹치기 기준 */
+  height: 932px; /* 필요에 따라 높이 조정 */
+}
+
+.wpwp {
+  width: 100%;
+  height: 100vh; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* 배경 뒤로 보내기 */
+}
+
+.title4{
+    transform: translate(-50%, -50%); /* 자기 크기만큼 반 이동 → 완전 중앙 */
+    width: 150px;
+    height: 37px;
+    left: 15%;
+    top: 4%;
+    position: absolute;
+    z-index: 6;
+}
+
+.my {
+  border-radius: 30px;
+  width: 10%;
+  height: 4.7%; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 2%;
+  right: 3%;
+  z-index: 0; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 {
+  border-radius: 25px;
+  width: 100%;
+  height: 200%; /* 화면(viewport) 전체 높이 */
+  background-color: #F6F6F6;
+  position: absolute;
+  top: 12%;
+  left: 0;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h1{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 16%;
+    top: 2.5%;
+    z-index: 4;
+}
+
+.hashtag {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 112px;
+  height: 40px; /* 화면(viewport) 전체 높이 */
+  background-color: #EAE9E9;
+  position: absolute;
+  top: 7%;
+  left: 19%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h2{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 12%;
+    top: 14%;
+    z-index: 4;
+}
+
+.line1 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 370px;
+  height: 1px; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 18.5%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h3{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 12%;
+    top: 24%;
+    z-index: 4;
+}
+
+.line2 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 370px;
+  height: 1px; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 28.5%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h4{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 32%;
+    top: 33%;
+    z-index: 4;
+}
+
+.file {
+  transform: translate(-50%, -50%);
+  border-radius: 25px;
+  width: 90%;
+  height: 13.5%; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h5{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 20%;
+    top: 54%;
+    z-index: 4;
+}
+
+.teamone {
+  transform: translate(-50%, -50%);
+  border-radius: 37px;
+  width: 380px;
+  height: 90px; /* 화면(viewport) 전체 높이 */
+  background-color: #EDEDED;
+  position: absolute;
+  top: 61%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.wpwp2 h6{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 24px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 12%;
+    top: 64%;
+    z-index: 4;
+}
+
+.line3 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 370px;
+  height: 1px; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 71%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.end {
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  width: 380px;
+  height: 70px; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 84%;
+  left: 50%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.end h1{
+    position: absolute;
+    white-space: nowrap;  /* 🔹 텍스트 줄바꿈 방지 */
+    font-size: 20px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 30%;
+    z-index: 4;
+}
+
+.bar2{
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+  width:100%;
+  height: 8%; /* 화면(viewport) 전체 높이 */
+  background-color: #EDEDED;
+  position: absolute;
+  top: 94.6%;
+  left: 50%;
+  z-index: 2; /* 배경 뒤로 보내기 */
+}
+
+.s1 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 65px;
+  height: 65px; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.s2 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 65px;
+  height: 65px; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.s3 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 65px;
+  height: 65px; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.s4 {
+  transform: translate(-50%, -50%);
+  border-radius: 300px;
+  width: 65px;
+  height: 65px; /* 화면(viewport) 전체 높이 */
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 80%;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.s1 img{
+  width: 65%;     /* 서클 안 여유 공간 */
+  height: 50%;
+  left: 18%;
+  top: 24%;
+   position: absolute;
+}
+.s2 img{
+      width: 60%;     /* 서클 안 여유 공간 */
+  height: 50%;
+    left: 18%;
+  top: 24%;
+   position: absolute;
+}
+.s3 img {
+  width: 60%;     /* 서클 안 여유 공간 */
+  height: 55%;
+    left: 26%;
+  top: 19%;
+   position: absolute;
+}
+
+.s4 img {
+  width: 50%;     /* 서클 안 여유 공간 */
+  height: 70%;
+    left: 29%;
+  top: 17%;
+   position: absolute;
+}
+
+.bar2 h1{
+    position: absolute;
+    font-size: 14px;
+    font-weight: 500;
+    transform: translate(-50%, -50%);
+    left: 20%;
+    top: 70%;
+    z-index: 4;
+}
+
+.bar2 h2{
+    position: absolute;
+    font-size: 14px;
+    font-weight: 500;
+    transform: translate(-50%, -50%);
+    left: 40%;
+    top: 69%;
+    z-index: 4;
+}
+
+.bar2 h3{
+    position: absolute;
+    font-size: 14px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 60%;
+    top: 67%;
+    z-index: 4;
+}
+
+.bar2 h4{
+    position: absolute;
+    font-size: 14px;
+    font-weight: 400;
+    transform: translate(-50%, -50%);
+    left: 80%;
+    top: 64%;
+    z-index: 4;
+}
+
+.input-title {
+  position: absolute;
+  left: 50%;
+  top: 17.5%;               /* line1 위치와 정렬 (같은 top) */
+  transform: translate(-50%, -50%);
+  width: 370px;             /* line1과 동일 폭 */
+  height: 36px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;  /* 흰색 배경 제거 */
+  font-size: 20px;
+  outline: none;
+  z-index: 4;               /* 라인 위로 올라오게 */
+  box-shadow: none;
+}
+
+
+.input-content {
+  position: absolute;
+  left: 50%;
+  top: 27.5%;               /* line1 위치와 정렬 (같은 top) */
+  transform: translate(-50%, -50%);
+  width: 370px;             /* line1과 동일 폭 */
+  height: 36px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;  /* 흰색 배경 제거 */
+  font-size: 20px;
+  outline: none;
+  z-index: 4;               /* 라인 위로 올라오게 */
+  box-shadow: none;
+}
+
+
+/* 기한 입력칸 — line3 위치에 맞춤 */
+.input-deadline {
+  position: absolute;
+  left: 50%;
+  top: 70%;                 /* line3과 동일 top */
+  transform: translate(-50%, -50%);
+  width: 370px;             /* line3과 동일 폭 */
+  height: 36px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 20px;
+  outline: none;
+  z-index: 4;
+  box-shadow: none;
+}
+
+.calendar-popup {
+  position: absolute;
+  top: 73%;            /* 기한 입력칸 바로 아래 */
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 10;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background-color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}

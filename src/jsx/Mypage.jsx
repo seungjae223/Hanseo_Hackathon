@@ -1,9 +1,6 @@
 import { useState } from "react";
 import "../css/Mypage.css";
-import bg1 from '../image/background1.png';
-import bg2 from '../image/background2.png';
 import back from '../image/back.png';
-import set from '../image/setting.png';
 import pfi1 from '../image/pfi1.png';
 import pfi2 from '../image/pfi2.png';
 import pfi3 from '../image/pfi3.png';
@@ -42,10 +39,7 @@ export default function Mypage() {
 
   return (
     <div className="container">
-      <img src={bg1} alt="뒷배경1" className="background1"/>
-      <img src={bg2} alt="뒷배경2" className="background2"/>
       <img src={back} alt="뒤로가기" className="back" onClick={handleStartClick}/>
-      <img src={set} alt="설정 아이콘" className="setting"/>
       <p className="pf">프로필 설정</p>
 
       {/* 대표 프로필 이미지 (흰 칸 클릭 시 변경) */}
@@ -83,13 +77,23 @@ export default function Mypage() {
             <span className="value">{profile.nickname}</span>
           }
         </div>
-        <div className="row">
-          <span className="label">학년</span>
-          {editing ? 
-            <input type="text" value={profile.grade} onChange={(e) => handleChange(e, "grade")} /> :
-            <span className="value">{profile.grade}</span>
-          }
-        </div>
+       <div className="row">
+  <span className="label">학년</span>
+  {editing ? (
+    <select
+      value={profile.grade}
+      onChange={(e) => handleChange(e, "grade")}
+      className="grade-select"
+    >
+      <option value="1학년">1학년</option>
+      <option value="2학년">2학년</option>
+      <option value="3학년">3학년</option>
+      <option value="4학년">4학년</option>
+    </select>
+  ) : (
+    <span className="value">{profile.grade}</span>
+  )}
+</div>
         <div className="row">
           <span className="label">학과</span>
           {editing ? 
