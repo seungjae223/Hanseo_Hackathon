@@ -68,7 +68,189 @@
   background:var(--yellow); color:var(--yellow-ink);
   font-weight:800; cursor:pointer;
 }
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+  position: relative; /* 배경 이미지 겹치기 기준 */
+  height: 932px; /* 필요에 따라 높이 조정 */
+}
 
+
+
+.back{
+  width: 17px;
+  height: 30px;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  top: 20px; /* 1번 뒤에 살짝 내려서 겹치기 */
+  left: 20px;
+  z-index: 3; /* 위쪽 */
+}
+
+
+.pf {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 90%;
+  left: 50%;
+  text-align: center;
+  position: absolute;   /* 배경 위로 올리기 */
+  top: 5px;           /* 화면에서 원하는 위치 조정 */
+  transform: translateX(-50%); /* 가운데 정렬 */
+  z-index: 3;           /* 배경보다 위 */
+}
+
+.white{
+  position: absolute;
+  background-color: #EDEDED;
+  width: 180px;
+  height: 172px;
+  border-radius: 18px;
+  top: 162px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.pfi1{
+  width: 93px;
+  height: 150px;
+  top: 10px;
+  left: 25%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+.pfi2{
+  width: 100px;
+  height: 150px;
+  top: 10px;
+  left: 23%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+.pfi3{
+  width: 100px;
+  height: 150px;
+  top: 10px;
+  left: 23%;
+  position: absolute; /* 겹치도록 절대 위치 지정 */
+  z-index: 2;
+}
+
+
+.pf-btn{
+  position: absolute;
+  width: 90px;
+  height: 28px;
+  top: 354px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 12px;
+  z-index: 3;
+  background-color: #FED800;
+}
+
+.pf-btn p{
+  top: -4px;
+  font-size: 11px;
+  font-weight: 400;
+  text-align: center;
+  position: relative;
+}
+
+.profile-info {
+  position: absolute;
+  top: 420px; /* pfbtn 아래로 배치 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%; /* 전체 폭의 80% */
+  z-index: 3;
+  font-size: 14px;
+}
+
+.profile-info .row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-info .label {
+  width: 70px; /* 라벨 고정폭 */
+  font-weight: bold;
+  color: #000;
+}
+
+.profile-info .value {
+  flex: 1;
+  color: #333;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+}
+
+.tag {
+  background-color: #d9d9d9;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 794px; /* 프로필정보 밑으로 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FED800;
+  border: none;
+  border-radius: 12px;
+  width: 90px;
+  height: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 794px; /* 프로필정보 밑으로 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FED800;
+  border: none;
+  border-radius: 12px;
+  width: 90px;
+  height: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* input 필드 스타일 */
+.profile-info input {
+  flex: 1;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.grade-select {
+  flex: 1;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
 /* 정보 리스트 */
 .form{
   width:min(560px, 90vw);

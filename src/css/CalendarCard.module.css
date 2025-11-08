@@ -71,6 +71,7 @@
   place-items:top;
   position:relative;
   cursor:pointer;
+   border:2px solid transparent;
 }
 
 .day.hasEvent::after{
@@ -86,7 +87,8 @@
 
 /* 선택된 날짜 – 살짝만 강조 */
 .day.selected{
-  background:#fff;
+  background:transparent;  /* 또는 #fff, 카드 배경색이랑 동일하게 */
+  border-color:#FED800;       /* 테두리 색 */
   outline:none;
 }
 

@@ -111,8 +111,8 @@
 }
 
 .searchIcon{
-  width:20px;
-  height:20px;
+  width:25px;
+  height:25px;
   flex-shrink:0;
   filter:brightness(.2);
 }
@@ -133,21 +133,18 @@
 
 /* 오른쪽 네모 연필 버튼 */
 .shareBtn{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-  border:2px solid #000000;
-  background:#ffffff;
+  width:40px;
+  height:40px;
+  background: transparent;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:0;
   cursor:pointer;
-  box-shadow:0 6px 14px rgba(0,0,0,.18);
 }
 .shareBtn img{
-  width:18px;
-  height:18px;
+  width:30px;
+  height:30px;
   filter:brightness(0);
 }
 
