@@ -7,8 +7,7 @@
   --dot:#ff9257;
 }
 
-/* 카드 & 헤더는 직전 상태 유지해도 되고, 아래 핵심은 날짜 구역 */
-
+/* 카드 & 헤더 */
 .card{
   width:100%;
   max-width:340px;
@@ -19,20 +18,37 @@
   padding:14px 16px 12px;
   color:var(--ink);
 }
+
 .header{
   display:grid;
   grid-template-columns:24px 1fr 24px;
   align-items:center;
   gap:6px;
 }
-.title{ margin:0; font-size:20px; font-weight:800; }
-.arrow{
-  width:24px; height:24px; border:none; background:transparent;
-  font-size:18px; line-height:1; cursor:pointer;
-}
-.divider{ height:2px; background:#000; margin:6px 0 8px; }
 
-/* ===== 날짜 영역 (목업과 동일) ===== */
+.title{
+  margin:0;
+  font-size:20px;
+  font-weight:800;
+}
+
+.arrow{
+  width:24px;
+  height:24px;
+  border:none;
+  background:transparent;
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.divider{
+  height:2px;
+  background:#000;
+  margin:6px 0 8px;
+}
+
+/* ===== 날짜 영역 ===== */
 .dayWrap{
   display:grid;
   grid-template-columns: repeat(7, 1fr);
@@ -41,7 +57,7 @@
   padding:4px 0 0;
 }
 
-/* 위 줄(1~7) : 클릭 가능 알약 */
+/* 날짜 버튼 */
 .day{
   height:60px;
   min-width:36px;
@@ -51,39 +67,161 @@
   color:var(--ink);
   font-weight:800;
   font-size:13px;
-  display:grid; 
+  display:grid;
   place-items:top;
   position:relative;
   cursor:pointer;
 }
+
 .day.hasEvent::after{
   content:"";
-  position:absolute; right:6px; top:6px;
-  width:5px; height:5px; border-radius:50%;
+  position:absolute;
+  right:6px;
+  top:6px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
   background:var(--dot);
 }
-/* 목업은 선택 윤곽선 거의 없음 → 살짝 진해 보이게만 */
-.day.selected{ background:#fff; outline:none; }
 
-/* 아래 줄(모두 ‘2’) : 비활성 알약 */
+/* 선택된 날짜 – 살짝만 강조 */
+.day.selected{
+  background:#fff;
+  outline:none;
+}
+
+/* 아래 줄(비활성 알약 – 필요하면 사용) */
 .countPill{
   height:40px;
   min-width:36px;
   border-radius:16px;
   background:#f3f3f3;
-  color:#9a9a9a;            /* 회색 텍스트 */
+  color:#9a9a9a;
   font-weight:800;
   font-size:13px;
-  display:grid; place-items:center;
-  pointer-events:none;      /* 클릭 불가 */
+  display:grid;
+  place-items:center;
+  pointer-events:none;
 }
 
-/* 토글/상세 */
-.toggle{ margin:8px auto 4px; display:block; border:none; background:transparent; cursor:pointer; }
-.toggleIcon{ font-size:14px; color:#7b7b7b; }
-.detail{ margin-top:4px; padding:2px 0 6px; }
-.detailDate{ font-size:14px; font-weight:800; margin-bottom:4px; }
-.detailTitle{ font-size:13px; font-weight:800; margin-bottom:4px; }
-.detailPlace{ font-size:11px; color:var(--muted); }
-.chev{ text-align:center; font-size:14px; opacity:.6; margin-top:4px; }
-.hint{ color:var(--muted); }
+/* ===== 토글/상세 ===== */
+
+/* 토글 버튼: 달력 바로 밑, 오른쪽 정렬 (위쪽으로 더 붙임) */
+.toggle{
+  margin:0 4px 4px auto;   /* ⬅ top 0으로 수정 */
+  display:block;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+}
+
+.toggleIcon{
+    position: relative;
+    right: 145px;
+  width:8.92px;
+  height:8px;
+  opacity:1.5;
+}
+
+/* 상세 영역 공통 */
+.detail{
+  margin-top:4px;
+  padding:2px 0 6px;
+}
+
+.detailDate{
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.detailTitle{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.detailPlace{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.hint{
+  color:var(--muted);
+}
+
+/* 플러스 버튼 */
+.editBtn{
+  border:none;
+  background:transparent;
+  padding:6px 0 0;
+  cursor:pointer;
+}
+
+.editIcon{
+    position: sticky;
+    bottom: 115px;
+    left: 295px;
+  width:9px;
+  height:10px;
+}
+
+/* ===== 편집 모드용 ===== */
+
+.detailLabel{
+  margin-top:8px;
+  font-size:13px;
+}
+
+.detailInput{
+  width:100%;
+  margin-top:4px;
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
+
+/* 버튼 묶음 */
+.detailActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:12px;
+}
+
+.detailBtn{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid #ddd;
+  background:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.detailBtnPrimary{
+  border:none;
+  background:#111;
+  color:#fff;
+}
+
+.detailBtnDanger{
+  border-color:#f97373;
+  color:#d92c2c;
+}
+.eventDeleteBtn{
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: #d92c2c;
+  cursor: pointer;
+  white-space: nowrap;       /* '삭제' 줄바꿈 안 되게 */
+}
+
+/* (예전 chev 클래스 필요하면) */
+.chev{
+  text-align:center;
+  font-size:14px;
+  opacity:.6;
+  margin-top:4px;
+}

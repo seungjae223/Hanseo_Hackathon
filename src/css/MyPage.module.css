@@ -1,0 +1,119 @@
+:root{
+  --ink:#111; --muted:#757575; --line:#eee;
+  --yellow:#FED800; --yellow-ink:#111;
+  --surface:#fff; --tile:#eeeeee;
+}
+
+.page{
+  min-height:100dvh;
+  background:#fff;
+  color:var(--ink);
+}
+
+/* 상단바 */
+.topbar{
+  position:sticky; top:0; z-index:10;
+  display:grid;
+  grid-template-columns:48px 1fr 48px;
+  align-items:center;
+  height:56px;
+  background:#fff;
+}
+.back{
+  width:48px; height:48px; border:none; background:transparent;
+  font-size:28px; line-height:1; cursor:pointer;
+}
+.title{
+  margin:0; text-align:center;
+  font-size:22px; font-weight:800; letter-spacing:.2px;
+}
+.rightSpace{ width:48px; height:48px; }
+
+/* 아바타 */
+.avatarBox{
+  display:grid; place-items:center;
+  padding:24px 0 8px;
+}
+.avatar{
+  width:232px; height:232px;
+  background:#eee; border-radius:24px;
+  display:grid; place-items:center;
+  overflow:hidden;                 /* 이미지 넘침 방지 */
+}
+
+/* ▶ 이미지로 프로필을 쓸 때 */
+.avatarImg{
+  width:80%;
+  height:80%;
+  object-fit:contain;
+  display:block;
+}
+
+/*토끼 플레이스홀더 */
+.rabbit{
+  width:100px; height:100px; border-radius:999px;
+  background:#fff; position:relative;
+}
+.rabbit::before, .rabbit::after{
+  content:""; position:absolute; top:-22px; width:16px; height:28px;
+  background:#fff; border-radius:10px;
+}
+.rabbit::before{ left:46%; transform:translateX(-100%); }
+.rabbit::after{ left:54%; }
+
+.editBtn{
+  margin-top:16px;
+  height:40px; padding:0 18px;
+  border:none; border-radius:999px;
+  background:var(--yellow); color:var(--yellow-ink);
+  font-weight:800; cursor:pointer;
+}
+
+/* 정보 리스트 */
+.form{
+  width:min(560px, 90vw);
+  margin:18px auto 0;
+}
+.row{
+  display:grid;
+  grid-template-columns:100px 1fr;
+  align-items:center;
+  padding:14px 4px;
+}
+.rowCol{
+  padding:14px 4px;
+}
+.label{
+  font-size:16px; color:var(--ink);
+}
+.value{
+  font-size:20px; font-weight:700;
+}
+.tagWrap{
+  display:flex; gap:12px; margin-top:10px;
+}
+.tagChip{
+  width:96px; height:36px; border-radius:18px;
+  background:#eee;
+  display:inline-block;
+}
+
+/* 하단 버튼 */
+.bottomSpace{ height:28px; }
+.logout{
+  display:block;
+  width:156px;
+  margin:0 auto 24px;
+  height:36px; border:none; border-radius:16px;
+  background:#FED800; color:var(--yellow-ink);
+  font-weight:800; font-size:18px; cursor:pointer;
+}
+
+/* 작은 화면 최적화 */
+@media (max-width:420px){
+  .title{ font-size:20px; }
+  .avatar{ width:200px; height:200px; }
+  .row{ grid-template-columns:84px 1fr; }
+  .value{ font-size:18px; }
+  .tagChip{ width:84px; height:34px; }
+}

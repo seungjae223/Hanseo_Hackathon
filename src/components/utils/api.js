@@ -1,5 +1,5 @@
 // src/utils/api.js
-export const API_BASE_URL = ""; // CRA 프록시 사용 시 빈 문자열 권장
+export const API_BASE_URL = "http://localhost:8080"; // CRA 프록시 사용 시 빈 문자열 권장
 
 export async function apiFetch(path, options = {}) {
   const {

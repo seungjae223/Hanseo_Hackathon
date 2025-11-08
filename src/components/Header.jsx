@@ -1,5 +1,5 @@
 // src/components/Header.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/Header.module.css";
 import Logo from "../assets/작당모의.png";
@@ -10,6 +10,17 @@ import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
 import FindPasswordModal from "../components/FindpassWordModal";
 
+/* 아바타 기본/옵션 이미지 */
+import AvtBear from "../assets/캐릭터.png";
+import AvtCat from "../assets/캐릭터2.png";
+import AvtBunny from "../assets/캐릭터3.png";
+
+const AVATAR_SRC = {
+  bear: AvtBear,
+  cat: AvtCat,
+  bunny: AvtBunny,
+};
+
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
@@ -18,22 +29,39 @@ export default function Header() {
   // 로고 클릭 애니메이션 상태
   const [logoAnimating, setLogoAnimating] = useState(false);
 
+  // 헤더 아바타 상태(로컬스토리지에 저장된 키를 읽어옴: 'bear' | 'cat' | 'bunny')
+  const [avatarKey, setAvatarKey] = useState(localStorage.getItem("profileAvatar") || "");
+
   const navigate = useNavigate();
+
+  // 마이페이지에서 선택 후 헤더 즉시 반영 (커스텀 이벤트 & storage 변화 둘 다 수신)
+  useEffect(() => {
+    const onAvatarChange = () => setAvatarKey(localStorage.getItem("profileAvatar") || "");
+    window.addEventListener("avatarChange", onAvatarChange);
+    window.addEventListener("storage", onAvatarChange);
+    return () => {
+      window.removeEventListener("avatarChange", onAvatarChange);
+      window.removeEventListener("storage", onAvatarChange);
+    };
+  }, []);
 
   const handleLogoClick = () => {
     if (logoAnimating) return; // 연타 방지
     setLogoAnimating(true);
-
-    const DURATION = 320; // 아래 keyframes pop-bounce와 동일
+    const DURATION = 320;
     setTimeout(() => {
       navigate("/Mainpage", { state: { reset: Date.now() } });
       setLogoAnimating(false);
     }, DURATION);
   };
 
+  const goMyPage = () => navigate("/mypage");
+
+  const avatarUrl = AVATAR_SRC[avatarKey]; // 선택된 아바타 실제 파일 경로
+
   return (
     <header className={styles.header}>
-      {/* 컴포넌트 내부에 애니메이션 스타일 주입 (다른 파일 수정 없이 적용) */}
+      {/* 내부 애니메이션 스타일 */}
       <style>{`
         @keyframes pop-bounce {
           0%   { transform: scale(1) rotate(0deg); }
@@ -41,13 +69,8 @@ export default function Header() {
           65%  { transform: scale(1.08) rotate(0.6deg); }
           100% { transform: scale(1) rotate(0deg); }
         }
-        .__logoBtnReset {
-          background: none; border: 0; padding: 0; cursor: pointer;
-          display: inline-flex; align-items: center;
-        }
-        .__logoBounce {
-          animation: pop-bounce .32s ease-out both;
-        }
+        .__logoBtnReset{background:none;border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;}
+        .__logoBounce{animation: pop-bounce .32s ease-out both;}
       `}</style>
 
       {/* 좌측 로고 */}
@@ -68,12 +91,26 @@ export default function Header() {
         </button>
       </div>
 
-      {/* 우측 버튼들 */}
+      {/* 우측 메뉴: 로그인 버튼 + 마이페이지 아바타 원형 버튼 */}
       <div className={styles.rightMenu}>
         <button className={styles.loginBtn} onClick={() => setShowLogin(true)}>
           <img src={LoginBtnImg} alt="로그인" className="Login-img" />
         </button>
-        <span className={styles.mypage}>마이페이지</span>
+
+        {/* 아바타 원 버튼 (사진 있으면 배경, 없으면 텍스트 '마이페이지') */}
+        <button
+          type="button"
+          className={styles.mypageBtn}
+          aria-label="마이페이지로 이동"
+          onClick={goMyPage}
+          style={
+            avatarUrl
+              ? { backgroundImage: `url(${avatarUrl})` }
+              : undefined
+          }
+        >
+         
+        </button>
       </div>
 
       {/* 로그인 모달 */}
@@ -91,13 +128,9 @@ export default function Header() {
         />
       )}
 
-      {/* 회원가입 모달 */}
+      {/* 회원가입/비번 찾기 모달 */}
       {showSignUp && <SignUpModal onClose={() => setShowSignUp(false)} />}
-
-      {/* 비밀번호 찾기 모달 */}
-      {showFindPassword && (
-        <FindPasswordModal onClose={() => setShowFindPassword(false)} />
-      )}
+      {showFindPassword && <FindPasswordModal onClose={() => setShowFindPassword(false)} />}
     </header>
   );
 }

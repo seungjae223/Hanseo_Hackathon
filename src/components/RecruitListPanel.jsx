@@ -86,85 +86,100 @@ export default function RecruitListPanel() {
 
   return (
     <section className={styles.page}>
-      {/* ===== Hero (피그마의 가운데 장식) ===== */}
+      {/* ===== 상단 노란 영역 (Hero) ===== */}
       <div className={styles.hero}>
         <div className={styles.heroGraphic} aria-hidden="true">
-          <span className={styles.heroCap} />
-          <span className={styles.heroBody} />
-          <span className={styles.heroShadow} />
-          <span className={styles.heroHeart}>
+          {/* 위 연한 카드 */}
+          <div className={styles.heroCap} />
+          {/* 아래 진한 그림자 막대 */}
+          <div className={styles.heroBody} />
+          {/* 위 카드 오른쪽 하트 */}
+          <button
+            type="button"
+            className={styles.heroHeart}
+            aria-label={LABELS.heartList}
+          >
             <img src={HeartIcon} alt="" />
-          </span>
-        </div>
-      </div>
-
-      {/* ===== Search ===== */}
-      <div className={styles.searchSection}>
-        <div className={styles.searchBox}>
-          <img src={SearchIcon} alt="" className={styles.searchIcon} />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className={styles.searchInput}
-            type="search"
-            placeholder={LABELS.searchPlaceholder}
-            aria-label={LABELS.searchAria}
-          />
-          <button type="button" className={styles.shareBtn} aria-label={LABELS.share}>
-            <img src={PencilIcon} alt="" />
           </button>
         </div>
       </div>
 
-      {/* ===== List (기존 유지) ===== */}
-      <div className={styles.list}>
-        {filteredPosts.map((post) => {
-          const isSaved = saved.has(post.id);
-          const highlight = post.highlight || "\u00a0";
-
-          return (
-            <article
-              key={post.id}
-              className={styles.card}
-              role="button"
-              tabIndex={0}
-              onClick={() => navigate(`/recruit/${post.id}`)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  navigate(`/recruit/${post.id}`);
-                }
-              }}
+      {/* ===== 흰 패널 영역 (검색 + 리스트) ===== */}
+      <div className={styles.body}>
+        {/* Search */}
+        <div className={styles.searchSection}>
+          <div className={styles.searchBox}>
+            <img src={SearchIcon} alt="" className={styles.searchIcon} />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className={styles.searchInput}
+              type="search"
+              placeholder={LABELS.searchPlaceholder}
+              aria-label={LABELS.searchAria}
+            />
+            <button
+              type="button"
+              className={styles.shareBtn}
+              aria-label={LABELS.share}
             >
-              <div className={styles.cardHeader}>
-                <span className={styles.cardTag}>{post.tag}</span>
-                <button
-                  type="button"
-                  className={`${styles.cardHeart} ${isSaved ? styles.cardHeartActive : ""}`}
-                  aria-label={isSaved ? LABELS.unSave : LABELS.save}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleSave(post.id);
-                  }}
-                >
-                  <img src={HeartIcon} alt="" />
-                </button>
-              </div>
+              <img src={PencilIcon} alt="" />
+            </button>
+          </div>
+        </div>
 
-              <h3 className={styles.cardTitle}>{post.title}</h3>
-              <p className={styles.cardSummary}>{post.summary}</p>
+        {/* List */}
+        <div className={styles.list}>
+          {filteredPosts.map((post) => {
+            const isSaved = saved.has(post.id);
+            const highlight = post.highlight || "\u00a0";
 
-              <footer className={styles.cardFooter}>
-                <span className={styles.cardHighlight}>{highlight}</span>
-                <span className={styles.cardDday}>{`D-${post.dday}`}</span>
-              </footer>
-            </article>
-          );
-        })}
+            return (
+              <article
+                key={post.id}
+                className={styles.card}
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(`/recruit/${post.id}`)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    navigate(`/recruit/${post.id}`);
+                  }
+                }}
+              >
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardTag}>{post.tag}</span>
+                  <button
+                    type="button"
+                    className={`${styles.cardHeart} ${
+                      isSaved ? styles.cardHeartActive : ""
+                    }`}
+                    aria-label={isSaved ? LABELS.unSave : LABELS.save}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSave(post.id);
+                    }}
+                  >
+                    <img src={HeartIcon} alt="" />
+                  </button>
+                </div>
 
-        {filteredPosts.length === 0 && (
-          <div className={styles.empty}>검색 결과가 없습니다.</div>
-        )}
+                <h3 className={styles.cardTitle}>{post.title}</h3>
+                <p className={styles.cardSummary}>{post.summary}</p>
+
+                <footer className={styles.cardFooter}>
+                  <span className={styles.cardHighlight}>{highlight}</span>
+                  <span className={styles.cardDday}>{`D-${post.dday}`}</span>
+                </footer>
+              </article>
+            );
+          })}
+
+          {filteredPosts.length === 0 && (
+            <div className={styles.empty}>검색 결과가 없습니다.</div>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 :root{
-  --ink:#222; --line:#101010; --card:#eaeaea; --block:#d9d9d9;
+  --ink:#222; --line:#101010; --card:#eaeaea; --block:#d9d9d9; --backgraound: #F5F5F5;
   --accent:#2f9bff; /* 상세 큰 이미지 파란 테두리 */
 }
 

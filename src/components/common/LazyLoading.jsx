@@ -8,13 +8,13 @@ export function DefaultFallback() {
         minHeight: "50vh",
         display: "grid",
         placeItems: "center",
-        gap: 12,
+        gap: 10,
       }}
     >
       <div
         style={{
-          width: 48,
-          height: 48,
+          width: 60,
+          height: 60,
           borderRadius: "50%",
           border: "4px solid rgba(246, 228, 41, 1)",
           borderTopColor: "currentColor",
@@ -55,11 +55,11 @@ export const Lazy = {
   RecruitListPanel: lazyRetry(() => import(/* webpackChunkName: "recruit-list" */     "../RecruitListPanel.jsx")),
   TeamManagePanel:  lazyRetry(() => import(/* webpackChunkName: "team-manage" */      "../TeamManagePanel.jsx")),
   ProtectedPage:    lazyRetry(() => import(/* webpackChunkName: "protected" */        "../ProtectedPage.jsx")),
-
-  /* 추가 라우트 */
   Matching:         lazyRetry(() => import(/* webpackChunkName: "matching" */         "../Matching.jsx")),
   RecruitDetail:    lazyRetry(() => import(/* webpackChunkName: "recruit-detail" */   "../RecruitDetail.jsx")),
   TeamMemberDetail: lazyRetry(() => import(/* webpackChunkName: "team-member-detail" */"../TeamMemberDetail.jsx")),
+  /* ✅ 마이페이지 추가 */
+  MyPage:           lazyRetry(() => import(/* webpackChunkName: "mypage" */           "../Mypage.jsx")),
 
   /* 공통 컴포넌트 */
   Header:           lazyRetry(() => import(/* webpackChunkName: "header" */           "../Header.jsx")),
@@ -81,6 +81,8 @@ export const prefetch = {
   matching:         () => import(/* webpackPrefetch: true */ "../Matching.jsx"),
   recruitDetail:    () => import(/* webpackPrefetch: true */ "../RecruitDetail.jsx"),
   teamMemberDetail: () => import(/* webpackPrefetch: true */ "../TeamMemberDetail.jsx"),
+  /* ✅ 마이페이지 프리패치 */
+  mypage:           () => import(/* webpackPrefetch: true */ "../Mypage.jsx"),
 };
 
 export default Lazy;
