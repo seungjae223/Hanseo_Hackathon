@@ -1,4 +1,4 @@
-/* =================== 컨테이너 & 기본 구조 =================== */
+/* =================== 컨테이너 =================== */
 .container {
   max-width: 480px;
   margin: 0 auto;
@@ -21,7 +21,6 @@
 .pf {
   font-size: 20px;
   font-weight: 500;
-  line-height: 1.5;
   max-width: 90%;
   left: 50%;
   text-align: center;
@@ -69,7 +68,6 @@
 .pf-btn p {
   top: -4px;
   font-size: 11px;
-  font-weight: 400;
   text-align: center;
   position: relative;
 }
@@ -86,7 +84,6 @@
 
 .profile-info .row {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   margin-bottom: 30px;
 }
@@ -94,12 +91,10 @@
 .profile-info .label {
   width: 70px;
   font-weight: bold;
-  color: #000;
 }
 
 .profile-info .value {
   flex: 1;
-  color: #333;
 }
 
 .profile-info input,
@@ -111,33 +106,24 @@
   font-size: 14px;
 }
 
-.grade-select {
-  background-color: white;
-  cursor: pointer;
-}
-
 /* =================== 태그 영역 =================== */
 
-/* 태그 표시 영역 (편집 전후 동일 높이, 한 줄 고정) */
 .tags,
 .tags-editable {
   display: flex;
   align-items: center;
-  justify-content: flex-start;  /* 좌측 정렬 고정 */
   gap: 8px;
-  flex-wrap: nowrap;            /* 줄바꿈 금지 */
-  overflow-x: auto;             /* 넘치면 스크롤 */
+  flex-wrap: nowrap;
+  overflow-x: auto;
   min-height: 40px;
   padding: 0 4px;
 }
 
-/* 스크롤바 숨기기 (선택 사항) */
 .tags::-webkit-scrollbar,
 .tags-editable::-webkit-scrollbar {
   display: none;
 }
 
-/* 개별 태그 스타일 */
 .tag {
   width: 61px;
   height: 23px;
@@ -147,12 +133,9 @@
   background-color: #d9d9d9;
   border-radius: 20px;
   font-size: 12px;
-  color: #333;
-  white-space: nowrap;
-  flex-shrink: 0;               /* 크기 줄어들지 않음 */
+  flex-shrink: 0;
 }
 
-/* "+ 태그 선택" 버튼 디자인 고정 */
 .add-tag {
   width: 60px;
   height: 23px;
@@ -163,22 +146,19 @@
   border: 1px dashed #aaa;
   border-radius: 20px;
   font-size: 12px;
-  color: #666;
-  flex-shrink: 0;               /* 줄어들지 않음 */
   cursor: pointer;
-  margin-left: auto;             /* 끝으로 붙이기 */
+  flex-shrink: 0;
 }
 
-
-/* 태그 없을 때 표시 */
 .no-tag {
   background-color: #f3f3f3;
   color: #aaa;
-  height: 23px;;
+  height: 23px;
   border-radius: 10px;
 }
 
-/* =================== 태그 모달 =================== */
+/* =================== 3열 태그 모달 =================== */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -189,56 +169,56 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 999;
 }
 
 .tag-modal {
-  background: white;
-  border-radius: 20px;
+  background: #FBFAF7;
+  border-radius: 15px;
   padding: 20px;
-  width: 90%;
-  max-width: 380px;
-  max-height: 80%;
+  width: 87%;
+  max-height: 440px;
   overflow-y: auto;
 }
 
-.tag-modal h3 {
-  text-align: center;
-  margin-bottom: 10px;
+
+.tag-3col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
 }
 
-.tag-section {
-  margin-bottom: 16px;
-}
-
-.tag-section p {
+.tag-col-title {
   font-weight: bold;
-  margin-bottom: 8px;
+  font-size: 15px;
+  text-align: center;
+  margin-bottom: 6px;
 }
 
-.tag-grid {
+.tag-col {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
 }
 
-.tag-btn {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f3f3f3;
-  cursor: pointer;
+.tag-item-btn {
+  padding: 6px 8px;
+  border-radius: 30px;
   font-size: 12px;
-  transition: 0.2s;
+  width: 60px;
+  margin-left: 20px; 
+  background: #DEDEDE;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  text-align: center;
 }
 
-.tag-btn.selected {
-  background-color: #FED800;
+.tag-item-btn.selected {
+  background: #FED800;
   border-color: #FED800;
-  color: #000;
 }
 
-/* =================== 로그아웃 버튼 =================== */
+/* =================== 로그아웃 =================== */
 .logout-btn {
   position: absolute;
   top: 794px;

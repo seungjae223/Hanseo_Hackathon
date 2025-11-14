@@ -12,7 +12,7 @@ export default function Mypage() {
 
   const profileImages = [pfi1, pfi2, pfi3];
   const [editing, setEditing] = useState(false);
-  const [showTagModal, setShowTagModal] = useState(false); // 🔹 태그 모달 상태
+  const [showTagModal, setShowTagModal] = useState(false);
 
   const [profile, setProfile] = useState({
     name: "주노",
@@ -34,7 +34,6 @@ export default function Mypage() {
     setProfile({ ...profile, profileImage: profileImages[nextIndex] });
   };
 
-  // 🔹 태그 선택 관련
   const handleTagClick = (tag) => {
     const alreadySelected = profile.tags.includes(tag);
     let updatedTags;
@@ -51,8 +50,8 @@ export default function Mypage() {
   };
 
   const personality = ["친절함", "활발함", "유머감", "배려심", "사교성", "인내심"];
-  const ability = ["문제 해결", "신속 처리", "창의 발상", "논리 정연", "실행 능력", "경력직", "협업 능력", "효율 추구", "발표 능력", "학습 능력"];
-  const attitude = ["적극 참여", "솔선 수범", "긍정 사고", "배움 열정", "성실 노력", "책임 완수", "공감 능력", "도전 의지", "목표 지향"];
+  const ability = ["문제 해결", "신속 처리", "창의 발생", "논리 정연", "실행 능력", "경험적", "협업 능력", "효율 추구", "발표 능력", "학습 능력"];
+  const attitude = ["적극 참여", "출석 수범", "긍정 사고", "배움 열정", "성실 노력", "책임 완수", "공감 능력", "도전 의지", "목표 지향"];
 
   return (
     <div className="container">
@@ -131,89 +130,95 @@ export default function Mypage() {
 
         <div className="row">
           <span className="label">관심태그</span>
-{editing ? (
-  <div 
-    className="tags-editable"
-    onClick={() => setShowTagModal(true)}
-  >
-    {profile.tags.length > 0 ? (
-      profile.tags.map((tag, idx) => (
-        <span key={idx} className="tag">{tag}</span>
-      ))
-    ) : (
-      <span className="no-tag">선택된 태그 없음</span> // 🔸 비어 있을 때 표시
-    )}
-    <span className="add-tag">+ 태그 선택</span>
-  </div>
-) : (
-  <div className="tags">
-    {profile.tags.length > 0 ? (
-      profile.tags.map((tag, idx) => 
-        <span key={idx} className="tag">{tag}</span>
-      )
-    ) : (
-      <span className="no-tag">선택된 태그 없음</span>
-    )}
-  </div>
-)}
+
+          {editing ? (
+            <div 
+              className="tags-editable"
+              onClick={() => setShowTagModal(true)}
+            >
+              {profile.tags.length > 0 ? (
+                profile.tags.map((tag, idx) => (
+                  <span key={idx} className="tag">{tag}</span>
+                ))
+              ) : (
+                <span className="no-tag">선택된 태그 없음</span>
+              )}
+              <span className="add-tag">+ 태그 선택</span>
+            </div>
+          ) : (
+            <div className="tags">
+              {profile.tags.length > 0 ? (
+                profile.tags.map((tag, idx) => 
+                  <span key={idx} className="tag">{tag}</span>
+                )
+              ) : (
+                <span className="no-tag">선택된 태그 없음</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {!editing && <button className="logout-btn">로그아웃</button>}
       {editing && <button className="logout-btn" onClick={() => setEditing(false)}>완료</button>}
 
-      {/* 🔹 태그 선택 모달 */}
+      {/* ✅ 태그 3열 모달 */}
       {showTagModal && (
         <div className="modal-overlay" onClick={() => setShowTagModal(false)}>
           <div className="tag-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>관심 태그 선택</h3>
-            <div className="tag-section">
-              <p>성격 (Personality)</p>
-              <div className="tag-grid">
-                {personality.map((tag) => (
-                  <button 
+            
+
+
+            <div className="tag-3col-grid">
+
+              {/* 성격 */}
+              <div className="tag-col">
+                <p className="tag-col-title">성격</p>
+                {personality.map((tag)=>(
+                  <div
                     key={tag}
-                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
+                    className={`tag-item-btn ${profile.tags.includes(tag)?'selected':''}`}
                     onClick={() => handleTagClick(tag)}
                   >
                     {tag}
-                  </button>
+                  </div>
                 ))}
               </div>
+
+              {/* 능력 */}
+              <div className="tag-col">
+                <p className="tag-col-title">능력</p>
+                {ability.map((tag)=>(
+                  <div
+                    key={tag}
+                    className={`tag-item-btn ${profile.tags.includes(tag)?'selected':''}`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </div>
+                ))}
+              </div>
+
+              {/* 태도 */}
+              <div className="tag-col">
+                <p className="tag-col-title">태도</p>
+                {attitude.map((tag)=>(
+                  <div
+                    key={tag}
+                    className={`tag-item-btn ${profile.tags.includes(tag)?'selected':''}`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </div>
+                ))}
+              </div>
+
             </div>
 
-            <div className="tag-section">
-              <p>능력 (Ability)</p>
-              <div className="tag-grid">
-                {ability.map((tag) => (
-                  <button 
-                    key={tag}
-                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="tag-section">
-              <p>태도 (Attitude)</p>
-              <div className="tag-grid">
-                {attitude.map((tag) => (
-                  <button 
-                    key={tag}
-                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
