@@ -7,42 +7,58 @@ import pfi3 from '../image/pfi3.png';
 import { useNavigate } from "react-router-dom";
 
 export default function Mypage() {
+  const navigate = useNavigate();
+  const handleStartClick = () => navigate("/main");
 
-        const navigate = useNavigate();
-
-  const handleStartClick = () => {
-    navigate("/main"); // ✅ 이동 경로
-  };
-  const profileImages = [pfi1, pfi2, pfi3]; // 프로필 이미지 배열
+  const profileImages = [pfi1, pfi2, pfi3];
   const [editing, setEditing] = useState(false);
+  const [showTagModal, setShowTagModal] = useState(false); // 🔹 태그 모달 상태
+
   const [profile, setProfile] = useState({
     name: "주노",
     nickname: "Juno",
     grade: "3학년",
     dept: "컴퓨터공학과",
     email: "juno@hanseo.ac.kr",
-    tags: ["#태그1", "#태그2", "#태그3"],
-    profileImage: pfi1 // 기본 프로필 이미지
+    tags: ['친절함','활발함','유머감'],
+    profileImage: pfi1
   });
 
-  // 프로필 정보 변경
   const handleChange = (e, field) => {
     setProfile({ ...profile, [field]: e.target.value });
   };
 
-  // 프로필 이미지 변경 (순환)
   const handleImageChange = () => {
     const currentIndex = profileImages.indexOf(profile.profileImage);
     const nextIndex = (currentIndex + 1) % profileImages.length;
     setProfile({ ...profile, profileImage: profileImages[nextIndex] });
   };
 
+  // 🔹 태그 선택 관련
+  const handleTagClick = (tag) => {
+    const alreadySelected = profile.tags.includes(tag);
+    let updatedTags;
+
+    if (alreadySelected) {
+      updatedTags = profile.tags.filter(t => t !== tag);
+    } else if (profile.tags.length < 3) {
+      updatedTags = [...profile.tags, tag];
+    } else {
+      return alert("최대 3개까지 선택할 수 있습니다!");
+    }
+
+    setProfile({ ...profile, tags: updatedTags });
+  };
+
+  const personality = ["친절함", "활발함", "유머감", "배려심", "사교성", "인내심"];
+  const ability = ["문제 해결", "신속 처리", "창의 발상", "논리 정연", "실행 능력", "경력직", "협업 능력", "효율 추구", "발표 능력", "학습 능력"];
+  const attitude = ["적극 참여", "솔선 수범", "긍정 사고", "배움 열정", "성실 노력", "책임 완수", "공감 능력", "도전 의지", "목표 지향"];
+
   return (
     <div className="container">
       <img src={back} alt="뒤로가기" className="back" onClick={handleStartClick}/>
       <p className="pf">프로필 설정</p>
 
-      {/* 대표 프로필 이미지 (흰 칸 클릭 시 변경) */}
       <div 
         className="white"
         onClick={editing ? handleImageChange : undefined}
@@ -70,6 +86,7 @@ export default function Mypage() {
             <span className="value">{profile.name}</span>
           }
         </div>
+
         <div className="row">
           <span className="label">닉네임</span>
           {editing ? 
@@ -77,23 +94,25 @@ export default function Mypage() {
             <span className="value">{profile.nickname}</span>
           }
         </div>
-       <div className="row">
-  <span className="label">학년</span>
-  {editing ? (
-    <select
-      value={profile.grade}
-      onChange={(e) => handleChange(e, "grade")}
-      className="grade-select"
-    >
-      <option value="1학년">1학년</option>
-      <option value="2학년">2학년</option>
-      <option value="3학년">3학년</option>
-      <option value="4학년">4학년</option>
-    </select>
-  ) : (
-    <span className="value">{profile.grade}</span>
-  )}
-</div>
+
+        <div className="row">
+          <span className="label">학년</span>
+          {editing ? (
+            <select
+              value={profile.grade}
+              onChange={(e) => handleChange(e, "grade")}
+              className="grade-select"
+            >
+              <option value="1학년">1학년</option>
+              <option value="2학년">2학년</option>
+              <option value="3학년">3학년</option>
+              <option value="4학년">4학년</option>
+            </select>
+          ) : (
+            <span className="value">{profile.grade}</span>
+          )}
+        </div>
+
         <div className="row">
           <span className="label">학과</span>
           {editing ? 
@@ -101,6 +120,7 @@ export default function Mypage() {
             <span className="value">{profile.dept}</span>
           }
         </div>
+
         <div className="row">
           <span className="label">이메일</span>
           {editing ? 
@@ -108,28 +128,92 @@ export default function Mypage() {
             <span className="value">{profile.email}</span>
           }
         </div>
+
         <div className="row">
           <span className="label">관심태그</span>
-          {editing ? 
-            <input 
-              type="text" 
-              value={profile.tags.join(", ")} 
-              onChange={(e) => setProfile({
-                ...profile, 
-                tags: e.target.value.split(", ")
-              })} 
-            /> :
-            <div className="tags">
-              {profile.tags.map((tag, idx) => 
-                <span key={idx} className="tag">{tag}</span>
-              )}
-            </div>
-          }
+{editing ? (
+  <div 
+    className="tags-editable"
+    onClick={() => setShowTagModal(true)}
+  >
+    {profile.tags.length > 0 ? (
+      profile.tags.map((tag, idx) => (
+        <span key={idx} className="tag">{tag}</span>
+      ))
+    ) : (
+      <span className="no-tag">선택된 태그 없음</span> // 🔸 비어 있을 때 표시
+    )}
+    <span className="add-tag">+ 태그 선택</span>
+  </div>
+) : (
+  <div className="tags">
+    {profile.tags.length > 0 ? (
+      profile.tags.map((tag, idx) => 
+        <span key={idx} className="tag">{tag}</span>
+      )
+    ) : (
+      <span className="no-tag">선택된 태그 없음</span>
+    )}
+  </div>
+)}
         </div>
       </div>
 
       {!editing && <button className="logout-btn">로그아웃</button>}
       {editing && <button className="logout-btn" onClick={() => setEditing(false)}>완료</button>}
+
+      {/* 🔹 태그 선택 모달 */}
+      {showTagModal && (
+        <div className="modal-overlay" onClick={() => setShowTagModal(false)}>
+          <div className="tag-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>관심 태그 선택</h3>
+            <div className="tag-section">
+              <p>성격 (Personality)</p>
+              <div className="tag-grid">
+                {personality.map((tag) => (
+                  <button 
+                    key={tag}
+                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="tag-section">
+              <p>능력 (Ability)</p>
+              <div className="tag-grid">
+                {ability.map((tag) => (
+                  <button 
+                    key={tag}
+                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="tag-section">
+              <p>태도 (Attitude)</p>
+              <div className="tag-grid">
+                {attitude.map((tag) => (
+                  <button 
+                    key={tag}
+                    className={`tag-btn ${profile.tags.includes(tag) ? "selected" : ""}`}
+                    onClick={() => handleTagClick(tag)}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

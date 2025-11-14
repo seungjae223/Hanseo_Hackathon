@@ -1,24 +1,22 @@
+/* =================== 컨테이너 & 기본 구조 =================== */
 .container {
   max-width: 480px;
   margin: 0 auto;
   padding: 16px;
   font-family: sans-serif;
   box-sizing: border-box;
-  position: relative; /* 배경 이미지 겹치기 기준 */
-  height: 932px; /* 필요에 따라 높이 조정 */
+  position: relative;
+  height: 932px;
 }
 
-
-
-.back{
+.back {
   width: 17px;
   height: 30px;
-  position: absolute; /* 겹치도록 절대 위치 지정 */
-  top: 20px; /* 1번 뒤에 살짝 내려서 겹치기 */
+  position: absolute;
+  top: 20px;
   left: 20px;
-  z-index: 3; /* 위쪽 */
+  z-index: 3;
 }
-
 
 .pf {
   font-size: 20px;
@@ -27,13 +25,13 @@
   max-width: 90%;
   left: 50%;
   text-align: center;
-  position: absolute;   /* 배경 위로 올리기 */
-  top: 5px;           /* 화면에서 원하는 위치 조정 */
-  transform: translateX(-50%); /* 가운데 정렬 */
-  z-index: 3;           /* 배경보다 위 */
+  position: absolute;
+  top: 5px;
+  transform: translateX(-50%);
+  z-index: 3;
 }
 
-.white{
+.white {
   position: absolute;
   background-color: #EDEDED;
   width: 180px;
@@ -45,35 +43,18 @@
   z-index: 3;
 }
 
-.pfi1{
+.pfi1, .pfi2, .pfi3 {
   width: 93px;
   height: 150px;
   top: 10px;
-  left: 25%;
-  position: absolute; /* 겹치도록 절대 위치 지정 */
+  position: absolute;
   z-index: 2;
 }
 
-.pfi2{
-  width: 100px;
-  height: 150px;
-  top: 10px;
-  left: 23%;
-  position: absolute; /* 겹치도록 절대 위치 지정 */
-  z-index: 2;
-}
+.pfi1 { left: 25%; }
+.pfi2, .pfi3 { left: 23%; }
 
-.pfi3{
-  width: 100px;
-  height: 150px;
-  top: 10px;
-  left: 23%;
-  position: absolute; /* 겹치도록 절대 위치 지정 */
-  z-index: 2;
-}
-
-
-.pf-btn{
+.pf-btn {
   position: absolute;
   width: 90px;
   height: 28px;
@@ -85,7 +66,7 @@
   background-color: #FED800;
 }
 
-.pf-btn p{
+.pf-btn p {
   top: -4px;
   font-size: 11px;
   font-weight: 400;
@@ -95,10 +76,10 @@
 
 .profile-info {
   position: absolute;
-  top: 420px; /* pfbtn 아래로 배치 */
+  top: 420px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%; /* 전체 폭의 80% */
+  width: 80%;
   z-index: 3;
   font-size: 14px;
 }
@@ -111,7 +92,7 @@
 }
 
 .profile-info .label {
-  width: 70px; /* 라벨 고정폭 */
+  width: 70px;
   font-weight: bold;
   color: #000;
 }
@@ -121,50 +102,8 @@
   color: #333;
 }
 
-.tags {
-  display: flex;
-  gap: 6px;
-}
-
-.tag {
-  background-color: #d9d9d9;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 12px;
-}
-
-.logout-btn {
-  position: absolute;
-  top: 794px; /* 프로필정보 밑으로 */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #FED800;
-  border: none;
-  border-radius: 12px;
-  width: 90px;
-  height: 30px;
-  font-size: 12px;
-  cursor: pointer;
-  z-index: 3;
-}
-
-.logout-btn {
-  position: absolute;
-  top: 794px; /* 프로필정보 밑으로 */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #FED800;
-  border: none;
-  border-radius: 12px;
-  width: 90px;
-  height: 30px;
-  font-size: 12px;
-  cursor: pointer;
-  z-index: 3;
-}
-
-/* input 필드 스타일 */
-.profile-info input {
+.profile-info input,
+.grade-select {
   flex: 1;
   padding: 4px 8px;
   border-radius: 8px;
@@ -173,11 +112,144 @@
 }
 
 .grade-select {
-  flex: 1;
-  padding: 4px 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
   background-color: white;
   cursor: pointer;
+}
+
+/* =================== 태그 영역 =================== */
+
+/* 태그 표시 영역 (편집 전후 동일 높이, 한 줄 고정) */
+.tags,
+.tags-editable {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* 좌측 정렬 고정 */
+  gap: 8px;
+  flex-wrap: nowrap;            /* 줄바꿈 금지 */
+  overflow-x: auto;             /* 넘치면 스크롤 */
+  min-height: 40px;
+  padding: 0 4px;
+}
+
+/* 스크롤바 숨기기 (선택 사항) */
+.tags::-webkit-scrollbar,
+.tags-editable::-webkit-scrollbar {
+  display: none;
+}
+
+/* 개별 태그 스타일 */
+.tag {
+  width: 61px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #333;
+  white-space: nowrap;
+  flex-shrink: 0;               /* 크기 줄어들지 않음 */
+}
+
+/* "+ 태그 선택" 버튼 디자인 고정 */
+.add-tag {
+  width: 60px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff5c4;
+  border: 1px dashed #aaa;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #666;
+  flex-shrink: 0;               /* 줄어들지 않음 */
+  cursor: pointer;
+  margin-left: auto;             /* 끝으로 붙이기 */
+}
+
+
+/* 태그 없을 때 표시 */
+.no-tag {
+  background-color: #f3f3f3;
+  color: #aaa;
+  height: 23px;;
+  border-radius: 10px;
+}
+
+/* =================== 태그 모달 =================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.tag-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 90%;
+  max-width: 380px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.tag-modal h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.tag-section {
+  margin-bottom: 16px;
+}
+
+.tag-section p {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-btn {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f3f3f3;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.tag-btn.selected {
+  background-color: #FED800;
+  border-color: #FED800;
+  color: #000;
+}
+
+/* =================== 로그아웃 버튼 =================== */
+.logout-btn {
+  position: absolute;
+  top: 794px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FED800;
+  border: none;
+  border-radius: 12px;
+  width: 90px;
+  height: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 3;
 }

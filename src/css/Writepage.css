@@ -64,8 +64,8 @@
 .hashtag {
   transform: translate(-50%, -50%);
   border-radius: 300px;
-  width: 112px;
-  height: 40px; /* 화면(viewport) 전체 높이 */
+  width: 140px;
+  height: 50px; 
   background-color: #EAE9E9;
   position: absolute;
   top: 7%;
@@ -80,7 +80,7 @@
     font-weight: 400;
     transform: translate(-50%, -50%);
     left: 12%;
-    top: 14%;
+    top: 13%;
     z-index: 4;
 }
 
@@ -103,7 +103,7 @@
     font-weight: 400;
     transform: translate(-50%, -50%);
     left: 12%;
-    top: 24%;
+    top: 21%;
     z-index: 4;
 }
 
@@ -343,39 +343,52 @@
 
 .input-title {
   position: absolute;
-  left: 50%;
-  top: 17.5%;               /* line1 위치와 정렬 (같은 top) */
+  left: 48%;
+  top: 16.8%;
   transform: translate(-50%, -50%);
-  width: 370px;             /* line1과 동일 폭 */
-  height: 36px;
+  width: 370px;
   padding: 6px 12px;
   border: none;
   border-radius: 8px;
-  background: transparent;  /* 흰색 배경 제거 */
-  font-size: 20px;
+  background: transparent;
+  font-size: 20px;         /* input과 동일 */
+  font-weight: 400;        /* input과 동일 */
+  font-family: inherit;    /* input과 동일 폰트 */
+  color: #000;             /* input과 동일 색상 */
   outline: none;
-  z-index: 4;               /* 라인 위로 올라오게 */
-  box-shadow: none;
+  z-index: 4;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.2em;
+  max-height: 2.4em;       /* 2줄까지만 보이게 */
+  white-space: pre-wrap;
+  box-sizing: border-box;  /* 패딩 포함해서 크기 계산 */
 }
 
-
+/* 내용 */
 .input-content {
   position: absolute;
-  left: 50%;
-  top: 27.5%;               /* line1 위치와 정렬 (같은 top) */
+  left: 48%;
+  top: 26%;
   transform: translate(-50%, -50%);
-  width: 370px;             /* line1과 동일 폭 */
-  height: 36px;
+  width: 370px;
   padding: 6px 12px;
   border: none;
   border-radius: 8px;
-  background: transparent;  /* 흰색 배경 제거 */
-  font-size: 20px;
+  background: transparent;
+  font-size: 20px;       /* input과 동일 */
+  font-weight: 400;      /* input과 동일 */
+  font-family: inherit;  /* input과 동일 폰트 */
+  color: #000;           /* input과 동일 색상 */
   outline: none;
-  z-index: 4;               /* 라인 위로 올라오게 */
-  box-shadow: none;
+  z-index: 4;
+  resize: none;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.2em;    /* 줄 간격 */
+  max-height: 3.6em; 
+  box-sizing: border-box;
 }
-
 
 /* 기한 입력칸 — line3 위치에 맞춤 */
 .input-deadline {
@@ -408,3 +421,68 @@
   font-size: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+/* 해시태그 텍스트 */
+.hashtag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hashtag-text {
+  font-size: 16px;
+  color: black;
+}
+
+/* 해시태그 모달 */
+.hashtag-modal {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; 
+  height: 150px;
+  background: #F0F0F0;
+  border-radius: 18px;
+  padding: 18px 14px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.15);
+  z-index: 20;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 12px;
+  column-gap: 10px;
+
+  justify-items: center;          
+  align-content: space-evenly;    /* ← 두 줄 간격을 자동으로 예쁘게 떨어뜨림 */
+}
+
+
+
+/* 태그 버튼 */
+.tag-btn2 {
+  width: 90px;
+  height: 40px;
+  line-height: 40px;    /* ← 글씨 세로 중앙 맞추기 */
+
+  text-align: center;
+  padding: 0;            /* ← padding 제거해야 중앙 정렬 정확히 맞음 */
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 10px;
+  font-weight: 400px;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #ddd;
+}
+
+
+.tag-btn2:hover {
+  background: #FFF4B0;
+}
+
+.tag-btn2.selected {
+  background: #FED800;
+  font-weight: 600;
+}
+
