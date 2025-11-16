@@ -10,6 +10,9 @@ const MOCK = [
   { id: 2, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
   { id: 3, tag: "스터디", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
   { id: 4, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 5, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 6, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
+  { id: 7, tag: "공모전", title: "코스튬 재질 관련 공부", dday: 21, img: Poster },
 ];
 
 export default function TeamManagePanel() {

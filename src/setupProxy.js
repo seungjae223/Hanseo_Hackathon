@@ -1,7 +1,6 @@
 // src/setupProxy.js
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
-// CRA의 /ws (핫리로드) 는 건드리지 말 것! (여기엔 아무 설정 X)
 module.exports = function (app) {
   // REST
   app.use(

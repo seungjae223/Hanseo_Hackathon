@@ -29,7 +29,21 @@ export function DefaultFallback() {
 
 /** Suspense 경계 */
 export function LazyBoundary({ children, fallback }) {
-  return <Suspense fallback={fallback ?? <DefaultFallback />}>{children}</Suspense>;
+  return (
+    <Suspense fallback={fallback ?? <DefaultFallback />}>
+      {children}
+    </Suspense>
+  );
+}
+
+/** 모듈에서 컴포넌트를 안전하게 꺼내기 (default 없을 때 named도 지원) */
+function pickDefault(mod, ...namedKeys) {
+  if (mod && mod.default) return { default: mod.default };
+  for (const k of namedKeys) {
+    if (mod && mod[k]) return { default: mod[k] };
+  }
+  // 마지막 안전장치: 모듈 자체를 리턴(대부분 default가 없을 땐 여기 걸림)
+  return { default: mod };
 }
 
 /** 동적 import 실패 시 재시도(옵션) */
@@ -50,25 +64,33 @@ function lazyRetry(factory, retries = 2, interval = 500) {
 /** 여기서는 전부 components 폴더(../) 기준입니다 */
 export const Lazy = {
   /* 라우트/페이지 */
-  FirstPage:        lazyRetry(() => import(/* webpackChunkName: "first-page" */       "../FirstPage.jsx")),
-  MainPage:         lazyRetry(() => import(/* webpackChunkName: "main-page" */        "../MainPage.jsx")),
-  RecruitListPanel: lazyRetry(() => import(/* webpackChunkName: "recruit-list" */     "../RecruitListPanel.jsx")),
-  TeamManagePanel:  lazyRetry(() => import(/* webpackChunkName: "team-manage" */      "../TeamManagePanel.jsx")),
-  ProtectedPage:    lazyRetry(() => import(/* webpackChunkName: "protected" */        "../ProtectedPage.jsx")),
-  Matching:         lazyRetry(() => import(/* webpackChunkName: "matching" */         "../Matching.jsx")),
-  RecruitDetail:    lazyRetry(() => import(/* webpackChunkName: "recruit-detail" */   "../RecruitDetail.jsx")),
-  TeamMemberDetail: lazyRetry(() => import(/* webpackChunkName: "team-member-detail" */"../TeamMemberDetail.jsx")),
-  /* ✅ 마이페이지 추가 */
-  MyPage:           lazyRetry(() => import(/* webpackChunkName: "mypage" */           "../Mypage.jsx")),
+  FirstPage:        lazyRetry(() => import("../FirstPage.jsx").then(m => pickDefault(m, "FirstPage"))),
+  MainPage:         lazyRetry(() => import("../MainPage.jsx").then(m => pickDefault(m, "MainPage"))),
+  RecruitListPanel: lazyRetry(() => import("../RecruitListPanel.jsx").then(m => pickDefault(m, "RecruitListPanel"))),
+  TeamManagePanel:  lazyRetry(() => import("../TeamManagePanel.jsx").then(m => pickDefault(m, "TeamManagePanel"))),
+  ProtectedPage:    lazyRetry(() => import("../ProtectedPage.jsx").then(m => pickDefault(m, "ProtectedPage"))),
+  Matching:         lazyRetry(() => import("../Matching.jsx").then(m => pickDefault(m, "Matching"))),
+  RecruitDetail:    lazyRetry(() => import("../RecruitDetail.jsx").then(m => pickDefault(m, "RecruitDetail"))),
+  TeamMemberDetail: lazyRetry(() => import("../TeamMemberDetail.jsx").then(m => pickDefault(m, "TeamMemberDetail"))),
+
+  /* 마이페이지 — 실제 파일명: MyPage.jsx */
+  MyPage:           lazyRetry(() =>
+    import("../MyPage.jsx").then(m => pickDefault(m, "MyPage", "Mypage"))
+  ),
+
+  /* 글쓰기 — 실제 파일명에 맞춰서 사용 (여기서는 RecruitPanelWrite.jsx 기준) */
+  RecruitpanelWrite: lazyRetry(() =>
+    import("../RecruitPanelWrite.jsx").then(m => pickDefault(m, "RecruitPanelWrite", "RecruitpanelWrite"))
+  ),
 
   /* 공통 컴포넌트 */
-  Header:           lazyRetry(() => import(/* webpackChunkName: "header" */           "../Header.jsx")),
-  LoginModal:       lazyRetry(() => import(/* webpackChunkName: "login-modal" */      "../LoginModal.jsx")),
-  SignUpModal:      lazyRetry(() => import(/* webpackChunkName: "signup-modal" */     "../SignUpModal.jsx")),
-  EmailVerifyModal: lazyRetry(() => import(/* webpackChunkName: "email-verify-modal" */"../EmailVerifyModal.jsx")),
-  FindpassWordModal:lazyRetry(() => import(/* webpackChunkName: "findpass-modal" */   "../FindpassWordModal.jsx")),
-  AuthBlurGate:     lazyRetry(() => import(/* webpackChunkName: "auth-blur-gate" */   "../AuthBlurGate.jsx")),
-  LoadingSpinner:   lazyRetry(() => import(/* webpackChunkName: "loading-spinner" */  "../Loadingspinner.jsx")),
+  Header:           lazyRetry(() => import("../Header.jsx").then(m => pickDefault(m, "Header"))),
+  LoginModal:       lazyRetry(() => import("../LoginModal.jsx").then(m => pickDefault(m, "LoginModal"))),
+  SignUpModal:      lazyRetry(() => import("../SignUpModal.jsx").then(m => pickDefault(m, "SignUpModal"))),
+  EmailVerifyModal: lazyRetry(() => import("../EmailVerifyModal.jsx").then(m => pickDefault(m, "EmailVerifyModal"))),
+  FindpassWordModal:lazyRetry(() => import("../FindpassWordModal.jsx").then(m => pickDefault(m, "FindpassWordModal"))),
+  AuthBlurGate:     lazyRetry(() => import("../AuthBlurGate.jsx").then(m => pickDefault(m, "AuthBlurGate"))),
+  LoadingSpinner:   lazyRetry(() => import("../Loadingspinner.jsx").then(m => pickDefault(m, "LoadingSpinner"))),
 };
 
 /** 프리패치 */
@@ -81,8 +103,12 @@ export const prefetch = {
   matching:         () => import(/* webpackPrefetch: true */ "../Matching.jsx"),
   recruitDetail:    () => import(/* webpackPrefetch: true */ "../RecruitDetail.jsx"),
   teamMemberDetail: () => import(/* webpackPrefetch: true */ "../TeamMemberDetail.jsx"),
-  /* ✅ 마이페이지 프리패치 */
-  mypage:           () => import(/* webpackPrefetch: true */ "../Mypage.jsx"),
+
+  /* 마이페이지 프리패치 — 실제 파일명: MyPage.jsx */
+  mypage:           () => import(/* webpackPrefetch: true */ "../MyPage.jsx"),
+
+  /* 글쓰기 프리패치 — 실제 파일명에 맞춰서 */
+  recruitWrite:     () => import(/* webpackPrefetch: true */ "../RecruitPanelWrite.jsx"),
 };
 
 export default Lazy;

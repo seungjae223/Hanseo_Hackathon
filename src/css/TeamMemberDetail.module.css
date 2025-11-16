@@ -26,7 +26,7 @@
   background: #fff;        /* 흰색 배경 */
   padding: 32px 20px;
   text-align: left;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .heroText h1{
@@ -63,7 +63,7 @@
 .cardContainer{
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   max-width: 100%;
   margin: 0;
   padding: 0 20px 0 20px;
@@ -72,8 +72,7 @@
 .card{
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 30px;
   border: none;
 }
 
@@ -89,21 +88,21 @@
 }
 
 .cardTitle{
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 800;
   color: #000;
   margin: 0 0 2px 0;
 }
 
 .cardSubtitle{
-  font-size: 12px;
+  font-size: 10px;
   color: #000;
   margin: 0;
 }
 
 .cardAvatar{
-  width: 44px;
-  height: 44px;
+  width: 80px;
+  height: 80px;
   background: #f0f0f0;
   border-radius: 12px;
   display: flex;
@@ -113,8 +112,8 @@
 }
 
 .avatarIcon{
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   background: #666;
   border-radius: 4px;
   position: relative;
@@ -147,12 +146,15 @@
 
 /* ===== 캐릭터 아이콘 ===== */
 .characterIcon{
-  width: 28px;
-  height: 28px;
+  width: 50px;
+  height: 70px;
   object-fit: contain;
 }
 
 .cardDivider{
+  position: relative;
+  right: 10px;
+  width: 300px;
   height: 1px;
   background: #f0f0f0;
   margin: 16px 0;
@@ -160,14 +162,16 @@
 
 .cardTags{
   display: flex;
-  gap: 6px;
+  gap: 3px;
 }
 
 .tag{
+  position: relative;
+  left:80px;
   width: 60px;
-  height: 8px;
+  height: 25px;
   background: #f0f0f0;
-  border-radius: 4px;
+  border-radius: 55px;
 }
 
 .tag:nth-child(2){

@@ -11,15 +11,15 @@ import {
 } from "react-router-dom";
 import Lazy, { LazyBoundary } from "./components/common/LazyLoading";
 import BaseLayout from "./components/BaseLayout";
-
+import RecruitPanelWrite from "./components/RecruitPanelWrite";
 import "./components/FooterNav";
 
 /* 라우팅+헤더 제어를 위해 내부 컴포넌트로 분리 */
 function AppRoutes() {
   const location = useLocation();
 
-  // ✅ 마이페이지에서만 헤더/푸터 감추기
-  const hideChrome = location.pathname === "/mypage";
+  // 마이페이지에서만 헤더/푸터 감추기
+  const hideChrome = location.pathname === "/MypPage";
 
   return (
     <LazyBoundary>
@@ -39,6 +39,9 @@ function AppRoutes() {
             <Route path="/Recruit" element={<Lazy.RecruitListPanel />} />
             <Route path="/Matching" element={<Lazy.Matching />} />
 
+            {/*글쓰기 (연필 버튼 이동 경로)*/}
+            <Route path="/recruit/write" element={<RecruitPanelWrite />} />
+
             {/* 상세 페이지들 */}
             <Route path="/recruit/:id" element={<Lazy.RecruitDetail />} />
             <Route path="/team/:id" element={<Lazy.TeamMemberDetail />} />
@@ -47,8 +50,8 @@ function AppRoutes() {
           {/* 레이아웃 밖: 헤더/푸터 없음 */}
           <Route path="/login" element={<Lazy.LoginModal />} />
           <Route path="/signup" element={<Lazy.SignUpModal />} />
-          {/* ✅ 마이페이지: 헤더/푸터 모두 없음 */}
-          <Route path="/mypage" element={<Lazy.MyPage />} />
+          {/* 마이페이지: 헤더/푸터 모두 없음 */}
+          <Route path="/MyPage" element={<Lazy.MyPage />} />
 
           {/* 존재하지 않는 경로 → 홈으로 */}
           <Route path="*" element={<Navigate to="/" replace />} />

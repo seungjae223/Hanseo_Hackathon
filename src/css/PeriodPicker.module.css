@@ -1,0 +1,124 @@
+.wrapper {
+  width: 100%;
+}
+
+/* 기한 버튼 */
+.field {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* 모달 오버레이 */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* 모달 박스 */
+.panel {
+  width: 280px;
+  background: #f7f7f7;
+  border-radius: 20px;
+  padding: 14px 18px 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.headerRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.headerTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 시작/마감 탭 */
+.tabRow {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 6px 0;
+  border-radius: 999px;
+  border: none;
+  background: #e5e7eb;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.active {
+  background: #111827;
+  color: #ffffff;
+}
+
+/* 휠 + 왼쪽 '기한' 라벨 */
+.wheelBox {
+  position: relative;
+  margin: 8px 0 10px;
+}
+
+.floatingLabel {
+  position: absolute;
+  left: -46px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 10px;
+  background: #e5e5e5;
+  border-radius: 999px 0 0 999px;
+  font-size: 14px;
+}
+
+/* 하단 버튼들 */
+.buttonRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.cancelBtn,
+.okBtn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: transparent;
+  color: #6b7280;
+}
+
+.okBtn {
+  background: #111827;
+  color: #ffffff;
+}

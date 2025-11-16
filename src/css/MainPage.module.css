@@ -6,6 +6,7 @@
   --soft:#f7f8f8;
   --pill:#eef7fa;
   --card:#eaf5f8;
+  --background--color:#F6F6F6;
 }
 
 /* ===== 전체 레이아웃 ===== */
@@ -113,7 +114,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
 }
 
-/* ✅ 활성 탭(선택됨): 올라간 상태 유지 */
+/*  활성 탭(선택됨): 올라간 상태 유지 */
 .pillActive{
   border-color:#0ea5b7;
   transform: translateY(-4px) scale(1.02);
@@ -152,7 +153,7 @@
   border:2px solid rgba(0,0,0,.22);
   animation:inner-fade .45s ease-out forwards;
 }
-/* ✅ 캐러셀 섹션: 예전 페이드/마스크/오버플로우 제거 */
+/* 캐러셀 섹션: 예전 페이드/마스크/오버플로우 제거 */
 .carousel{
   overflow: visible !important;
   position: relative;
@@ -408,12 +409,115 @@ button{ font: inherit; color: inherit; background: none; border: none; padding: 
   box-shadow: 0 6px 24px rgba(0,0,0,.08), 0 0 0 4px rgba(14,165,183,.45);
   border-color:#0ea5b7;
 }
-.searchBox .searchInput:focus-visible{
-  box-shadow: 0 0 0 3px rgba(14,165,183,.35);
-  border-color:#0ea5b7;
-}
+
 .navBtn:focus-visible{
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(14,165,183,.55);
+}
+
+/* =========================
+   마감기한 임박글
+   ========================= */
+.deadlineCard {
+  background: #ffffff;
+  border-radius: 50px;
+  padding: 32px 64px 40px;
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.05);
+  overflow: hidden;             /* 안 삐져나가게 */
+}
+
+.deadlineTitle {
+  margin: 0 0 24px 0;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #111111;
+}
+
+/* 리스트 전체 */
+.deadlineList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 한 줄(번호 / 제목 / New / D-day) */
+.deadlineItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+
+  padding: 10px 32px;
+  margin-top: 10px;
+
+  border-radius: 999px;
+  background: #f7f7f7;
+}
+
+/* 왼쪽 동그란 번호 */
+.deadlineRank {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 500;
+  color: #111111;
+}
+
+/* 제목: 가로 한 줄 + 길면 … 처리 */
+.deadlineTitleBtn {
+  flex: 1 1 auto;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0;
+  font-size: 15px;
+  color: #222222;
+  cursor: pointer;
+
+  white-space: nowrap;       /* 한 줄 유지 */
+  overflow: hidden;          /* 넘치는 부분 숨김 */
+  text-overflow: ellipsis;   /* … 표시 */
+}
+
+/* New 뱃지 칸 */
+.deadlineNewWrap {
+  flex: 0 0 70px;
+  text-align: center;
+}
+
+/* 오른쪽 D-day */
+.deadlineDday {
+  flex: 0 0 70px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: right;
+  color: #111111;
+}
+/* 모바일일 때 살짝 축소 */
+@media (max-width: 600px) {
+   .deadlineItem {
+    padding: 8px 18px;
+    gap: 16px;
+  }
+  .deadlineRank {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  .deadlineTitleBtn {
+    font-size: 14px;
+  }
+  .deadlineNewWrap,
+  .deadlineDday {
+    flex-basis: 56px;
+  }
 }
 
 /* 모션 최소화 환경 배려 */

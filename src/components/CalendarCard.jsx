@@ -27,11 +27,6 @@ function withIds(list) {
   }));
 }
 
-/**
- * props
- *  - events : [{ date:'2025-10-06', title:'...', place:'...' }]
- *    (초기 일정 목록 – 없으면 빈 배열)
- */
 export default function CalendarCard({ events = [] }) {
   const [pivot, setPivot] = React.useState(() => new Date());
   const [selected, setSelected] = React.useState(null);
@@ -42,13 +37,18 @@ export default function CalendarCard({ events = [] }) {
   // "해당 주만 보기" 토글 상태
   const [weekFocus, setWeekFocus] = React.useState(false);
 
-  // 일정 목록을 이 컴포넌트 안에서 관리 (id 추가)
+  // 날짜 그리드 DOM 참조(자동 스크롤용)
+  const dayWrapRef = React.useRef(null);
+  // 토글 직전 주-포커스 상태 기억
+  const prevWeekFocusRef = React.useRef(false);
+
+  // 일정 목록
   const [eventList, setEventList] = React.useState(() => withIds(events));
   React.useEffect(() => {
     setEventList(withIds(events));
   }, [events]);
 
-  // 편집 모드 여부 + 입력값 (새 일정 추가 용도)
+  // 편집 모드 여부 + 입력값
   const [editing, setEditing] = React.useState(false);
   const [form, setForm] = React.useState({ title: "", place: "" });
 
@@ -57,32 +57,24 @@ export default function CalendarCard({ events = [] }) {
   const days = Array.from({ length: last.getDate() }, (_, i) => i + 1);
 
   /* ▼▼▼ 날짜 줄 모드 계산 ▼▼▼ */
-
-  // 1단계: viewMode 기준 기본 줄
   let daysForUi;
   if (viewMode === 0) {
-    daysForUi = days.slice(0, 7);          // 1~7
+    daysForUi = days.slice(0, 7);
   } else if (viewMode === 1) {
-    daysForUi = days.slice(0, 14);         // 1~14
+    daysForUi = days.slice(0, 14);
   } else {
-    daysForUi = days;                      // 전체 달
+    daysForUi = days;
   }
 
-  // 2단계: 펼친 상태(viewMode > 0) + weekFocus 켜짐 + 날짜 선택됨
-  //        → 선택된 날짜가 포함된 "그 주 7일"만 보여주기
   if (viewMode > 0 && weekFocus && selected) {
-    const selectedDay = Number(selected.slice(-2));  // 예: '20' → 20
+    const selectedDay = Number(selected.slice(-2));
     const weekIndex = Math.floor((selectedDay - 1) / 7); // 0~4
     const start = weekIndex * 7 + 1;
     const end = Math.min(start + 6, last.getDate());
-
     const weekDays = [];
-    for (let d = start; d <= end; d += 1) {
-      weekDays.push(d);
-    }
+    for (let d = start; d <= end; d += 1) weekDays.push(d);
     daysForUi = weekDays;
   }
-
   /* ▲▲▲ 날짜 줄 계산 끝 ▲▲▲ */
 
   // 날짜별 이벤트 맵
@@ -97,30 +89,22 @@ export default function CalendarCard({ events = [] }) {
 
   const selEvents = selected ? byDate.get(selected) || [] : [];
 
-  // 플러스 눌렀을 때: 새 일정 추가 폼 열기
   const handleEditClick = () => {
     if (!selected) return;
-    setForm({ title: "", place: "" }); // 항상 새 일정 입력
+    setForm({ title: "", place: "" });
     setEditing(true);
   };
 
-  // 입력값 변경
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 저장(추가)
   const handleSave = () => {
     if (!selected) return;
-
     const title = form.title.trim();
     const place = form.place.trim();
-
-    if (!title && !place) {
-      setEditing(false);
-      return;
-    }
+    if (!title && !place) { setEditing(false); return; }
 
     const newEv = {
       id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -128,46 +112,56 @@ export default function CalendarCard({ events = [] }) {
       title,
       place,
     };
-
     setEventList((prev) => [...prev, newEv]);
     setEditing(false);
   };
 
-  // 개별 일정 삭제
   const handleDeleteEvent = (id) => {
     setEventList((prev) => prev.filter((ev) => ev.id !== id));
   };
 
-  // 날짜 버튼 클릭
   const handleDayClick = (dateStr) => {
-    // 같은 날짜를 다시 누르면 weekFocus 끄기 → 원래 뷰로 복귀
     if (selected === dateStr && weekFocus) {
       setWeekFocus(false);
     } else {
       setSelected(dateStr);
-      // 펼쳐져 있는 상태에서만 "해당 주 보기" 켜기
-      if (viewMode > 0) {
-        setWeekFocus(true);
-      } else {
-        setWeekFocus(false);
-      }
+      if (viewMode > 0) setWeekFocus(true);
+      else setWeekFocus(false);
     }
     setEditing(false);
   };
 
   // 펼침 단계 변경: 0 → 1 → 2 → 다시 0
   const handleToggle = () => {
+    prevWeekFocusRef.current = weekFocus;  // 직전 상태 기억
     setViewMode((prev) => (prev + 1) % 3);
-    // 뷰 모드 바꿀 땐 주 포커스 해제
-    setWeekFocus(false);
+    setWeekFocus(false);                   // 모드 전환 시 기본 해제
   };
 
-  // 상세 영역은 1·2에서만 보이게
-  const isExpanded = viewMode > 0;
+  //  주(weekFocus=true) 상태에서 전체(2단계)로 바뀌면,
+  // 선택한 날짜 버튼까지 자동 스크롤(첫 줄이 1일로 보이지 않게)
+  React.useEffect(() => {
+    if (viewMode === 2 && selected && prevWeekFocusRef.current) {
+      // 다음 페인트 후 실행
+      requestAnimationFrame(() => {
+        const wrap = dayWrapRef.current;
+        if (!wrap) return;
+        const el = wrap.querySelector(`[data-date="${selected}"]`);
+        if (!el) return;
 
-  // 화살표 모양: 0,1 = 아래 / 2 = 위
-  const arrowSrc = viewMode === 2 ? ArrowUp : ArrowDown;
-  const arrowAlt = viewMode === 2 ? "접기" : "펼치기";
+        // 중앙 근처로 오도록 스크롤 보정
+        const top = el.offsetTop - (wrap.clientHeight / 2) + (el.clientHeight / 2);
+        wrap.scrollTop = Math.max(0, top);
+      });
+      // 한 번 쓰고 플래그 내림
+      prevWeekFocusRef.current = false;
+    }
+  }, [viewMode, selected]);
+
+  const isExpanded = viewMode > 0;
+  const isFullyOpened = viewMode === 2 && !weekFocus;
+  const arrowSrc = isFullyOpened ? ArrowUp : ArrowDown;
+  const arrowAlt = isFullyOpened ? "접기" : "펼치기";
 
   return (
     <section className={styles.card}>
@@ -197,7 +191,7 @@ export default function CalendarCard({ events = [] }) {
       <div className={styles.divider} />
 
       {/* 날짜 버튼들 */}
-      <div className={styles.dayWrap}>
+      <div className={styles.dayWrap} ref={dayWrapRef}>
         {daysForUi.map((d) => {
           const dateStr = ymd(
             new Date(pivot.getFullYear(), pivot.getMonth(), d)
@@ -208,6 +202,7 @@ export default function CalendarCard({ events = [] }) {
           return (
             <button
               key={d}
+              data-date={dateStr}                     
               className={[
                 styles.day,
                 hasEv ? styles.hasEvent : "",
@@ -221,7 +216,7 @@ export default function CalendarCard({ events = [] }) {
         })}
       </div>
 
-      {/* 토글 버튼: 7일 ↓ → 14일(혹은 해당 주) ↓ → 전체 ↑ → 다시 7일 ↓ */}
+      {/* 토글 버튼: 7일 ↓ → 14일/해당주 ↓ → 전체 ↑ → 다시 7일 ↓ */}
       <button
         className={styles.toggle}
         onClick={handleToggle}
@@ -240,7 +235,6 @@ export default function CalendarCard({ events = [] }) {
         <div className={styles.detail}>
           {selected ? (
             editing ? (
-              /* === 편집 모드: 새 일정 추가 === */
               <>
                 <div className={styles.detailDate}>
                   {Number(selected.slice(-2))}
@@ -282,7 +276,6 @@ export default function CalendarCard({ events = [] }) {
                 </div>
               </>
             ) : (
-              /* === 일반 모드: 해당 날짜의 일정 목록 + 플러스 === */
               <>
                 <div className={styles.detailDate}>
                   {Number(selected.slice(-2))}
@@ -310,7 +303,6 @@ export default function CalendarCard({ events = [] }) {
                   <div className={styles.detailTitle}>일정 없음</div>
                 )}
 
-                {/* 일정 추가 버튼 (플러스) */}
                 <button
                   type="button"
                   className={styles.editBtn}

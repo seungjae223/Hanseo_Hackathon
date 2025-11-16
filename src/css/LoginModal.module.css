@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-/* 👇 [수정됨] 2번 이미지처럼 두꺼운 검은 테두리와 둥근 모서리 */
+/* 두꺼운 검은 테두리와 둥근 모서리 */
 .modalContent {
   background-color: white;
   padding: 40px;

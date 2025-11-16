@@ -1,7 +1,7 @@
 // src/components/FooterGate.jsx
 import React from "react";
 import { useLocation, matchPath } from "react-router-dom";
-import FooterNav from "../FooterNav";
+import FooterNav from "./FooterNav";
 
 export default function FooterGate() {
   const { pathname } = useLocation();

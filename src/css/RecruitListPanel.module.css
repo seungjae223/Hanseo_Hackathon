@@ -7,83 +7,98 @@
 }
 
 /* ================= 전체 래퍼 ================= */
-
 .page{
   width:100%;
+  height: 100%;
   margin:0;
-  padding:0 0 80px;
+  padding:0 0 0px;
   background:var(--page-bg);
   font-family:"Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,sans-serif;
   color:var(--ink);
 }
 
-/* ================= Hero (노란 영역 안 흰 카드) ================= */
-
+/* ===== Hero 정확 보정 ===== */
 .hero{
-  width:100%;
-  padding:18px 16px 40px;
-  background:var(--yellow);
-  border-radius:0 0 24px 24px;
+  background:#ffd400;
+  padding:30px 24px 44px;
+  border-radius:0 0 28px 28px;
 }
 
-/* 큰 흰 카드 */
+/* 흰 카드 */
 .heroGraphic{
   position:relative;
   width:100%;
-  margin:0 auto;
-  background:#ffffff;
-  border-radius:24px;
-  height:86px;                         /* 카드 높이 고정 */
-  box-shadow:0 10px 18px rgba(0,0,0,.12);
+  height:112px;
+  margin:0 0;
+  background:#fff;
+  border-radius:26px;
+  overflow:hidden; /* 밖으로 새는 거 차단 */
 }
 
-/* 위 연한 카드 */
+/* 윗 바(연회색) */
 .heroCap{
   position:absolute;
-  left:26px;
-  right:26px;
-  top:16px;
-  height:30px;
-  border-radius:16px;
-  background:#f3f3f3;
+  top:24px;
+  left:48px;             /* ← 좌우 여백 */
+  right:48px;
+  height:50px;
+  background:#ecebeb;
+  border-radius:20px;
 }
 
-/* 아래 진한 그림자 막대 */
+/* 아랫 바(진회색, 윗 바 바로 아래) */
 .heroBody{
   position:absolute;
-  left:32px;
-  right:32px;
-  bottom:14px;
-  height:20px;
-  border-radius:10px;
+  top:24px + 64px;        /* = 88px (윗 바 아래에 딱 붙음) */
+  left:66px;              /* ← 윗 바보다 좁게 */
+  right:66px;
+  height:44px;
   background:#cfcfcf;
+  border-radius:16px;
+  box-shadow:0 10px 0 rgba(0,0,0,.16); /* 아래로 한 줄 그림자 */
 }
 
-/* 위 카드 오른쪽 하트 */
-.heroHeart{
-  position:absolute;
-  top:22px;                            /* 위 카드 안 중앙 정도 */
-  right:34px;
-  width:20px;
-  height:20px;
-  border:none;
-  padding:0;
-  background:transparent;
+.heroListWrap{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* 한 줄 카드 */
+.heroListItem{
+  background:#f1f1f1;
+  border-radius:20px;
+  padding:10px 18px;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:space-between;
 }
 
-.heroHeart img{
-  width:18px;
-  height:18px;
-  opacity:0.9;                         /* 연한 노랑 느낌 */
+/* 제목 */
+.heroListTitle{
+  flex:1;
+  font-size:14px;
+  font-weight:600;
+  color:#222;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
+
+/* 오른쪽 하트 */
+.heroListHeart img{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
+
 
 /* ================= Body (흰 패널 – 검색 + 리스트) ================= */
-
 .body{
   width:100%;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   margin:0 auto;
   padding-top:0;
   background:var(--page-bg);
@@ -92,209 +107,114 @@
 /* 검색 영역 */
 .searchSection{
   width:100%;
-  padding:0 16px;
-  margin:-34px 0 22px;                 /* 노란 영역과 경계에 걸쳐 올라오게 */
+  height:59px;
+  padding:0 15px;
+  margin:-34px 0 22px;
   position:relative;
   z-index:10;
 }
-
 .searchBox{
-  display:flex;
+  border-radius: 40px;
+  position: relative;
+  display:flex; 
+  top: 15px;
   align-items:center;
-  gap:10px;
-  height:56px;
+   gap:10px;
+  height:33px;
+  width: 350px; 
   padding:0 16px 0 20px;
-  border:2px solid #000000;
-  border-radius:26px;
-  background:#ffffff;
-  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  border:1px solid #000; border-radius:26px; background:#fff;
 }
-
-.searchIcon{
-  width:25px;
-  height:25px;
-  flex-shrink:0;
-  filter:brightness(.2);
-}
-
+.searchIcon{ width:18px; height:24px; flex-shrink:0; filter:brightness(.2); }
 .searchInput{
-  flex:1;
-  border:0;
-  background:transparent;
-  font-size:15px;
-  font-weight:700;
-  color:#2a2a2a;
-  outline:none;
+  flex:1; border:0; background:transparent; font-size:15px; font-weight:300; color:#2a2a2a; outline:none;
 }
-.searchInput::placeholder{
-  color:#555555;
-  font-weight:700;
-}
-
-/* 오른쪽 네모 연필 버튼 */
-.shareBtn{
-  width:40px;
-  height:40px;
-  background: transparent;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  cursor:pointer;
-}
+.searchInput::placeholder{ color:#555; font-weight:400; }
+.shareBtn{ width:40px; height:40px; background:transparent; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; }
 .shareBtn img{
-  width:30px;
-  height:30px;
-  filter:brightness(0);
-}
+  position: relative;
+  left: 17px;
+   width:30px; 
+   height:30px; 
+   filter:brightness(0); }
 
 /* ================= 리스트 카드 ================= */
-
-.list{
-  padding:0 16px 0;
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-}
-
+.list{ 
+  padding:0 16px 0; 
+  display:flex; 
+  flex-direction:column; 
+  gap:22px; }
 .card{
-  background:var(--surface);
-  border-radius:24px;
-  padding:22px 22px 24px;
-  box-shadow:0 18px 32px rgba(0,0,0,.12);
+  background:var(--surface); 
+  border-radius:40px; 
+  padding:20px 20px 20px;
   border:1px solid rgba(0,0,0,.02);
-  display:grid;
-  gap:12px;
-  cursor:pointer;
+  display:grid; 
+  justify-content: flex-start;
+  text-align: left;
+  gap:-5px; 
+  cursor:pointer; 
   transition:transform .18s, box-shadow .18s;
 }
-.card:focus-visible{
-  outline:3px solid var(--yellow);
-  outline-offset:4px;
+.card:focus-visible{ outline:3px solid var(--yellow); outline-offset:4px; }
+.card:active{ transform:translateY(1px); box-shadow:0 10px 22px rgba(0,0,0,.18); }
+.cardHeader{ 
+  display:flex; 
+  align-items:flex-start; 
+  justify-content:space-between; }
+.cardTag{ 
+  font-size:15px; 
+  font-weight:300; 
+  color:var(--ink); 
+  letter-spacing:-.1px; 
 }
-.card:active{
-  transform:translateY(1px);
-  box-shadow:0 10px 22px rgba(0,0,0,.18);
-}
-
-.cardHeader{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-}
-
-.cardTag{
-  font-size:15px;
-  font-weight:800;
-  color:var(--ink);
-  letter-spacing:-.3px;
-}
-
-.cardHeart{
-  width:32px;
-  height:32px;
+.cardHeart{ 
+  width:40px; 
+  height:40px; 
   border-radius:50%;
-  border:0;
-  background:#fff;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  box-shadow:0 12px 24px rgba(0,0,0,.12);
-}
-.cardHeart img{
-  width:18px;
-  height:18px;
-  filter:grayscale(1) brightness(1.4);
+   border:0; 
+   background:transparent;
+    display:grid; 
+    place-items:center; 
+    cursor:pointer; 
+  }
+.cardHeart img{ 
+  width:30px; 
+  height:30px; 
+  filter:grayscale(1) brightness(1.4); 
   transition:filter .2s;
+  position: relative; 
+  left:5px;
+  bottom: 10px;
 }
-.cardHeartActive img{
-  filter:saturate(6) hue-rotate(-18deg);
-}
-
-.cardTitle{
-  margin:0;
-  font-size:20px;
-  font-weight:900;
-  letter-spacing:-.4px;
-  line-height:1.4;
-  color:var(--ink);
-}
-
-.cardSummary{
-  margin:0;
-  font-size:14px;
-  line-height:1.7;
-  color:#7d7d7d;
-}
-
-.cardFooter{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-}
-
-.cardHighlight{
-  font-size:12px;
-  font-weight:700;
-  color:#b9b9b9;
-}
-
+.cardHeartActive img{ filter:saturate(6) hue-rotate(-18deg); }
+.cardTitle{ margin:6px; font-size:20px; font-weight:400; letter-spacing:-.4px; line-height:1.4; color:var(--ink); }
+.cardSummary{ margin:0; font-size:12px; line-height:1.3; color:#7d7d7d; }
+.cardFooter{ display:flex; align-items:flex-end; justify-content:space-between; }
+.cardHighlight{ 
+  font-size:12px; font-weight:700; color:#b9b9b9; }
 .cardDday{
-  font-size:22px;
-  font-weight:900;
-  color:var(--ink);
-}
-
-.empty{
-  text-align:center;
-  padding:18px 0;
-  color:var(--muted);
-  font-weight:600;
-}
+  position: relative;
+  top: 8px; 
+  right: 7px;
+  font-size:20px; font-weight:400; color:var(--ink); }
+.empty{ text-align:center; padding:18px 0; color:var(--muted); font-weight:600; }
 
 /* ================= Responsive ================= */
-
 @media (max-width:420px){
-  .page{
-    width:100%;
-    padding-bottom:60px;
+  .page{ 
+    padding-bottom:50px; 
+    height: 100%;
+  
   }
+  .hero{ padding:20px 14px 36px; border-radius:0 0 24px 24px; }
+  .heroGraphic{ border-radius:20px; height:67px; }
+  .heroCap{ left:24px; right:24px; top:28px; height:60px; border-radius:20px; }
+  .heroBody{ left:36px; right:36px; top:92px; height:46px; border-radius:18px; box-shadow:0 10px 0 rgba(0,0,0,.16); }
+  .heroHeart{ top:42px; right:38px; width:36px; height:36px; }
+  .heroHeart img{ width:28px; height:28px; }
 
-  .hero{
-    padding:14px 12px 32px;
-    border-radius:0 0 20px 20px;
-  }
-  .heroGraphic{
-    border-radius:20px;
-    height:80px;
-  }
-  .heroCap{
-    left:24px;
-    right:24px;
-    top:14px;
-  }
-  .heroBody{
-    left:30px;
-    right:30px;
-    bottom:12px;
-  }
-
-  .body{
-    padding-top:0;
-  }
-
-  .searchSection{
-    padding:0 12px;
-    margin:-30px 0 18px;
-  }
-
-  .list{
-    padding:0 12px;
-    gap:20px;
-  }
-
-  .card{
-    border-radius:20px;
-    padding:18px 18px 20px;
-  }
+  .searchSection{ padding:0 10px; margin:-30px 0 18px; }
+  .list{ padding:0 12px; gap:20px; }
+  .card{ border-radius:20px; padding:18px 18px 20px; }
 }

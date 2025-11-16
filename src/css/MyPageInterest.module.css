@@ -1,0 +1,71 @@
+.panel{
+  display:flex;
+  flex-wrap:nowrap;        /* ★ 한 줄 고정 */
+  gap:16px;                /* 칼럼 간격 */
+  width:100%;              /* 카드 폭에 맞춤 */
+}
+
+/* 각 컬럼은 같은 비율로 폭 나눔(필요시 수축) */
+.column{
+  flex:1 1 0;              /* ★ 동일분배 + 축소 허용 */
+  min-width:0;             /* 내용이 길어도 줄 맞춤 */
+}
+
+/* 타이틀 살짝 컴팩트 */
+.colTitle{
+  position: relative;
+  left: 35px;
+  margin:0 0 8px;
+  font-weight:500;
+  font-size:15px;
+  color:#111;
+}
+
+/* 칩 리스트 */
+.chipGrid{
+  list-style:none;
+  margin:0; padding:12px;
+  display:grid;
+  gap:8px;                /* 세로 간격 */
+}
+
+/* 칩: 높이/폰트 줄여서 3컬럼이 카드폭에 들어오도록 */
+/* 칩: 글 길이와 상관없이 동일한 크기 */
+.chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+
+  width:80px;             /* 가로 고정 (필요하면 숫자만 조절) */
+  height:30px;            /* 세로 고정 */
+  background:#f1f1f1; 
+  color:#6b6b6b;
+  border:none; 
+  cursor:pointer;
+  padding:5px 5px;         /* 세로 높이는 height로, 가로 여백만 */
+  border-radius:25px;
+  font-weight:400;
+  font-size:13px;
+  white-space:nowrap;
+  transition:transform .08s ease, opacity .12s ease, background .12s ease, color .12s ease;
+}
+.on{ background:#ffd400; color:#111 }
+.dim{ opacity:.5 }
+
+/* ========== (요약칩 영역을 쓰는 경우만) ========== */
+.summary{
+  margin-top:12px;
+}
+.summaryTitle{
+  font-weight:800; color:#6b6b6b; margin-right:8px;
+}
+.summaryChips{
+  display:flex; gap:8px; margin-top:6px;
+  align-items:center; flex-wrap:wrap;
+}
+.summaryChip{
+  background:#f1f1f1; color:#6b6b6b;
+  padding:8px 12px; border-radius:18px; font-weight:700; font-size:14px;
+}
+.empty{ opacity:.4 }
