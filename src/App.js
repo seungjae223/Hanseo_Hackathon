@@ -6,6 +6,7 @@ import Start from './jsx/Start';
 import Mainpage from './jsx/Mainpage';
 import Recruit from './jsx/Recruit';
 import Writepage from './jsx/Writepage';
+import Aspage from './jsx/Aspage';
 function App() {
   return (
     <div className="App">
@@ -16,6 +17,7 @@ function App() {
             <Route path="/my" element={<Mypage />} />
             <Route path="/recruit" element={<Recruit />} />
             <Route path="/write" element={<Writepage />} />
+            <Route path="/Aspage" element={<Aspage />} />
           </Routes>
         </BrowserRouter>
     </div>

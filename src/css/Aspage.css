@@ -1,0 +1,222 @@
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+  position: relative; /* 배경 이미지 겹치기 기준 */
+  height: 932px; /* 필요에 따라 높이 조정 */
+}
+
+.wp10{
+  width: 100%;
+  height: 12%; /* 화면(viewport) 전체 높이 */
+  background-color: #FED800;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* 배경 뒤로 보내기 */
+}
+
+.wp10 h1{
+  font-size: 26px;
+  font-weight: 400;
+  height: 70px;          /* 원하는 세로 높이 */
+  display: flex;
+  justify-content: center;
+  align-items: center;   /* 세로 가운데 */
+}
+
+.back2 {
+  width: 20px;
+  height: 35px;
+  position: absolute;
+  top: 31%;
+  left: 8%;
+  z-index: 3;
+}
+
+.wpwp10 {
+  width: 100%;
+  height: 200%; /* 화면(viewport) 전체 높이 */
+  background-color: #F6F6F6;
+  position: absolute;
+  top: 12%;
+  left: 0;
+  z-index: 1; /* 배경 뒤로 보내기 */
+}
+
+.teamjang,
+.ad {
+  position: absolute;
+  width: 130px;
+  height: 44px;
+  top: 2.5%;
+  transform: translate(-50%, -50%);
+  border-radius: 14px;
+  z-index: 3;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #E9E9E9; /* 기본 회색 */
+}
+
+/* 팀장 버튼 위치 */
+.teamjang {
+  left: 25%;
+}
+
+/* 신청내역 버튼 위치 */
+.ad {
+  left: 73%;
+}
+
+/* 활성화된 버튼 색 */
+.teamjang.active,
+.ad.active {
+  background-color: #FFF19A; /* 노란색 */
+  font-weight: 600;
+}
+
+.sc{
+  transform: translate(-50%, -50%);
+  border-radius: 1000px;
+  width: 250px;
+  height: 250px; /* 화면(viewport) 전체 높이 */
+  background-color: #F2F2F2;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  z-index: 10; /* 배경 뒤로 보내기 */
+}
+
+.note{
+  width: 100%;
+  height: 100%;
+}
+
+.loading1{
+  transform: translate(-50%, -50%);
+  border-radius: 1000px;
+  width: 13px;
+  height: 13px; /* 화면(viewport) 전체 높이 */
+  background-color: #D9D9D9;
+  position: absolute;
+  top: 8%;
+  left: 65%;
+  z-index: 100; /* 배경 뒤로 보내기 */
+}
+
+.loading2{
+  transform: translate(-50%, -50%);
+  border-radius: 1000px;
+  width: 13px;
+  height: 13px; /* 화면(viewport) 전체 높이 */
+  background-color: #D9D9D9;
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  z-index: 100; /* 배경 뒤로 보내기 */
+}
+
+.loading3{
+  transform: translate(-50%, -50%);
+  border-radius: 1000px;
+  width: 13px;
+  height: 13px; /* 화면(viewport) 전체 높이 */
+  background-color: #D9D9D9;
+  position: absolute;
+  top: 8%;
+  left: 35%;
+  z-index: 100; /* 배경 뒤로 보내기 */
+}
+
+@keyframes wave {
+  0% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-6px); }
+  100% { transform: translate(-50%, -50%) translateY(0); }
+}
+
+/* 로딩 점 공통 스타일 + 느린 애니메이션 */
+.loading1,
+.loading2,
+.loading3 {
+  animation: wave 2.2s infinite ease-in-out; /* 0.8s → 2.2s */
+}
+
+/* 점마다 딜레이 — 느려진 속도에 맞게 증가 */
+.loading1 {
+  animation-delay: 0s;
+}
+
+.loading2 {
+  animation-delay: 0.35s; /* 기존 0.15 → 느리게 */
+}
+
+.loading3 {
+  animation-delay: 0.7s; /* 기존 0.3 → 느리게 */
+}
+
+.ad-content h1{
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: 400;
+  left: 50%;
+  top: 23%;
+  position: absolute;
+    white-space: nowrap;   /* 줄바꿈 방지 */
+}
+
+.ad-content h2{
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: 400;
+  left: 50%;
+  top: 26%;
+  position: absolute;
+    white-space: nowrap;   /* 줄바꿈 방지 */
+  color: gray;
+}
+
+.mozib-btn{
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #FED800;
+  border: none;
+  border-radius: 20px;
+  width: 100px;
+  height: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 3;
+
+    display: flex;
+  justify-content: center; /* 가로 가운데 */
+  align-items: center;     /* 세로 가운데 */
+}
+
+.teamjang-content h1{
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: 400;
+  left: 50%;
+  top: 23%;
+  position: absolute;
+    white-space: nowrap;   /* 줄바꿈 방지 */
+}
+
+.teamjang-content h2{
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: 400;
+  left: 50%;
+  top: 26%;
+  position: absolute;
+    white-space: nowrap;   /* 줄바꿈 방지 */
+  color: gray;
+}

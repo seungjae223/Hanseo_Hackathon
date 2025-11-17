@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function Mypage() {
   const navigate = useNavigate();
   const handleStartClick = () => navigate("/main");
+  const handleasClick = () => navigate("/aspage");
 
   const profileImages = [pfi1, pfi2, pfi3];
   const [editing, setEditing] = useState(false);
@@ -157,6 +158,9 @@ export default function Mypage() {
             </div>
           )}
         </div>
+      </div>
+      <div className="application-status" onClick={handleasClick}>
+        <p>신청 현황</p>
       </div>
 
       {!editing && <button className="logout-btn">로그아웃</button>}

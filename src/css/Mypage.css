@@ -226,10 +226,28 @@
   transform: translateX(-50%);
   background-color: #FED800;
   border: none;
-  border-radius: 12px;
-  width: 90px;
+  border-radius: 10px;
+  width: 120px;
   height: 30px;
   font-size: 12px;
   cursor: pointer;
   z-index: 3;
+}
+
+.application-status {
+  position: absolute;
+  width: 90px;
+  height: 28px;
+  top: 81%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  z-index: 3;
+  font-size: 12px;
+  cursor: pointer;
+  background-color: #EDEDED;
+
+  display: flex;
+  justify-content: center; /* 가로 가운데 */
+  align-items: center;     /* 세로 가운데 */
 }
