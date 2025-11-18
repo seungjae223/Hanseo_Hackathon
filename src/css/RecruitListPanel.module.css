@@ -17,59 +17,83 @@
   color:var(--ink);
 }
 
-/* ===== Hero 정확 보정 ===== */
-.hero{
-  background:#ffd400;
-  padding:30px 24px 44px;
-  border-radius:0 0 28px 28px;
+/* ================= 상단 노란 영역 ================= */
+
+.hero {
+  padding: 18px 16px 20px;
+  background: var(--yellow);      /* 노란 배경 */
 }
 
-/* 흰 카드 */
-.heroGraphic{
-  position:relative;
-  width:100%;
-  height:112px;
-  margin:0 0;
-  background:#fff;
-  border-radius:26px;
-  overflow:hidden; /* 밖으로 새는 거 차단 */
+/* 바깥 흰 박스(노란 배경 안에 있는 큰 카드) */
+.heroGraphic {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 26px;
+  padding: 18px 20px 26px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
-/* 윗 바(연회색) */
-.heroCap{
-  position:absolute;
-  top:24px;
-  left:48px;             /* ← 좌우 여백 */
-  right:48px;
-  height:50px;
-  background:#ecebeb;
-  border-radius:20px;
+/* 회색 박스 두 개 겹치는 영역 래퍼 */
+.heroStack {
+  position: relative;
 }
 
-/* 아랫 바(진회색, 윗 바 바로 아래) */
-.heroBody{
-  position:absolute;
-  top:24px + 64px;        /* = 88px (윗 바 아래에 딱 붙음) */
-  left:66px;              /* ← 윗 바보다 좁게 */
-  right:66px;
-  height:44px;
-  background:#cfcfcf;
-  border-radius:16px;
-  box-shadow:0 10px 0 rgba(0,0,0,.16); /* 아래로 한 줄 그림자 */
+/* 아래쪽 회색 그림자 박스 */
+.heroCardShadow {
+  width:300px;
+  position: absolute;
+  left:24px;
+  right: 34px;
+  bottom: -10px;
+  height: 42px;
+  border-radius: 18px;
+  background: #cfcfcf;
 }
 
-/* 하트(윗 바 내부 우측) — 꽉 찬 노란색 */
-.heroHeart{
-  position:absolute;
-  top:32px;               /* 윗 바 안 수직 위치 */
-  right:58px;             /* 우측 여백 */
-  width:40px; height:40px;
-  border:none; padding:0; background:transparent;
-  display:grid; place-items:center; cursor:pointer;
+/* 위쪽 메인 회색 박스 */
+.heroCardMain {
+  position: relative;
+  border-radius: 20px;
+  background: #f1f0f0;
+  padding: 14px 60px 14px 24px;  /* 오른쪽은 하트 때문에 여유 */
+  display: flex;
+  align-items: center;
 }
-.heroHeart img{ width:20.67px; height:18.94px; filter:grayscale(1) brightness(.55); }
 
+/* 제목 텍스트 (한 줄, 말줄임) */
+.heroTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+/* 오른쪽 노란 하트 버튼 */
+.heroHeartButton {
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  border: none;
+  background: none;
+  width: 30px;
+  height: 30px;
+  cursor: default;   /* 지금은 단순 표시 용도라 클릭 X */
+}
+
+/* 하트 아이콘 크기 고정 */
+.heroHeartImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
 /* ================= Body (흰 패널 – 검색 + 리스트) ================= */
 .body{
@@ -96,31 +120,39 @@
   display:flex; 
   top: 15px;
   align-items:center;
-   gap:10px;
+  gap:10px;
   height:33px;
   width: 350px; 
   padding:0 16px 0 20px;
-  border:1px solid #000; border-radius:26px; background:#fff;
+  border:1px solid #000;
+  border-radius:26px;
+  background:#fff;
 }
 .searchIcon{ width:18px; height:24px; flex-shrink:0; filter:brightness(.2); }
 .searchInput{
   flex:1; border:0; background:transparent; font-size:15px; font-weight:300; color:#2a2a2a; outline:none;
 }
 .searchInput::placeholder{ color:#555; font-weight:400; }
-.shareBtn{ width:40px; height:40px; background:transparent; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; }
+.shareBtn{
+  width:40px; height:40px; background:transparent;
+  display:flex; align-items:center; justify-content:center;
+  padding:0; cursor:pointer;
+}
 .shareBtn img{
   position: relative;
   left: 17px;
-   width:30px; 
-   height:30px; 
-   filter:brightness(0); }
+  width:30px; 
+  height:30px; 
+  filter:brightness(0);
+}
 
 /* ================= 리스트 카드 ================= */
 .list{ 
   padding:0 16px 0; 
   display:flex; 
   flex-direction:column; 
-  gap:22px; }
+  gap:22px;
+}
 .card{
   background:var(--surface); 
   border-radius:40px; 
@@ -138,23 +170,24 @@
 .cardHeader{ 
   display:flex; 
   align-items:flex-start; 
-  justify-content:space-between; }
+  justify-content:space-between;
+}
 .cardTag{ 
   font-size:15px; 
   font-weight:300; 
   color:var(--ink); 
-  letter-spacing:-.1px; 
+  letter-spacing:-.1px;
 }
 .cardHeart{ 
   width:40px; 
-  height:40px; 
+  height:30px; 
   border-radius:50%;
-   border:0; 
-   background:transparent;
-    display:grid; 
-    place-items:center; 
-    cursor:pointer; 
-  }
+  border:0; 
+  background:transparent;
+  display:grid; 
+  place-items:center; 
+  cursor:pointer; 
+}
 .cardHeart img{ 
   width:30px; 
   height:30px; 
@@ -165,31 +198,80 @@
   bottom: 10px;
 }
 .cardHeartActive img{ filter:saturate(6) hue-rotate(-18deg); }
-.cardTitle{ margin:6px; font-size:20px; font-weight:400; letter-spacing:-.4px; line-height:1.4; color:var(--ink); }
-.cardSummary{ margin:0; font-size:12px; line-height:1.3; color:#7d7d7d; }
-.cardFooter{ display:flex; align-items:flex-end; justify-content:space-between; }
+.cardTitle{
+  margin:6px;
+  font-size:20px;
+  font-weight:400;
+  letter-spacing:-.4px;
+  line-height:1.4;
+  color:var(--ink);
+}
+.cardSummary{
+  margin:0;
+  font-size:12px;
+  line-height:1.3;
+  color:#7d7d7d;
+}
+.cardFooter{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+}
 .cardHighlight{ 
-  font-size:12px; font-weight:700; color:#b9b9b9; }
+  font-size:12px;
+  font-weight:700;
+  color:#b9b9b9;
+}
 .cardDday{
   position: relative;
   top: 8px; 
   right: 7px;
-  font-size:20px; font-weight:400; color:var(--ink); }
-.empty{ text-align:center; padding:18px 0; color:var(--muted); font-weight:600; }
+  font-size:20px;
+  font-weight:400;
+  color:var(--ink);
+}
+.empty{
+  text-align:center;
+  padding:18px 0;
+  color:var(--muted);
+  font-weight:600;
+}
 
 /* ================= Responsive ================= */
 @media (max-width:420px){
   .page{ 
     padding-bottom:50px; 
     height: 100%;
-  
   }
-  .hero{ padding:20px 14px 36px; border-radius:0 0 24px 24px; }
-  .heroGraphic{ border-radius:20px; height:67px; }
-  .heroCap{ left:24px; right:24px; top:28px; height:60px; border-radius:20px; }
-  .heroBody{ left:36px; right:36px; top:92px; height:46px; border-radius:18px; box-shadow:0 10px 0 rgba(0,0,0,.16); }
-  .heroHeart{ top:42px; right:38px; width:36px; height:36px; }
-  .heroHeart img{ width:28px; height:28px; }
+  .hero{
+    padding:20px 14px 36px;
+    border-radius:0 0 24px 24px;
+  }
+  .heroGraphic{
+    border-radius:20px;
+    padding:16px 18px 26px;
+  }
+  .heroCardMain{
+    border-radius:18px;
+    padding:12px 56px 12px 20px;
+  }
+  .heroCardShadow{
+    width: 295px;
+    left:10px;
+    right:20px;
+    bottom:-17px;
+    height:30px;
+    border-radius:18px;
+  }
+  .heroHeartButton{
+    right:22px;
+    width:32px;
+    height:32px;
+  }
+  .heroHeartImg{
+    width:100%;
+    height:100%;
+  }
 
   .searchSection{ padding:0 10px; margin:-30px 0 18px; }
   .list{ padding:0 12px; gap:20px; }
