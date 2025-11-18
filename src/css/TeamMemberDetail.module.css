@@ -162,18 +162,28 @@
 
 .cardTags{
   display: flex;
-  gap: 3px;
+  gap: 16px;           /* 태그 사이 간격 */
+  margin-top: 16px;
 }
 
 .tag{
+    flex: 0 0 64px; 
   position: relative;
-  left:80px;
-  width: 60px;
-  height: 25px;
-  background: #f0f0f0;
-  border-radius: 55px;
-}
+  height: 28px;
+  left: 70px;
+  display: inline-flex;          /* 안의 글씨를 flex로 정렬 */
+  align-items: center;           /* 세로 가운데 */
+  justify-content: center;       /* 가로 가운데 */
 
+  padding: 10px 10px;            /* 왼·오른쪽 여백 넉넉하게 */
+  border-radius: 999px;          /* 완전 동글동글 */
+  background: #f3f3f3;
+
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;            /* 혹시 모를 텍스트 정렬 */
+  white-space: nowrap;           /* 줄바꿈 안 되게 */
+}
 .tag:nth-child(2){
   width: 75px;
 }

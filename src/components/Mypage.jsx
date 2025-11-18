@@ -1,13 +1,16 @@
 // src/components/MyPage.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";   // 🔸 추가
 import styles from "../css/MyPage.module.css";
 import MyPageInterest from "./MyPageInterest";
 import BackIcon from "../assets/Chevron Right Small.png";
-import Avatar1 from "../assets/캐릭터.png";
-import Avatar2 from "../assets/캐릭터2.png";
-import Avatar3 from "../assets/캐릭터3.png";
+import Avatar1 from "../assets/곰.png";
+import Avatar2 from "../assets/하양색 캐릭터.png";
+import Avatar3 from "../assets/토끼.png";
 
 export default function Mypage() {
+  const nav = useNavigate();  // 🔸 추가
+
   const user = {
     name: "주노",
     nickname: "Juno",
@@ -156,23 +159,32 @@ export default function Mypage() {
         <span className={styles.rightSpace} />
       </header>
 
-      <section className={styles.avatarBox}>
-        <div className={styles.avatar}>
-          <img
-            src={currentAvatar}
-            alt="프로필 아바타"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-            }}
-          />
-        </div>
-        <button className={styles.editBtn} onClick={() => setOpenPicker(true)}>
-          프로필 수정
-        </button>
-      </section>
+   <section className={styles.avatarBox}>
+  <div
+    className={styles.avatar}
+    style={{
+      width: "150px",   // 👉 원하는 크기로 키우기 (예: 260px)
+      height: "150px",  // 👉 세로도 키우기 (예: 320px)
+      borderRadius: "40px", // 모서리 둥글게 (필요 없으면 지워도 됨)
+    }}
+  >
+    <img
+      src={currentAvatar}
+      alt="프로필 아바타"
+      style={{
+        position: "relative",
+        bottom: "10px",
+        width: "150px",
+        height: "150px",
+        objectFit: "contain",
+        display: "block",
+      }}
+    />
+  </div>
+  <button className={styles.editBtn} onClick={() => setOpenPicker(true)}>
+    프로필 수정
+  </button>
+</section>
 
       <section className={styles.form}>
         <div className={styles.row}>
@@ -251,7 +263,15 @@ export default function Mypage() {
             ))}
           </div>
         </div>
-      <button className={styles.applyStatusButton}>신청 현황</button>
+
+        {/* 🔸 여기 버튼 클릭 시 TeamApply 페이지로 이동 */}
+          <button
+          type="button"
+          className={styles.applyStatusButton}
+          onClick={() => nav("/TeamApply")}   // 경로 중요!!
+        >
+          신청 현황
+        </button>
       </section>
 
       <div className={styles.bottomSpace} />
@@ -269,14 +289,14 @@ export default function Mypage() {
             <div className={styles.intBody}>
               <MyPageInterest value={draftTags} onChange={setDraftTags} />
             </div>
-           <div className={styles.intFooter}>
-  <button
-    className={`${styles.intBtn} ${styles.intBtnPrimary}`}
-    onClick={applyInterest}   // 적용 + 닫기 둘 다 수행
-  >
-    닫기
-  </button>
-</div>
+            <div className={styles.intFooter}>
+              <button
+                className={`${styles.intBtn} ${styles.intBtnPrimary}`}
+                onClick={applyInterest} // 적용 + 닫기 둘 다 수행
+              >
+                닫기
+              </button>
+            </div>
           </div>
         </div>
       )}

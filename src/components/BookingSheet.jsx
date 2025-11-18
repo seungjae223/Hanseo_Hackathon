@@ -37,9 +37,13 @@ export default function BookingSheet({
   const [visible, setVisible] = useState(open);
   const [month, setMonth] = useState(startOfMonth(initialStart || new Date()));
   const [start, setStart] = useState(initialStart);   // 단일 선택
+
   const [rentTime, setRentTime] = useState(initialRentTime);
   const [returnTime, setReturnTime] = useState(initialReturnTime);
-  const [picked, setPicked] = useState("");
+
+  // ✅ 여러 개 시간 칩을 제한 없이 선택할 수 있도록 배열로 변경
+  const [pickedSlots, setPickedSlots] = useState([]); // ["8:00~9:00", "9:00~10:00", ...]
+
   const [people, setPeople] = useState(initialPeople);
   const [peopleOpen, setPeopleOpen] = useState(false);
 
@@ -76,7 +80,7 @@ export default function BookingSheet({
     const s = startOfMonth(month);
     const e = endOfMonth(month);
     const startOffset = s.getDay();
-    const total = startOffset + e.getDate();   // ← 오타 수정
+    const total = startOffset + e.getDate();
     const rows = Math.ceil(total / 7);
     const cells = [];
     for (let r = 0; r < rows * 7; r++) {
@@ -100,20 +104,29 @@ export default function BookingSheet({
 
   const resetAll = () => {
     setStart(null);
-    setRentTime(""); setReturnTime("");
-    setPicked(""); setPeople(initialPeople);
+    setRentTime(""); 
+    setReturnTime("");
+    setPickedSlots([]);      // ✅ 선택한 시간 전부 초기화
+    setPeople(initialPeople);
   };
 
   const confirm = () => {
     if (!start) return;
-    const summary = `${fmtYMD(start)}${picked ? ` (${picked})` : ""} · ${people}인`;
+
+    const timePart =
+      pickedSlots.length > 0 ? ` (${pickedSlots.join(", ")})` : "";
+
+    const summary = `${fmtYMD(start)}${timePart} · ${people}인`;
+
     onConfirm?.({
-      date: start,          // 하루 예약: date 한 개만 전달
-      start,                // (호환용)
+      date: start,
+      start,
       end: null,
-      slot: picked,
+      slot: pickedSlots,     // ✅ 여러 슬롯 전달
+      slots: pickedSlots,
       people,
-      rentTime, returnTime,
+      rentTime,
+      returnTime,
       summary,
     });
     onClose?.();
@@ -218,26 +231,44 @@ export default function BookingSheet({
         <div className={css.timeBlock}>
           <div className={css.timeLabel}>오전</div>
           <div className={css.chips}>
-            {MORNING.map((t) => (
-              <button
-                key={t}
-                className={`${css.chip} ${picked === t ? css.chipActive : ""}`}
-                onClick={() => setPicked(t)}
-              >{t}</button>
-            ))}
+            {MORNING.map((t) => {
+              const on = pickedSlots.includes(t);
+              return (
+                <button
+                  key={t}
+                  className={`${css.chip} ${on ? css.chipActive : ""}`}
+                  onClick={() => {
+                    setPickedSlots((prev) =>
+                      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+                    );
+                  }}
+                >
+                  {t}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <div className={css.timeBlock}>
           <div className={css.timeLabel}>오후</div>
           <div className={css.chips}>
-            {AFTERNOON.map((t) => (
-              <button
-                key={t}
-                className={`${css.chip} ${picked === t ? css.chipActive : ""}`}
-                onClick={() => setPicked(t)}
-              >{t}</button>
-            ))}
+            {AFTERNOON.map((t) => {
+              const on = pickedSlots.includes(t);
+              return (
+                <button
+                  key={t}
+                  className={`${css.chip} ${on ? css.chipActive : ""}`}
+                  onClick={() => {
+                    setPickedSlots((prev) =>
+                      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+                    );
+                  }}
+                >
+                  {t}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -246,7 +277,7 @@ export default function BookingSheet({
           <button className={css.resetBtn} onClick={resetAll}>
             <img
               src={refresh}
-              alt=""        /* 장식 아이콘 */
+              alt=""
               aria-hidden="true"
               style={{ width: 22, height: 22, borderRadius: "50%" }}
             />

@@ -58,39 +58,16 @@
   box-shadow:0 10px 0 rgba(0,0,0,.16); /* 아래로 한 줄 그림자 */
 }
 
-.heroListWrap{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+/* 하트(윗 바 내부 우측) — 꽉 찬 노란색 */
+.heroHeart{
+  position:absolute;
+  top:32px;               /* 윗 바 안 수직 위치 */
+  right:58px;             /* 우측 여백 */
+  width:40px; height:40px;
+  border:none; padding:0; background:transparent;
+  display:grid; place-items:center; cursor:pointer;
 }
-
-/* 한 줄 카드 */
-.heroListItem{
-  background:#f1f1f1;
-  border-radius:20px;
-  padding:10px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-/* 제목 */
-.heroListTitle{
-  flex:1;
-  font-size:14px;
-  font-weight:600;
-  color:#222;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-/* 오른쪽 하트 */
-.heroListHeart img{
-  width:20px;
-  height:20px;
-  display:block;
-}
+.heroHeart img{ width:20.67px; height:18.94px; filter:grayscale(1) brightness(.55); }
 
 
 

@@ -19,7 +19,7 @@ function AppRoutes() {
   const location = useLocation();
 
   // 마이페이지에서만 헤더/푸터 감추기
-  const hideChrome = location.pathname === "/MypPage";
+  const hideChrome = location.pathname === "/MyPage";
 
   return (
     <LazyBoundary>
@@ -33,6 +33,7 @@ function AppRoutes() {
             {/* 메인 계열 (푸터 숨김은 BaseLayout 내부 로직에 따름) */}
             <Route path="/" element={<Lazy.FirstPage />} />
             <Route path="/Mainpage" element={<Lazy.MainPage />} />
+            <Route path="/TeamApply" element={<Lazy.TeamApply/>}/>
 
             {/* 푸터 표시 대상 */}
             <Route path="/TeamManage" element={<Lazy.TeamManagePanel />} />

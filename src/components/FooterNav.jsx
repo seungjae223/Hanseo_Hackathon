@@ -4,13 +4,10 @@ import styles from "../css/FooterNav.module.css";
 
 import HomeIcon from "../assets/home.png";
 import TeamIcon from "../assets/team.png";
-import RecruitIcon from "../assets/Recruit.png";   // 실제 파일명 대소문자 반드시 일치
+import RecruitIcon from "../assets/Recruit.png"; // 실제 파일명 대소문자 반드시 일치
 import MatchingIcon from "../assets/matching.png";
 
 function FooterNavInner({ active }) {
-
-
-
   // active prop을 사용하거나 기본값 설정
   const currentActive = active || "home";
 
@@ -28,20 +25,26 @@ function FooterNavInner({ active }) {
   return (
     <nav className={styles.footer} aria-label="하단 네비게이션">
       <ul className={styles.grid}>
-        {items.map((it) => (
-          <li key={it.key} className={styles.item}>
-            <button
-              type="button"
-              className={`${styles.bubble} ${currentActive === it.key ? styles.active : ""}`}
-              onClick={() => go(it.to)}
+        {items.map((it) => {
+          const isActive = currentActive === it.key;
+          return (
+            <li
+              key={it.key}
+              className={`${styles.item} ${isActive ? styles.active : styles.inactive}`}
             >
-              <img src={it.icon} alt="" className={styles.icon} />
-            </button>
-            <span className={`${styles.label} ${currentActive === it.key ? (styles.labelActive || "") : ""}`}>
-              {it.label}
-            </span>
-          </li>
-        ))}
+              <button
+                type="button"
+                className={styles.itemButton}
+                onClick={() => go(it.to)}
+              >
+                <div className={styles.bubble}>
+                  <img src={it.icon} alt="" className={styles.icon} />
+                </div>
+                <span className={styles.label}>{it.label}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

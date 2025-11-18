@@ -82,7 +82,9 @@ export const Lazy = {
   RecruitpanelWrite: lazyRetry(() =>
     import("../RecruitPanelWrite.jsx").then(m => pickDefault(m, "RecruitPanelWrite", "RecruitpanelWrite"))
   ),
-
+TeamApply: lazyRetry(() =>
+  import("../TeamApply.jsx").then((m) => pickDefault(m, "TeamApply"))
+),
   /* 공통 컴포넌트 */
   Header:           lazyRetry(() => import("../Header.jsx").then(m => pickDefault(m, "Header"))),
   LoginModal:       lazyRetry(() => import("../LoginModal.jsx").then(m => pickDefault(m, "LoginModal"))),
@@ -103,6 +105,7 @@ export const prefetch = {
   matching:         () => import(/* webpackPrefetch: true */ "../Matching.jsx"),
   recruitDetail:    () => import(/* webpackPrefetch: true */ "../RecruitDetail.jsx"),
   teamMemberDetail: () => import(/* webpackPrefetch: true */ "../TeamMemberDetail.jsx"),
+  teamApply: () =>  import(/* webpackPrefetch: true */ "../TeamApply.jsx"),
 
   /* 마이페이지 프리패치 — 실제 파일명: MyPage.jsx */
   mypage:           () => import(/* webpackPrefetch: true */ "../MyPage.jsx"),

@@ -23,6 +23,13 @@ const HASHTAG_OPTIONS = [
   "미술/디자인/건축",
 ];
 
+/* ✅ 파일 이름에서 확장자(PDF, PNG 등)만 추출 */
+const getFileExt = (name = "") => {
+  const dot = name.lastIndexOf(".");
+  if (dot === -1) return "";
+  return name.slice(dot + 1).toUpperCase(); // pdf -> PDF
+};
+
 export default function RecruitPanelWrite() {
   const [form, setForm] = useState({
     title: "",
@@ -37,7 +44,7 @@ export default function RecruitPanelWrite() {
   // ✅ 팀원 추가용 팝업 on/off
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
   // ✅ 팝업 안에서 선택된 캐릭터 / 직책 텍스트
-  const [selectedAvatar, setSelectedAvatar] = useState("bear"); // "bear" | "cat"
+  const [selectedAvatar, setSelectedAvatar] = useState("bear"); // "bear" | "cat" | "bear2"
   const [newRoleText, setNewRoleText] = useState("");
 
   // ✅ 해시태그 패널 on/off
@@ -94,11 +101,29 @@ export default function RecruitPanelWrite() {
 
   /* ===== 구하는 팀원(+) ===== */
 
+  // 아바타 타입에 맞는 이미지 반환
+  const getAvatarSrc = (type) => {
+    switch (type) {
+      case "cat":
+        return Cat;
+      default:
+        // "bear", "bear2" 등은 전부 곰 이미지
+        return Bear;
+    }
+  };
+
+  // 모달 닫을 때 공통 처리
+  const closeRolePicker = () => {
+    setRolePickerOpen(false);
+    setNewRoleText("");
+    setSelectedAvatar("bear");
+  };
+
   // ✅ 새 팀원 저장
   const saveNewMember = () => {
     if (!newRoleText.trim()) return;
 
-    const src = selectedAvatar === "bear" ? Bear : Cat;
+    const src = getAvatarSrc(selectedAvatar);
 
     setForm((p) => ({
       ...p,
@@ -112,10 +137,7 @@ export default function RecruitPanelWrite() {
       ],
     }));
 
-    // 입력값 초기화
-    setNewRoleText("");
-    setSelectedAvatar("bear");
-    setRolePickerOpen(false);
+    closeRolePicker();
   };
 
   const removeMember = (id) => {
@@ -154,9 +176,15 @@ export default function RecruitPanelWrite() {
     return () => {
       files.forEach((f) => URL.revokeObjectURL(f.url));
     };
-    // 의도적으로 deps 비움(언마운트 시 한 번만)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 모달에서 사용할 아바타 카드 3개 정보
+  const avatarOptions = [
+    { key: "bear", bg: "#C4F59A" }, // 연초록
+    { key: "cat", bg: "#FFCBCB" },  // 연분홍
+    { key: "bear2", bg: "#FFCBCB" } // 세 번째 카드도 연분홍
+  ];
 
   return (
     <main className="rpw">
@@ -166,7 +194,6 @@ export default function RecruitPanelWrite() {
           <label className="rpw-label">해시태그</label>
 
           <div className="rpw-hashArea">
-            {/* ▶ 첫 번째 화면: 작은 캡슐 버튼 (해시태그 바로 밑) */}
             <button
               type="button"
               className={`rpw-hashPill ${
@@ -177,13 +204,10 @@ export default function RecruitPanelWrite() {
               {form.hashtags.length === 0 ? (
                 <span className="rpw-hashPlus">+</span>
               ) : (
-                <span className="rpw-hashText">
-                  {form.hashtags[0]} {/* 선택된 태그 한 개만 표시 */}
-                </span>
+                <span className="rpw-hashText">{form.hashtags[0]}</span>
               )}
             </button>
 
-            {/* ▶ 두 번째 화면: 태그 선택 패널 (안쪽은 그리드만) */}
             {tagPanelOpen && (
               <div className="rpw-hashPanel">
                 <div className="rpw-hashGrid">
@@ -228,7 +252,6 @@ export default function RecruitPanelWrite() {
         <div className="rpw-row">
           <label className="rpw-label">내용</label>
 
-          {/* 아래 정렬 래퍼 */}
           <div className="rpw-bottomWrite">
             <textarea
               className="rpw-bottomTA"
@@ -248,7 +271,6 @@ export default function RecruitPanelWrite() {
             />
           </div>
 
-          {/* 노란 밑줄은 그대로 */}
           <div className="rpw-underline" />
         </div>
 
@@ -261,7 +283,6 @@ export default function RecruitPanelWrite() {
             aria-label="파일 업로드 영역"
             style={{ position: "relative" }}
           >
-            {/* 숨겨진 input */}
             <input
               ref={fileInputRef}
               type="file"
@@ -272,121 +293,71 @@ export default function RecruitPanelWrite() {
             />
 
             {files.length === 0 ? (
-              // ▶ 비어있을 때: 가운데 업로드 아이콘 버튼
               <button
                 type="button"
                 onClick={openPicker}
                 title="파일 첨부"
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  margin: "auto",
-                  width: 64,
-                  height: 64,
-                  borderRadius: "50%",
-                  display: "grid",
-                  placeItems: "center",
-                  background: "transparent",
-                  border: 0,
-                  cursor: "pointer",
-                }}
+                className="rpw-fileEmptyBtn"
               >
                 <img
                   src={UploadIcon}
                   alt="파일 첨부"
-                  style={{ width: 48, height: 48, opacity: 0.6 }}
+                  className="rpw-fileEmptyIcon"
                 />
               </button>
             ) : (
-              // ▶ 파일이 있을 때: 미리보기 그리드 + 오른쪽 아래 추가 버튼
               <>
-                <div
-                  style={{
-                    padding: 12,
-                    display: "grid",
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(88px, 1fr))",
-                    gap: 12,
-                  }}
-                >
-                  {files.map((f) => (
-                    <div
-                      key={f.id}
-                      style={{
-                        position: "relative",
-                        background: "#f7f7f7",
-                        borderRadius: 10,
-                        overflow: "hidden",
-                        boxShadow: "inset 0 1px 0 rgba(0,0,0,.04)",
-                        height: 88,
-                      }}
-                      title={f.name}
-                    >
-                      {/* 이미지/파일 미리보기(이미지 외 형식은 아이콘 대체 가능) */}
-                      <img
-                        src={f.url}
-                        alt={f.name}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                        onError={(e) => {
-                          // 이미지가 아닐 때는 기본 업로드 아이콘을 보여줌
-                          e.currentTarget.style.objectFit = "contain";
-                          e.currentTarget.src = UploadIcon;
-                        }}
-                      />
-                      {/* 삭제 버튼 */}
-                      <button
-                        type="button"
-                        onClick={() => removeFile(f.id)}
-                        aria-label="첨부 삭제"
-                        style={{
-                          position: "absolute",
-                          top: 6,
-                          right: 6,
-                          width: 22,
-                          height: 22,
-                          borderRadius: "50%",
-                          background: "#fff",
-                          border: "1px solid #ddd",
-                          fontSize: 14,
-                          lineHeight: "20px",
-                          cursor: "pointer",
-                        }}
-                        title="삭제"
+                <div className="rpw-fileGrid">
+                  {files.map((f) => {
+                    const isImage = f.file?.type?.startsWith("image/");
+                    const ext = getFileExt(f.name);
+
+                    return (
+                      <div
+                        key={f.id}
+                        className="rpw-fileItem"
+                        title={f.name}
                       >
-                        ×
-                      </button>
-                    </div>
-                  ))}
+                        {isImage ? (
+                          <img
+                            src={f.url}
+                            alt={f.name}
+                            className="rpw-fileThumb"
+                          />
+                        ) : (
+                          <div className="rpw-fileNonImg">
+                            <span className="rpw-fileExt">
+                              {ext || "FILE"}
+                            </span>
+                            <span className="rpw-fileName">{f.name}</span>
+                          </div>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => removeFile(f.id)}
+                          aria-label="첨부 삭제"
+                          className="rpw-fileDelete"
+                          title="삭제"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* 추가 업로드(우하단 원형 버튼) */}
                 <button
                   type="button"
                   onClick={openPicker}
                   aria-label="파일 추가"
                   title="파일 추가"
-                  style={{
-                    position: "absolute",
-                    right: 12,
-                    bottom: 12,
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    border: "1px solid #e0e0e0",
-                    background: "#fff",
-                    display: "grid",
-                    placeItems: "center",
-                    cursor: "pointer",
-                  }}
+                  className="rpw-fileAddBtn"
                 >
                   <img
                     src={UploadIcon}
                     alt=""
-                    style={{ width: 22, height: 22, opacity: 0.65 }}
+                    className="rpw-fileAddIcon"
                   />
                 </button>
               </>
@@ -399,7 +370,6 @@ export default function RecruitPanelWrite() {
           <label className="rpw-label">구하는 팀원</label>
 
           {form.members.length === 0 ? (
-            /* 처음 상태: 가운데 +만 있는 캡슐 */
             <div className="rpw-teamEmpty">
               <button
                 type="button"
@@ -411,7 +381,6 @@ export default function RecruitPanelWrite() {
               </button>
             </div>
           ) : (
-            /* 선택 후: 칩들 + 맨 오른쪽 + 버튼 */
             <div className="rpw-teamWrap">
               <div className="rpw-teamRow">
                 {form.members.map((m) => (
@@ -443,86 +412,75 @@ export default function RecruitPanelWrite() {
           )}
         </div>
 
-        {/* ✅ 캐릭터 + 직책 입력 모달 */}
+        {/* ✅ 캐릭터 + 직책 입력 모달 (목업 스타일) */}
         {rolePickerOpen && (
-          <div className="rpw-roleOverlay" role="dialog" aria-modal="true">
-            <div className="rpw-roleCard">
-              <h4 style={{ marginBottom: 12 }}>구하는 팀원 추가</h4>
+          <div
+            className="rpw-roleOverlay"
+            role="dialog"
+            aria-modal="true"
+            onClick={closeRolePicker}
+          >
+            <div
+              className="rpw-roleModal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h4 className="rpw-roleTitle">구하는 팀원 추가</h4>
 
-              {/* 캐릭터 선택 */}
-              <div className="rpw-roleBtns" style={{ marginBottom: 12 }}>
-                <button
-                  type="button"
-                  onClick={() => setSelectedAvatar("bear")}
-                  className={
-                    selectedAvatar === "bear"
-                      ? "rpw-avatarBtn __active"
-                      : "rpw-avatarBtn"
-                  }
-                >
-                  <img src={Bear} alt="곰 캐릭터" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedAvatar("cat")}
-                  className={
-                    selectedAvatar === "cat"
-                      ? "rpw-avatarBtn __active"
-                      : "rpw-avatarBtn"
-                  }
-                >
-                  <img src={Cat} alt="고양이 캐릭터" />
-                </button>
+              {/* 아바타 카드 3개 */}
+              <div className="rpw-avatarRow">
+                {avatarOptions.map((opt) => (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setSelectedAvatar(opt.key)}
+                    className={`rpw-avatarCard rpw-avatarCard--${opt.key} ${
+                      selectedAvatar === opt.key ? "is-active" : ""
+                    }`}
+                  >
+                    <img
+                      src={getAvatarSrc(opt.key)}
+                      alt="역할 아바타"
+                      className="rpw-avatarImg"
+                    />
+                  </button>
+                ))}
               </div>
 
-              {/* 캐릭터 아래 직책 입력 */}
-              <div style={{ width: "100%", marginBottom: 12 }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: 12,
-                    marginBottom: 4,
-                    color: "#6b7280",
-                  }}
-                >
-                  구하는 직책
-                </label>
-                <input
-                  className="rpw-roleInput"
-                  placeholder="구하는 역할을 입력하세요"
-                  value={newRoleText}
-                  onChange={(e) => setNewRoleText(e.target.value)}
-                />
+              {/* 카드 밑 체크박스 줄 */}
+              <div className="rpw-avatarChecks">
+                {avatarOptions.map((opt) => (
+                  <label key={opt.key} className="rpw-checkWrap">
+                    <input
+                      type="checkbox"
+                      checked={selectedAvatar === opt.key}
+                      onChange={() => setSelectedAvatar(opt.key)}
+                      className="rpw-avatarCheck"
+                    />
+                  </label>
+                ))}
               </div>
 
-              {/* 버튼들 */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: 8,
-                  marginTop: 4,
-                }}
+              {/* 구하는 직책 입력 */}
+              <div className="rpw-roleField">
+                <label className="rpw-roleFieldLabel">구하는 직책</label>
+                <div className="rpw-roleFieldBox">
+                  <input
+                    className="rpw-roleInput"
+                    placeholder="구하는 역할을 입력하세요."
+                    value={newRoleText}
+                    onChange={(e) => setNewRoleText(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* 큰 추가하기 버튼 */}
+              <button
+                type="button"
+                onClick={saveNewMember}
+                className="rpw-roleSubmit"
               >
-                <button
-                  type="button"
-                  className="rpw-roleClose"
-                  onClick={() => {
-                    setRolePickerOpen(false);
-                    setNewRoleText("");
-                    setSelectedAvatar("bear");
-                  }}
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  className="rpw-roleSave"
-                  onClick={saveNewMember}
-                >
-                  추가하기
-                </button>
-              </div>
+                추가하기
+              </button>
             </div>
           </div>
         )}
@@ -541,79 +499,39 @@ export default function RecruitPanelWrite() {
             </button>
 
             {openCalendar && (
-              <div
-                style={{
-                  marginTop: 8,
-                  background: "#f7f7f7",
-                  borderRadius: 18,
-                  padding: 12,
-                  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
-                }}
-              >
-                {/* 시작일 / 마감일 탭 */}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 6,
-                    marginBottom: 8,
-                  }}
-                >
+              <div className="rpw-dateSheet">
+                <div className="rpw-dateTabs">
                   <button
                     type="button"
                     onClick={() => setActiveField("start")}
-                    style={{
-                      flex: 1,
-                      borderRadius: 999,
-                      border: "none",
-                      padding: "6px 0",
-                      fontSize: 12,
-                      cursor: "pointer",
-                      background:
-                        activeField === "start" ? "#111827" : "#e5e7eb",
-                      color: activeField === "start" ? "#fff" : "#4b5563",
-                    }}
+                    className={`rpw-dateTab ${
+                      activeField === "start" ? "__active" : ""
+                    }`}
                   >
                     시작일
                   </button>
                   <button
                     type="button"
                     onClick={() => setActiveField("end")}
-                    style={{
-                      flex: 1,
-                      borderRadius: 999,
-                      border: "none",
-                      padding: "6px 0",
-                      fontSize: 12,
-                      cursor: "pointer",
-                      background:
-                        activeField === "end" ? "#111827" : "#e5e7eb",
-                      color: activeField === "end" ? "#fff" : "#4b5563",
-                    }}
+                    className={`rpw-dateTab ${
+                      activeField === "end" ? "__active" : ""
+                    }`}
                   >
                     마감일
                   </button>
                 </div>
 
-                {/* 가운데 줄 위에 '기한'이 같이 보이는 휠 */}
                 <DateWheelPicker
                   label="기한"
                   value={activeField === "start" ? startDate : endDate}
                   onChange={handleWheelChange}
                 />
 
-                <div style={{ marginTop: 8, textAlign: "right" }}>
+                <div className="rpw-dateDoneRow">
                   <button
                     type="button"
                     onClick={() => setOpenCalendar(false)}
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: 999,
-                      border: "none",
-                      background: "#111827",
-                      color: "#fff",
-                      fontSize: 12,
-                      cursor: "pointer",
-                    }}
+                    className="rpw-dateDoneBtn"
                   >
                     완료
                   </button>

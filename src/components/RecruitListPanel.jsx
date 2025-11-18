@@ -3,7 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/RecruitListPanel.module.css";
 
-import HeartIcon from "../assets/Heart.png";
+import HeartOutline from "../assets/Heart.png";      // 회색/선 하트
+import HeartFilled  from "../assets/하트.png";        // 노란 꽉 찬 하트
 import SearchIcon from "../assets/Search.png";
 import PencilIcon from "../assets/pencil.png";
 
@@ -94,8 +95,8 @@ export default function RecruitListPanel() {
   // (펼친 상태에서) 보여줄 리스트 – 최대 3개
   const heroList = (savedPosts.length
     ? savedPosts
-    : [{ id: "placeholder", title: HIGHLIGHT_PLACEHOLDER }]
-  ).slice(0, 3);
+    : [{ id: "placeholder", title: HIGHLIGHT_PLACEHOLDER }])
+    .slice(0, 3);
 
   // 예전 회전 로직은 지금은 안 써도 되지만, 필요하면 다시 쓸 수 있게만 남겨둠
   const [highlightIndex, setHighlightIndex] = useState(0);
@@ -137,7 +138,7 @@ export default function RecruitListPanel() {
         >
           {heroCompact ? (
             <>
-              {/* ✅ 2번째 그림 같은 접힌 상태: 앞/뒤 카드 + 노란 하트만 */}
+              {/* ✅ 접힌 상태: 앞/뒤 카드 + 노란 하트만 */}
               <div className={styles.heroCap} />
               <div className={styles.heroBody} />
               <button
@@ -146,17 +147,21 @@ export default function RecruitListPanel() {
                 aria-label={LABELS.heartList}
                 title="찜 목록"
               >
-                <img src={HeartIcon} alt="" />
+                {/* 찜한 글 있으면 노란 하트, 없으면 회색 하트 */}
+                <img
+                  src={savedPosts.length ? HeartFilled : HeartOutline}
+                  alt=""
+                />
               </button>
             </>
           ) : (
-            // ✅ 3번째 그림 같은 펼쳐진 상태: 회색 카드 3줄
+            // ✅ 펼쳐진 상태: 회색 카드 3줄
             <div className={styles.heroListWrap}>
               {heroList.map((post) => (
                 <div key={post.id} className={styles.heroListItem}>
                   <span className={styles.heroListTitle}>{post.title}</span>
                   <span className={styles.heroListHeart}>
-                    <img src={HeartIcon} alt="" />
+                    <img src={HeartFilled} alt="" />
                   </span>
                 </div>
               ))}
@@ -213,20 +218,31 @@ export default function RecruitListPanel() {
                 }}
               >
                 <div className={styles.cardHeader}>
-                  <span className={styles.cardTag}>{displayTag(post.tags)}</span>
+                  <span className={styles.cardTag}>
+                    {displayTag(post.tags)}
+                  </span>
+
+                  {/* 👉 오른쪽 위 하트 버튼 */}
                   <button
-                    type="button"
-                    className={`${styles.cardHeart} ${
-                      isSaved ? styles.cardHeartActive : ""
-                    }`}
-                    aria-label={isSaved ? LABELS.unSave : LABELS.save}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleSave(post.id);
-                    }}
-                  >
-                    <img src={HeartIcon} alt="" />
-                  </button>
+  type="button"
+  className={`${styles.cardHeart} ${isSaved ? styles.cardHeartActive : ""}`}
+  aria-label={isSaved ? LABELS.unSave : LABELS.save}
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleSave(post.id);
+  }}
+>
+  <img
+    src={isSaved ? HeartFilled : HeartOutline}
+    alt=""
+    style={{
+      width: 24,        // 여기 숫자 마음대로 조절 가능
+      height: 24,
+      display: "block",
+      objectFit: "contain",
+    }}
+  />
+</button>
                 </div>
 
                 <h3 className={styles.cardTitle}>{post.title}</h3>

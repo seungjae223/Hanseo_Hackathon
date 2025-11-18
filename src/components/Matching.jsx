@@ -1,6 +1,6 @@
 // src/pages/Matching.jsx
 import React, { useMemo, useState } from "react";
-import { createPortal } from "react-dom";           // ⭐ 추가
+import { createPortal } from "react-dom";           // ⭐ 포탈
 import styles from "../css/Matching.module.css";
 
 import RightIcon from "../assets/옆.png";
@@ -13,14 +13,58 @@ import BookingSheet from "../components/BookingSheet";
    목업 데이터(상세용 필드 포함)
    ────────────────────────────────────────────── */
 const MOCK_ROOMS = [
-  { id: 101, title: "인문관 2층 208호", imageUrl: LibraryImg, desc: "조용하게 공부얘기 하기 좋아요", tags: ["조용한", "청결"] },
-  { id: 102, title: "건축관 1층 스튜디오 A", imageUrl: LibraryImg, desc: "팀 스터디에 최적화된 공간", tags: ["화이트보드", "콘센트 多"] },
-  { id: 103, title: "인문관 1층 라운지", imageUrl: LibraryImg, desc: "간단 회의/피드백에 좋아요", tags: ["라운지", "편안"] },
+  {
+    id: 101,
+    title: "인문관 2층 208호",
+    imageUrl: LibraryImg,
+    desc: "조용하게 공부얘기 하기 좋아요",
+    tags: ["조용한", "청결"],
+  },
+  {
+    id: 102,
+    title: "건축관 1층 스튜디오 A",
+    imageUrl: LibraryImg,
+    desc: "팀 스터디에 최적화된 공간",
+    tags: ["화이트보드", "콘센트 多"],
+  },
+  {
+    id: 103,
+    title: "인문관 1층 라운지",
+    imageUrl: LibraryImg,
+    desc: "간단 회의/피드백에 좋아요",
+    tags: ["라운지", "편안"],
+  },
 ];
 
-const LABEL = { WAITING: "대기중", BOOKED: "예약완료", CONFIRMED: "예약확인", CANCELLED: "취소됨" };
+const LABEL = {
+  WAITING: "대기중",
+  BOOKED: "예약완료",
+  CONFIRMED: "예약확인",
+  CANCELLED: "취소됨",
+};
+
+/* 🔸 예약현황 목업 데이터 (목업 화면처럼 여러 줄) */
 const MOCK_RESERVATIONS = [
-  { id: 9001, room: { building: "건축관", name: "504호", thumbnailUrl: LibraryImg }, status: "WAITING" },
+  {
+    id: 9001,
+    room: { building: "건축관", name: "504호", thumbnailUrl: LibraryImg },
+    status: "WAITING",
+  },
+  {
+    id: 9002,
+    room: { building: "인문관", name: "208호", thumbnailUrl: LibraryImg },
+    status: "BOOKED",
+  },
+  {
+    id: 9003,
+    room: { building: "인문관", name: "세미나실 A", thumbnailUrl: LibraryImg },
+    status: "CONFIRMED",
+  },
+  {
+    id: 9004,
+    room: { building: "창업관", name: "라운지", thumbnailUrl: LibraryImg },
+    status: "WAITING",
+  },
 ];
 
 /* (지금은 안 쓰지만 필요하면 쓸 수 있게 남겨둔 디바운스 훅) */
@@ -33,15 +77,10 @@ function useDebounced(value, delay = 300) {
   return v;
 }
 
-/* ⭐ 화살표를 body에 직접 렌더하는 포탈 컴포넌트 */
+/*  화살표를 body에 직접 렌더하는 포탈 컴포넌트 */
 function NextFab({ onClick }) {
-  // SSR 환경이 아니니까 바로 body에 포탈
   return createPortal(
-    <button
-      className={styles.nextFab}
-      onClick={onClick}
-      aria-label="다음 공간"
-    >
+    <button className={styles.nextFab} onClick={onClick} aria-label="다음 공간">
       <img src={RightIcon} alt="" />
     </button>,
     document.body
@@ -49,8 +88,9 @@ function NextFab({ onClick }) {
 }
 
 export default function Matching() {
-  const [mode, setMode] = useState("grid");      // grid | status
-  const [detailIdx, setDetailIdx] = useState(0); // 항상 상세 화면(0번 카드)부터 시작
+  /* 🔸 처음 들어오면 ‘공간 상세’ 화면 보이도록 */
+  const [mode, setMode] = useState("grid");      // "grid" | "status"
+  const [detailIdx, setDetailIdx] = useState(0); // 상세 화면 인덱스
 
   const [rooms] = useState(MOCK_ROOMS);
   const [reservations, setReservations] = useState(MOCK_RESERVATIONS);
@@ -85,7 +125,13 @@ export default function Matching() {
     setSheetOpen(true);
   };
 
-  const handleConfirmSchedule = ({ start, end, rentTime, returnTime, summary }) => {
+  const handleConfirmSchedule = ({
+    start,
+    end,
+    rentTime,
+    returnTime,
+    summary,
+  }) => {
     if (!sheetRoom) return;
     const building = sheetRoom.title.split(" ")[0] || "건물";
     const name = sheetRoom.title.replace(`${building} `, "") || "공간";
@@ -98,8 +144,8 @@ export default function Matching() {
     setReservations((prev) => [newItem, ...prev]);
     setSheetOpen(false);
     setSheetRoom(null);
-    setDetailIdx(0); 
-    setMode("status"); 
+    setDetailIdx(0);
+    setMode("status");
   };
 
   return (
@@ -107,16 +153,16 @@ export default function Matching() {
       {/* ───── 상단 문구 ───── */}
       <header className={styles.detailHeader}>
         <p className={styles.detailHeadline}>
-          당신의 아이디어, 지금 함께
-          <br />
-          실행할 팀을 만나보세요!
+          집중을 위한 공간, 실행을 위한 선택.
         </p>
       </header>
 
       {/* 예약현황 버튼 */}
       <div className={styles.statusWrap}>
         <button
-          className={`${styles.statusBtn} ${mode === "status" ? styles.statusBtnActive : ""}`}
+          className={`${styles.statusBtn} ${
+            mode === "status" ? styles.statusBtnActive : ""
+          }`}
           onClick={() => setMode((m) => (m === "grid" ? "status" : "grid"))}
         >
           예약현황
@@ -127,11 +173,19 @@ export default function Matching() {
       {mode === "grid" && (
         <section className={styles.detailWrap}>
           <div className={styles.detailCard}>
-            <h3 className={styles.detailTitle}>{threeRooms[detailIdx].title}</h3>
+            <h3 className={styles.detailTitle}>
+              {threeRooms[detailIdx].title}
+            </h3>
             <div className={styles.detailPhotoWrap}>
-              <img className={styles.detailPhoto} src={threeRooms[detailIdx].imageUrl} alt="" />
+              <img
+                className={styles.detailPhoto}
+                src={threeRooms[detailIdx].imageUrl}
+                alt=""
+              />
             </div>
-            <p className={styles.detailDesc}>{threeRooms[detailIdx].desc}</p>
+            <p className={styles.detailDesc}>
+              {threeRooms[detailIdx].desc}
+            </p>
             {threeRooms[detailIdx].tags?.length > 0 && (
               <p className={styles.detailTags}>
                 {threeRooms[detailIdx].tags.map((t) => `#${t}`).join(" ")}
@@ -147,7 +201,7 @@ export default function Matching() {
         </section>
       )}
 
-      {/* 🔻 하단 화살표 — 이제 포탈로 body에 고정 렌더 */}
+      {/* 🔻 하단 화살표 — 포탈로 body에 고정 렌더 */}
       {mode === "grid" && <NextFab onClick={nextDetail} />}
 
       {/* ====== 예약현황 ====== */}
@@ -156,7 +210,11 @@ export default function Matching() {
           <ul className={styles.statusList}>
             {statusItems.map((r) => (
               <li key={r.id} className={styles.statusItem}>
-                <div className={`${styles.thumb} ${r.dim ? styles.thumbDim : ""}`}>
+                <div
+                  className={`${styles.thumb} ${
+                    r.dim ? styles.thumbDim : ""
+                  }`}
+                >
                   <img src={r.img} alt="" />
                 </div>
                 <div className={styles.meta}>

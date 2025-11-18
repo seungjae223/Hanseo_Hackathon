@@ -12,9 +12,10 @@
   padding-bottom: 100px;
   color:var(--ink);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+  background-color: #F5F5F5;
 }
 
-/* 스샷처럼 2열 그리드 */
+
 .grid{
   display:grid;
   grid-template-columns:repeat(2, minmax(0,1fr));
@@ -56,7 +57,41 @@
 .dday{
   margin:0; font-size:12px; color:var(--ink);
 }
+.frame {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  justify-content: flex-start;
+  padding: 24px 0 120px;
+}
 
+/* 가운데 정렬 + 폭 넓게 (2칸 들어가게) */
+.inner {
+  width: 100%;
+  max-width: 760px;      /* 🔸 600 → 760 정도로 넓혀주기 */
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 상단 문구 */
+.heroText {
+  margin: 0 0 24px;
+}
+
+.heroText h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* 카드 그리드 : 항상 2열 */
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));  /* 🔸 2칸 고정 */
+  column-gap: 24px;
+  row-gap: 32px;
+}
 /* 좁은 화면에서 간격만 축소 */
 @media (max-width:560px){
   .grid{ column-gap:16px; row-gap:18px; }

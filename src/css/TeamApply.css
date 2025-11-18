@@ -1,0 +1,319 @@
+/* ===== 페이지 전체 배경 ===== */
+.ta-root {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+
+.ta-phone {
+  width: 360px;
+  max-width: 100%;
+  background: #f5f5f5;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+/* ===== 상단 헤더 ===== */
+.ta-header {
+  height: 80px;
+  background: #ffd400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.ta-back {
+  position: absolute;
+  left: 18px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ta-back img {
+  width: 40px;
+}
+
+.ta-header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ===== 탭 ===== */
+.ta-tabs {
+  display: flex;
+  gap: 40px;
+  padding: 10px 30px 12px;
+  background: #F6F6F6;
+}
+
+.ta-tab {
+  flex: 1;
+  height: 38px;
+  width: 123px;
+  border-radius: 10px;
+  border: none;
+  background: #f0f0f0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ta-tab.is-active {
+  background: #FFF19A;
+}
+
+/* ===== 공통 내용 영역 ===== */
+.ta-content {
+  padding: 10px 12px 16px;
+}
+
+.ta-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ───────── 팀장 탭(리스트) ───────── */
+
+.ta-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: #F6F6F6;
+}
+
+.ta-avatar-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: #EDEDED;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.ta-avatar-inner {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ta-avatar-inner img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.ta-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ta-role {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ta-meta {
+  font-size: 11px;
+  color: #666666;
+}
+
+.ta-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ta-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ta-btn-reject {
+  background: #ff8b8b;
+}
+
+.ta-btn-accept {
+  background: #9be179;
+}
+
+/* ───────── 팀장 탭: 데이터 없을 때 ───────── */
+
+.ta-empty {
+  padding: 40px 16px 32px;
+  text-align: center;
+  color: #555555;
+}
+
+.ta-empty-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* 점 하나하나 애니메이션 */
+.ta-empty-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dddddd;
+  opacity: 0.25;
+  animation: ta-dot-blink 1.2s ease-in-out infinite;
+}
+
+/* 두 번째, 세 번째 점은 살짝 딜레이 줘서 순서대로 깜빡이게 */
+.ta-empty-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ta-empty-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* 깜빡이는 + 살짝 튀어오르는 느낌 */
+@keyframes ta-dot-blink {
+  0%, 80%, 100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.ta-empty-illustration {
+  width: 230px;
+  height: 230px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ta-empty-illustration img {
+  width: 65%;
+  height: 65%;
+  object-fit: contain;
+}
+
+.ta-empty-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #444444;
+}
+
+.ta-empty-sub {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+.ta-empty-button {
+  border: none;
+  padding: 10px 28px;
+  border-radius: 999px;
+  background: #ffd400;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ───────── 신청 내역 탭 ───────── */
+
+.ta-apply-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 6px 4px;
+  background: transparent;
+}
+
+/* 왼쪽 작은 흰 카드 */
+.ta-apply-card {
+  min-width: 150px;
+  max-width: 170px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: 0 0 0 1px #f1f1f1;
+}
+
+.ta-apply-tag {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.ta-apply-desc {
+  font-size: 11px;
+  color: #555555;
+  line-height: 1.4;
+}
+
+/* 가운데 역할/날짜 */
+.ta-apply-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.ta-apply-role {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ta-apply-date {
+  font-size: 12px;
+  color: #555555;
+}
+
+/* 오른쪽 상태 텍스트 */
+.ta-apply-status {
+  align-self: center;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ta-apply-status--approved {
+  color: #35b94a;
+}
+
+.ta-apply-status--rejected {
+  color: #ff5252;
+}
+
+.ta-apply-status--pending {
+  color: #999999;
+}

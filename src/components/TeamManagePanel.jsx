@@ -20,7 +20,16 @@ export default function TeamManagePanel() {
 
   return (
     <section className={styles.wrap} aria-label="상단 포스터 그리드">
+            {/* 상단 텍스트 */}
+            <div className={styles.heroText}>
+              <h1>
+                지금 내가 몸 담고 있는 팀들의
+                <br />
+                정보를 한눈에 확인해보세요.
+              </h1>
+            </div>
       <div className={styles.grid}>
+        
         {MOCK.map((it) => (
           <article
             key={it.id}

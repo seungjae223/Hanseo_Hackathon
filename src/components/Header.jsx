@@ -1,6 +1,6 @@
 // src/components/Header.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ useLocation 추가
 import styles from "../css/Header.module.css";
 import Logo from "../assets/작당모의.png";
 import LoginBtnImg from "../assets/로그인.png";
@@ -29,14 +29,23 @@ export default function Header() {
   // 로고 클릭 애니메이션 상태
   const [logoAnimating, setLogoAnimating] = useState(false);
 
-  // 헤더 아바타 상태(로컬스토리지에 저장된 키를 읽어옴: 'bear' | 'cat' | 'bunny')
-  const [avatarKey, setAvatarKey] = useState(localStorage.getItem("profileAvatar") || "");
+  // 헤더 아바타 상태
+  const [avatarKey, setAvatarKey] = useState(
+    localStorage.getItem("profileAvatar") || ""
+  );
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const pathLower = pathname.toLowerCase();
+
+  // ✅ MyPage, TeamApply 에서는 헤더 숨기기
+  const hideHeader =
+    pathLower.startsWith("/mypage") || pathLower.startsWith("/teamapply");
 
   // 마이페이지에서 선택 후 헤더 즉시 반영 (커스텀 이벤트 & storage 변화 둘 다 수신)
   useEffect(() => {
-    const onAvatarChange = () => setAvatarKey(localStorage.getItem("profileAvatar") || "");
+    const onAvatarChange = () =>
+      setAvatarKey(localStorage.getItem("profileAvatar") || "");
     window.addEventListener("avatarChange", onAvatarChange);
     window.addEventListener("storage", onAvatarChange);
     return () => {
@@ -57,7 +66,12 @@ export default function Header() {
 
   const goMyPage = () => navigate("/mypage");
 
-  const avatarUrl = AVATAR_SRC[avatarKey]; // 선택된 아바타 실제 파일 경로
+  const avatarUrl = AVATAR_SRC[avatarKey];
+
+  // ✅ Hooks 다 호출한 뒤에 헤더 숨김 처리
+  if (hideHeader) {
+    return null;
+  }
 
   return (
     <header className={styles.header}>
@@ -86,31 +100,29 @@ export default function Header() {
           <img
             src={Logo}
             alt="작당모의 로고"
-            className={`${styles.logo} ${logoAnimating ? "__logoBounce" : ""}`}
+            className={`${styles.logo} ${
+              logoAnimating ? "__logoBounce" : ""
+            }`}
           />
         </button>
       </div>
 
       {/* 우측 메뉴: 로그인 버튼 + 마이페이지 아바타 원형 버튼 */}
       <div className={styles.rightMenu}>
-        <button className={styles.loginBtn} onClick={() => setShowLogin(true)}>
+        <button
+          className={styles.loginBtn}
+          onClick={() => setShowLogin(true)}
+        >
           <img src={LoginBtnImg} alt="로그인" className="Login-img" />
         </button>
 
-        {/* 아바타 원 버튼 (사진 있으면 배경, 없으면 텍스트 '마이페이지') */}
         <button
           type="button"
           className={styles.mypageBtn}
           aria-label="마이페이지로 이동"
           onClick={goMyPage}
-          style={
-            avatarUrl
-              ? { backgroundImage: `url(${avatarUrl})` }
-              : undefined
-          }
-        >
-         
-        </button>
+          style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+        />
       </div>
 
       {/* 로그인 모달 */}
@@ -130,7 +142,9 @@ export default function Header() {
 
       {/* 회원가입/비번 찾기 모달 */}
       {showSignUp && <SignUpModal onClose={() => setShowSignUp(false)} />}
-      {showFindPassword && <FindPasswordModal onClose={() => setShowFindPassword(false)} />}
+      {showFindPassword && (
+        <FindPasswordModal onClose={() => setShowFindPassword(false)} />
+      )}
     </header>
   );
 }

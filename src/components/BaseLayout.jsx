@@ -6,8 +6,13 @@ import FooterNav from "./FooterNav";
 export default function BaseLayout() {
   const { pathname } = useLocation();
 
-  // 메인(/, /Mainpage)에서는 푸터 숨김
-  const hideFooter = pathname === "/" || pathname === "/Mainpage";
+  // ✅ 푸터를 숨길 페이지들
+  //  - 메인(/, /Mainpage)
+  //  - 팀 신청 내역(/TeamApply)
+  const hideFooter =
+    pathname === "/" ||
+    pathname === "/Mainpage" ||
+    pathname === "/TeamApply";
 
   // 스크롤 보장
   React.useEffect(() => {
@@ -25,19 +30,27 @@ export default function BaseLayout() {
     };
   }, []);
 
-
   // 활성 탭 계산(필요한 페이지만 지정)
   let active = "home";
-  if (pathname.startsWith("/TeamManage") || pathname.startsWith("/team/")) active = "team";
+  if (pathname.startsWith("/TeamManage") || pathname.startsWith("/team/"))
+    active = "team";
   else if (pathname.startsWith("/Recruit")) active = "recruit";
   else if (pathname.startsWith("/Matching")) active = "matching";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", position: "relative", minHeight: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+        minHeight: "100vh",
+      }}
+    >
       <main style={{ flex: 1, paddingBottom: !hideFooter ? "120px" : "0" }}>
         <Outlet />
       </main>
 
+      {/* ✅ TeamApply 포함 hideFooter가 true일 땐 푸터 숨김 */}
       {!hideFooter && <FooterNav active={active} />}
     </div>
   );
