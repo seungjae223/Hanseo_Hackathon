@@ -1,19 +1,126 @@
+// src/components/SignUpModal.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/SignUpModal.module.css";
-import BackIcon from "../assets/Chevron Right Small.png"; // ← 아이콘
+import BackIcon from "../assets/Chevron Right Small.png";
 import EmailVerifyModal from "./EmailVerifyModal";
-import { apiFetch } from "./utils/api.js"; // ← 여기 경로 수정!
+import FindPasswordModal from "./FindpassWordModal";   // 비밀번호 설정 모달
+import Lightlogo from "../assets/연한 로고 .png";
+import Word from "../assets/회원가입.png";
+import { apiFetch } from "./utils/api.js";
+
+// 학과 목록 (학부별 그룹)
+const DEPARTMENT_GROUPS = [
+  {
+    label: "항공학부",
+    options: [
+      "항공교통물류학과",
+      "항공운항학과",
+      "헬리콥터조종학과",
+      "항공정비학과",
+      "항공보안학과",
+      "공항행정학과",
+    ],
+  },
+  {
+    label: "항공우주공학부",
+    options: [
+      "항공기계공학과",
+      "항공전자공학과",
+      "무인항공기학과",
+      "항공산업공학과",
+      "신소재화학공학과",
+      "환경·토목·건축학과",
+    ],
+  },
+  {
+    label: "AI,SW학부",
+    options: ["항공AI소프트웨어학과", "AI로보틱스학과", "AI모빌리티학과"],
+  },
+  {
+    label: "항공관광학부",
+    options: ["항공관광학과", "항공외국어학과", "호텔카지노관광학과"],
+  },
+  {
+    label: "문화콘텐츠학부",
+    options: [
+      "문화재보존학과",
+      "미디어문예창작학과",
+      "실용음악과",
+      "영화영상학과",
+    ],
+  },
+  {
+    label: "보건학부",
+    options: [
+      "사회복지학과",
+      "간호학과",
+      "물리치료학과",
+      "작업치료학과",
+      "방사선학과",
+      "치위생학과",
+      "의료재활학과",
+      "수산생명의학과",
+    ],
+  },
+  {
+    label: "디자인융합학부",
+    options: [
+      "영상애니메이션학과",
+      "공간디자인학과",
+      "산업디자인학과",
+      "시각디자인학과",
+    ],
+  },
+  {
+    label: "해양·스포츠학부",
+    options: ["해양경찰학과", "경호비서학과", "레저해양스포츠학과"],
+  },
+  {
+    label: "자유전공학부",
+    options: [
+      "자유전공학과",
+      "인문사회전공자율학과",
+      "공학전공자율학과",
+      "자연과학전공자율학과",
+      "예체능전공자율학과",
+    ],
+  },
+  {
+    label: "충남RISE융합학부(계약학과)",
+    options: [
+      "첨단항공학과",
+      "항공서비스경영학과",
+      "모빌리티융합디자인학과",
+      "디지털융합학과(성인학습자)",
+    ],
+  },
+  {
+    label: "2024년 학과",
+    options: [
+      "항공소프트웨어공학과",
+      "항공융합학부",
+      "항공컴퓨터학과",
+      "전기전자공학과",
+      "식품공학과",
+      "국제관계학과",
+      "안전보건학과",
+      "뷰티바이오산업학과",
+      "디자인엔터미디어학부",
+      "패션디자인학과",
+    ],
+  },
+];
 
 export default function SignUpModal({ onClose, onOpenLogin }) {
   const navigate = useNavigate();
 
-  // ✅ 1단계: 이메일 인증 결과 (이메일 + 인증코드 저장)
+  // 1단계: 이메일 인증 상태 (지금은 화면에서 안 씀)
   const [emailVerified, setEmailVerified] = useState(false);
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
-  // ✅ 2단계: 회원가입 폼
+  // 2단계: 회원정보(비밀번호 제외)
   const [form, setForm] = useState({
     name: "",
     nickname: "",
@@ -26,46 +133,59 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
+  // 3단계: 비밀번호 설정 모달 열림 여부
+  const [showPwModal, setShowPwModal] = useState(false);
+
+  // ✅ 학과 드롭다운 열림 여부
+  const [isDeptOpen, setIsDeptOpen] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ← 왼쪽 화살표: 우선 콜백이 있으면 사용, 없으면 /Mainpage의 인덱스(로그인 모달)로 이동
   const handleBackToLogin = () => {
     if (typeof onOpenLogin === "function") return onOpenLogin();
-    if (typeof onClose === "function") return onClose(); // 단독 모달로 쓸 때 닫기용
+    if (typeof onClose === "function") return onClose();
     try {
-      navigate("..", { replace: true }); // /Mainpage/signup → .. = /Mainpage
+      navigate("..", { replace: true });
     } catch {}
   };
 
-  const handleSubmit = async () => {
+  // 학과 선택 처리
+  const handleDeptSelect = (dept) => {
+    setForm((prev) => ({ ...prev, department: dept }));
+    setIsDeptOpen(false);
+  };
+
+  // 실제 회원가입 API 호출 (비밀번호는 FindPasswordModal에서 받아서 전달)
+  const handleSubmit = async (password, passwordConfirm) => {
     setErr("");
 
-    // 간단 유효성
+    const finalPassword = password ?? form.password;
+    const finalPasswordConfirm = passwordConfirm ?? form.passwordConfirm;
+
     if (!verifiedEmail || !verificationCode) {
       return setErr("이메일 인증을 먼저 완료해주세요.");
     }
-    if (!form.password || form.password.length < 8) {
+    if (!finalPassword || finalPassword.length < 8) {
       return setErr("비밀번호를 8자 이상 입력하세요.");
     }
-    if (form.password !== form.passwordConfirm) {
+    if (finalPassword !== finalPasswordConfirm) {
       return setErr("비밀번호 확인이 일치하지 않습니다.");
     }
     if (!form.name || !form.nickname || !form.grade || !form.department) {
       return setErr("모든 필드를 입력해주세요.");
     }
 
-    // 백엔드 명세에 맞춰 payload 구성
     const payload = {
       email: verifiedEmail,
-      password: form.password,
-      username: form.name, // ← 백엔드: username = 이름
+      password: finalPassword,
+      username: form.name,
       nickname: form.nickname,
       grade: form.grade,
       department: form.department,
-      verificationCode, // ← 이메일 인증 단계에서 받은 코드
+      verificationCode,
     };
 
     try {
@@ -75,7 +195,6 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
         body: JSON.stringify(payload),
       });
 
-      // 가입 성공 UX: 로그인 모달로 보내기
       alert("회원가입이 완료되었습니다. 로그인 해주세요.");
       if (typeof onOpenLogin === "function") return onOpenLogin();
       if (typeof onClose === "function") onClose();
@@ -89,11 +208,27 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
     }
   };
 
+  // 지금 화면에서 "다음" 눌렀을 때: 기본 정보 확인 후 비밀번호 모달 열기
+  const handleNext = () => {
+    setErr("");
+
+    // ✏️ 이메일 인증 나중에 다시 연결할 거면 이 부분 복구
+    // if (!verifiedEmail || !verificationCode) {
+    //   return setErr("이메일 인증을 먼저 완료해주세요.");
+    // }
+
+    if (!form.name || !form.nickname || !form.grade || !form.department) {
+      return setErr("모든 필드를 입력해주세요.");
+    }
+
+    setShowPwModal(true);
+  };
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         {/* 상단 헤더 */}
-        <div className={styles.header}>
+        <header className={styles.header}>
           <button
             onClick={handleBackToLogin}
             className={styles.backBtn}
@@ -102,21 +237,15 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
             <img src={BackIcon} alt="뒤로가기" />
           </button>
           <span className={styles.title}>회원가입</span>
-        </div>
+        </header>
 
-        {/* ✅ 1단계: 웹메일 인증 먼저 표시, 인증되면 다음 단계 렌더 */}
+        {/* 이메일 인증 단계 JSX는 일단 주석 처리
         {!emailVerified ? (
           <EmailVerifyModal
-            /*
-              onVerified는 아래 두 형태 모두 지원:
-              1) onVerified({ email, verificationCode })
-              2) onVerified(email)  // 구버전 호환 — 이 경우 verificationCode는 EmailVerifyModal에서 검증완료 플래그 기반으로 서버가 허용해야 함
-            */
             onVerified={(info) => {
               if (typeof info === "string") {
-                // 구버전 호환: 문자열만 온 경우
                 setVerifiedEmail(info);
-                setVerificationCode(""); // 코드 미전달
+                setVerificationCode("");
               } else {
                 setVerifiedEmail(info?.email || "");
                 setVerificationCode(info?.verificationCode || "");
@@ -125,81 +254,119 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
             }}
           />
         ) : (
-          <>
-            {/* 로고 */}
-            <h2 className={styles.logo}>작당모의</h2>
-
-            {/* 안내 문구 */}
-            <p className={styles.subText}>
-              가입을 위한 정보를 입력해주세요
+        */}
+        <>
+          {/* 지금 보고 있는 2단계: 이름/닉네임/학년/학과 화면 */}
+          <main className={styles.body}>
+           <img src={Lightlogo} className={styles.Lightlogo} alt="로고"/>
+            <img src={Word} className={styles.subText} alt="회원가입"/>
               {verifiedEmail ? ` (인증: ${verifiedEmail})` : ""}
-            </p>
 
-            {/* 입력 폼 */}
-            <div className={styles.inputGroup}>
+            <div className={styles.field}>
+              <label className={styles.label}>이름</label>
               <input
                 type="text"
                 name="name"
-                placeholder="이름"
                 value={form.name}
                 onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="nickname"
-                placeholder="닉네임"
-                value={form.nickname}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="grade"
-                placeholder="학년"
-                value={form.grade}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="department"
-                placeholder="학과"
-                value={form.department}
-                onChange={handleChange}
-              />
-
-              {/* 🔐 연동 최소요건: 비밀번호 입력 */}
-              <input
-                type="password"
-                name="password"
-                placeholder="비밀번호 (8자 이상)"
-                value={form.password}
-                onChange={handleChange}
-              />
-              <input
-                type="password"
-                name="passwordConfirm"
-                placeholder="비밀번호 확인"
-                value={form.passwordConfirm}
-                onChange={handleChange}
+                className={styles.inputAccent}
               />
             </div>
 
-            {/* 에러 메시지 */}
-            {err && <p className={styles.errorText}>{err}</p>}
+            <div className={styles.field}>
+              <label className={styles.label}>닉네임</label>
+              <input
+                type="text"
+                name="nickname"
+                value={form.nickname}
+                onChange={handleChange}
+                className={styles.inputAccent}
+              />
+            </div>
 
-            {/* 버튼 */}
+            <div className={styles.field}>
+              <label className={styles.label}>학년</label>
+              <input
+                type="text"
+                name="grade"
+                value={form.grade}
+                onChange={handleChange}
+                className={styles.inputAccent}
+              />
+            </div>
+
+            {/* ✅ 커스텀 학과 드롭다운 */}
+            <div className={styles.field}>
+              <label className={styles.label}>학과</label>
+
+              <div className={styles.deptWrapper}>
+                <button
+                  type="button"
+                  className={styles.deptControl}
+                  onClick={() => setIsDeptOpen((prev) => !prev)}
+                >
+                  <span>
+                    {form.department && form.department.trim() !== ""
+                      ? form.department
+                      : "학과 선택"}
+                  </span>
+                  <span className={styles.deptArrow}>▾</span>
+                </button>
+
+                {isDeptOpen && (
+                  <div className={styles.deptDropdown}>
+                    {DEPARTMENT_GROUPS.map((group) => (
+                      <div key={group.label}>
+                        <div className={styles.deptGroupLabel}>
+                          {group.label}
+                        </div>
+                        {group.options.map((dept) => (
+                          <button
+                            key={dept}
+                            type="button"
+                            className={styles.deptOption}
+                            onClick={() => handleDeptSelect(dept)}
+                          >
+                            {dept}
+                          </button>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {err && <p className={styles.errorText}>{err}</p>}
+          </main>
+
+          {/* 하단 "다음" 버튼 */}
+          <footer className={styles.footer}>
             <button
               className={styles.submitBtn}
-              onClick={handleSubmit}
+              onClick={handleNext}
               disabled={loading}
             >
-              {loading ? "처리 중..." : "회원가입"}
+              {loading ? "처리 중..." : "다음"}
             </button>
+          </footer>
+        </>
+        {/* )}  // 이메일 인증 분기 닫는 괄호 (현재는 사용 X) */}
 
-            {/* (디버그/가시화용) 인증코드가 넘어온 경우만 표시 */}
-            {verificationCode && (
-              <p className={styles.helperText}>인증코드: {verificationCode}</p>
-            )}
-          </>
+        {/* 3단계: 비밀번호 설정 모달 (다음 눌렀을 때 뜸) */}
+        {showPwModal && (
+          <FindPasswordModal
+            onClose={() => setShowPwModal(false)}
+            onPasswordSet={(pw, pwConfirm) => {
+              setForm((prev) => ({
+                ...prev,
+                password: pw,
+                passwordConfirm: pwConfirm,
+              }));
+              handleSubmit(pw, pwConfirm);
+              setShowPwModal(false);
+            }}
+          />
         )}
       </div>
     </div>

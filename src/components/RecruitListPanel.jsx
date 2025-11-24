@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/RecruitListPanel.module.css";
 
-import HeartOutline from "../assets/Heart.png";   // 빈 하트
-import HeartFilled from "../assets/하트.png";      // 노란 하트
+import HeartOutline from "../assets/Heart.png"; // 빈 하트
+import HeartFilled from "../assets/하트.png"; // 노란 하트
 import SearchIcon from "../assets/Search.png";
 import PencilIcon from "../assets/pencil.png";
 
@@ -60,6 +60,16 @@ export const RECRUIT_MOCKS = [
     highlight: "클릭시 상세히 볼 수 있어요",
     dday: 4,
   },
+  {
+    id: 6,
+    tags: ["공모전", "콘텐츠"],
+    period: "2025-10-07 ~ 10-30",
+    title: "숏폼 공모전 촬영·편집 팀",
+    summary:
+      "릴스/쇼츠 공모전 참가. 촬영/편집/아이디어 기획 파트 함께할 팀원 모집. 촬영장비 보유자 우대.",
+    highlight: "촬영장비 보유자 우대",
+    dday: 12,
+  },
 ];
 
 /** 리스트에서 쓰기 편하도록 표시용 태그 문자열 생성 */
@@ -80,8 +90,11 @@ export default function RecruitListPanel() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  // 어떤 글이 찜됐는지
+  // 어떤 글이 찜됐는지 (id Set)
   const [saved, setSaved] = useState(() => new Set([1]));
+
+  // 상단 박스 펼침 여부
+  const [isHeroOpen, setIsHeroOpen] = useState(false);
 
   // 찜한 글들
   const savedPosts = useMemo(
@@ -101,22 +114,18 @@ export default function RecruitListPanel() {
   // 자동 순환 인덱스
   const [highlightIndex, setHighlightIndex] = useState(0);
 
-  // 찜 목록 길이가 바뀌면 첫 번째부터 다시 시작
   useEffect(() => {
     setHighlightIndex(0);
   }, [heroSource.length]);
 
-  // 3초마다 자동 순환
   useEffect(() => {
     if (!heroSource.length) return;
-    const timer = setInterval(() => {
-      setHighlightIndex((prev) => (prev + 1) % heroSource.length);
-    }, 3000);
+    const timer = setInterval(
+      () => setHighlightIndex((prev) => (prev + 1) % heroSource.length),
+      3000
+    );
     return () => clearInterval(timer);
   }, [heroSource.length]);
-
-  const currentHero = heroSource[highlightIndex] ?? heroSource[0];
-  const currentTitle = currentHero?.title ?? HIGHLIGHT_PLACEHOLDER;
 
   const filteredPosts = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -140,29 +149,102 @@ export default function RecruitListPanel() {
 
   return (
     <section className={styles.page}>
-      {/* ===== 상단 노란 영역 (겹쳐진 회색 박스 + 하트) ===== */}
+      {/* ===== 상단 노란 영역 ===== */}
       <div className={styles.hero}>
         <div className={styles.heroGraphic}>
-          <div className={styles.heroStack}>
-            {/* 아래 그림자 박스 */}
-            <div className={styles.heroCardShadow} />
-            {/* 위 메인 박스 */}
-            <div className={styles.heroCardMain}>
-              <span className={styles.heroTitle}>{currentTitle}</span>
-              <button
-                type="button"
-                className={styles.heroHeartButton}
-                aria-label={LABELS.heartList}
-                title={LABELS.heartList}
-              >
-                <img
-                  src={savedPosts.length ? HeartFilled : HeartOutline}
-                  alt=""
-                  className={styles.heroHeartImg}
-                />
-              </button>
+          {/* 접힌 상태: 밑 카드가 자동으로 올라오는 애니메이션 (회색 박스는 1개) */}
+          {!isHeroOpen ? (
+            <button
+              type="button"
+              className={styles.heroToggle}
+              onClick={() => setIsHeroOpen(true)}
+              aria-label={LABELS.heartList}
+            >
+              <div className={styles.heroStack}>
+              
+                {/* 흰 카드(제목)들만 위/아래로 애니메이션 */}
+                {heroSource.map((item, idx) => {
+                  const title = item.title ?? HIGHLIGHT_PLACEHOLDER;
+
+                  const isActive = idx === highlightIndex; // 위에 보이는 카드
+                  const isNext =
+                    idx === (highlightIndex + 1) % heroSource.length; // 바로 밑 카드
+
+                  // 나머지는 렌더하지 않음
+                  if (!isActive && !isNext) return null;
+
+                  return (
+                    <div
+                      key={item.id}
+                      className={`${styles.heroItem} ${
+                        isActive
+                          ? styles.heroItemActive
+                          : styles.heroItemNext
+                      }`}
+                    >
+                      <div className={styles.heroCardMain}>
+                        <span className={styles.heroTitle}>{title}</span>
+                        <button
+                          type="button"
+                          className={styles.heroHeartButton}
+                          aria-label={LABELS.heartList}
+                          title={LABELS.heartList}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 카드 전체 말고 하트만
+                            setIsHeroOpen(true);
+                          }}
+                        >
+                          <img
+                            src={
+                              savedPosts.length ? HeartFilled : HeartOutline
+                            }
+                            alt=""
+                            className={styles.heroHeartImg}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </button>
+          ) : (
+            /* 펼친 상태: 같은 자리에서 흰 패널 + 회색 박스들 */
+            <div className={styles.heroDropdown}>
+              {heroSource.map((item) => {
+                const isPlaceholder = item.id === "placeholder";
+                const isSaved = !isPlaceholder && saved.has(item.id);
+                const title = item.title ?? HIGHLIGHT_PLACEHOLDER;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={styles.heroRow}
+                    onClick={() => setIsHeroOpen(false)}
+                  >
+                    <span className={styles.heroRowTitle}>{title}</span>
+                    <button
+                      type="button"
+                      className={`${styles.heroRowHeart} ${
+                        isSaved ? styles.heroRowHeartActive : ""
+                      }`}
+                      aria-label={isSaved ? LABELS.unSave : LABELS.save}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isPlaceholder) toggleSave(item.id);
+                      }}
+                    >
+                      <img
+                        src={isSaved ? HeartFilled : HeartOutline}
+                        alt=""
+                        className={styles.heroRowHeartImg}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -214,7 +296,9 @@ export default function RecruitListPanel() {
                 }}
               >
                 <div className={styles.cardHeader}>
-                  <span className={styles.cardTag}>{displayTag(post.tags)}</span>
+                  <span className={styles.cardTag}>
+                    {displayTag(post.tags)}
+                  </span>
                   <button
                     type="button"
                     className={`${styles.cardHeart} ${

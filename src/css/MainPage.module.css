@@ -214,52 +214,105 @@
 
 .pillPlus{ font-size:clamp(22px, 6vw, 48px); font-weight:900; }
 
-/* ===== 시그널(실시간) 박스 ===== */
-.signalBox{
-  margin:clamp(6px, 2vw, 8px) clamp(12px, 5vw, 30px) clamp(16px, 4vw, 28px);
-  border-radius:16px;
-  background:#f7f8f8;
-  border:1px solid #e3e5e6;
-  box-shadow: 0 8px 20px rgba(0,0,0,.06);
-  padding:clamp(10px, 2.6vw, 14px);
+/* ▽ 마감기한 임박글 전체 영역 (회색 배경 위에 흰 카드 하나) */
+.signalBox {
+  padding: 24px 6px 0;
 }
-.signalTopBar{
-  display:flex; align-items:center; justify-content:space-between;
-  background:#ececec;
-  border-radius:10px;
-  padding:clamp(8px, 2.5vw, 12px) clamp(10px, 3vw, 16px);
-  border:1px solid #e1e1e1;
-}
-.signalTitle{ font-weight:800; font-size:clamp(14px, 3.2vw, 18px); color:#3b3b3b; }
-.signalGuide{ font-weight:800; font-size:clamp(12px, 3vw, 16px); color:#7b7b7b; }
 
-.signalMeta{
-  display:flex; gap:clamp(8px, 2.6vw, 14px); align-items:center; flex-wrap:wrap;
-  padding:clamp(8px, 2.4vw, 10px) 4px clamp(4px, 1.6vw, 6px) clamp(6px, 2vw, 6px);
-  font-size:clamp(11px, 3vw, 13px);
+/* 흰색 큰 카드 (모서리 둥글고 그림자) */
+.deadlineCard {
+  max-width: 960px;
+  margin: 0 0;
+  padding: 22px 32px 26px;
+  background: #ffffff;
+  border-radius: 32px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.06);
 }
-.signalDate{ color:#0ea5b7; font-weight:800; }
-.signalHelp{ color:#8b8b8b; font-weight:600; }
 
-.signalContent{
-  background:#fff;
-  border-radius:12px;
-  border:1px solid #e0e0e0;
-  padding:clamp(10px, 2.8vw, 14px) clamp(12px, 3vw, 16px);
+/* "마감기한 임박글" 제목 */
+.deadlineTitle {
+  margin: 0 0 1px;
+  font-size: 15px;
+  font-weight: 700;
 }
-.signalGrid{
-  display:grid;
-  grid-template-columns: 1fr 32px 1fr;
-  row-gap:clamp(6px, 2.4vw, 10px);
-  column-gap:8px;
-  font-size:clamp(14px, 3.8vw, 18px);
-  line-height:1.45;
-  letter-spacing:-0.2px;
+
+/* 리스트 기본 */
+.deadlineList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.mid{
-  text-align:center;
-  color:#2f2f2f;
-  font-weight:700;
+
+/* 각 줄(2번 사진처럼 납작한 가로 줄) */
+.deadlineItem {
+  width: 308px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 1px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* 마지막 줄은 밑줄 없게 */
+.deadlineItem:last-child {
+  border-bottom: none;
+}
+
+/* 왼쪽 번호 영역 */
+.deadlineLeft {
+  width: 10px;
+  text-align: left;
+}
+
+.deadlineRank {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* 가운데 제목 영역 */
+.deadlineCenter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+/* 제목 버튼 (완전 투명 버튼 + 왼쪽 정렬) */
+.deadlineTitleBtn {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 오른쪽 영역 (New 배지 + D-day) */
+.deadlineRight {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* New 배지 (작은 노란 알약) */
+.deadlineNew {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #ffe875;
+}
+
+/* D-day 텍스트 */
+.deadlineDday {
+  min-width: 40px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* ===== 검색창(슬림) ===== */
@@ -418,105 +471,125 @@ button{ font: inherit; color: inherit; background: none; border: none; padding: 
    마감기한 임박글
    ========================= */
 .deadlineCard {
+  position: relative;
+  bottom: 30px;
+  width: 100%;
+  max-width: 1050px;              /* 2번째 캡처처럼 넓게 */
+  padding: 32px 40px 28px;
   background: #ffffff;
-  border-radius: 50px;
-  padding: 32px 64px 40px;
-  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.05);
-  overflow: hidden;             /* 안 삐져나가게 */
+  border-radius: 30px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  box-sizing: border-box;
 }
 
+/* "마감기한 임박글" 제목 */
 .deadlineTitle {
-  margin: 0 0 24px 0;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: #111111;
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 700;
 }
 
-/* 리스트 전체 */
+/* 리스트 래퍼 */
 .deadlineList {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: -12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* 한 줄(번호 / 제목 / New / D-day) */
+/* 각 줄 회색 긴 바 하나 */
 .deadlineItem {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 24px;
-
-  padding: 10px 32px;
-  margin-top: 10px;
-
+  background: #f5f5f5;
   border-radius: 999px;
-  background: #f7f7f7;
+  padding: 10px 32px;   /* 🔸 22px -> 32px 으로 늘려서 양쪽 여백 확보 */
+  font-size: 15px;
+  box-sizing: border-box;
 }
 
-/* 왼쪽 동그란 번호 */
-.deadlineRank {
+/* 왼쪽 번호 영역 */
+.deadlineLeft {
   flex: 0 0 40px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: transparent;
-  font-size: 20px;
-  font-weight: 500;
-  color: #111111;
 }
 
-/* 제목: 가로 한 줄 + 길면 … 처리 */
-.deadlineTitleBtn {
+.deadlineRank {
+  font-weight: 600;
+}
+
+/* 가운데 제목 + New 뱃지 영역 */
+.deadlineCenter {
   flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  padding: 0 1px;
+}
+
+/* 제목 버튼 (텍스트 한 줄, 길면 …) */
+.deadlineTitleBtn {
   border: none;
   background: transparent;
-  text-align: left;
   padding: 0;
-  font-size: 15px;
-  color: #222222;
+  margin: 0;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 
-  white-space: nowrap;       /* 한 줄 유지 */
-  overflow: hidden;          /* 넘치는 부분 숨김 */
-  text-overflow: ellipsis;   /* … 표시 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* New 뱃지 칸 */
-.deadlineNewWrap {
-  flex: 0 0 70px;
-  text-align: center;
+/* New 뱃지 */
+.newIcon{
+  position: relative;
+  width: 25px;
+  height: 10px;
+  left: 5px;
+  margin-top: -2px;
+  
 }
 
-/* 오른쪽 D-day */
+/* 오른쪽 D-day 영역 */
+.deadlineRight {
+  flex: 0 0 1px;      /*  최소 72px 자리 확보 (원하면 80px 등으로 더 키워도 됨) */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .deadlineDday {
-  flex: 0 0 70px;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: right;
-  color: #111111;
+  font-weight: 500;
+  white-space: nowrap;  /* 줄바꿈 방지 */
 }
 /* 모바일일 때 살짝 축소 */
 @media (max-width: 600px) {
    .deadlineItem {
-    padding: 8px 18px;
-    gap: 16px;
+    padding: 8px 2px;
+    gap:0px;
   }
   .deadlineRank {
-    flex-basis: 32px;
+    position: relative;
+    bottom: -3px;
+    left: 10px;
     width: 32px;
     height: 32px;
     font-size: 18px;
   }
   .deadlineTitleBtn {
-    font-size: 14px;
+    font-size: 12px;
   }
   .deadlineNewWrap,
   .deadlineDday {
-    flex-basis: 56px;
+    position: relative;
+    font-size: 11px;
+    right: 10px;
+
   }
 }
 

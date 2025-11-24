@@ -1,19 +1,34 @@
+// src/components/RecruitDetail.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import css from "../css/RecruitDetail.module.css";
 
 import BackArrow from "../assets/노랑 왼쪽 화살표 .png";
-import Share from "../assets/Share Box.png";
-import Heart from "../assets/노랑색 하트.png";
+import Share from "../assets/share box.png";
+import Heart from "../assets/하트.png";
 
 import Char1 from "../assets/캐릭터.png";
 import Char2 from "../assets/캐릭터2.png";
 import Char3 from "../assets/캐릭터3.png";
 
+// ✅ 공모전 카테고리 이미지
+import ContestTagImg from "../assets/공모전.png";
+
+// 리스트에서 쓰는 목업 데이터 불러오기
+import { RECRUIT_MOCKS } from "./RecruitListPanel";
+
 export default function RecruitDetail({ onBack, onJoin = () => {} }) {
   const navigate = useNavigate();
+  const { id } = useParams();          // /recruit/:id 에서 id 가져오기
+  const numericId = Number(id);
+  const post =
+    RECRUIT_MOCKS.find((p) => p.id === numericId) || RECRUIT_MOCKS[0];
+
   const handleBack = onBack || (() => navigate("/recruit"));
-  const [liked, setLiked] = useState(false); // 샘플 이미지처럼 기본 노랑 하트
+  const [liked, setLiked] = useState(false);
+
+  // ✅ 첫 번째 태그
+  const mainTag = post.tags?.[0] || "공모전";
 
   return (
     <div className={css.page}>
@@ -27,26 +42,46 @@ export default function RecruitDetail({ onBack, onJoin = () => {} }) {
       {/* 메인 카드 */}
       <section className={css.card}>
         <div className={css.cardHead}>
-          <span className={css.datePill}>2025-09-25~09-30</span>
-          <span className={css.kindPill}>공모전</span>
+          {/* 날짜 */}
+          <span className={css.datePill}>{post.period}</span>
+
+          {/* ✅ 오른쪽 태그를 이미지로 사용 */}
+          {mainTag === "공모전" ? (
+            <img
+              src={ContestTagImg}
+              alt="공모전"
+              className={css.kindPillImg}  // 👉 CSS에서 크기만 잡아줄 클래스
+            />
+          ) : (
+            // 혹시 다른 태그(예: 스터디 등)일 때는 기존 텍스트 칩 유지
+            <span className={css.kindPill}>{mainTag}</span>
+          )}
         </div>
 
-        <h1 className={css.title}>AI 해커톤 같이 나갈 디자이너/개발자</h1>
+        {/* 제목 */}
+        <h1 className={css.title}>{post.title}</h1>
 
-        <p className={css.body}>
-          이번에 열리는 Dacon AI 해커톤에 참가할 팀원을 구합니다. 기획은 완료되었고, 함께
-          서비스를 구현할 백엔드 개발자 1명, UX/UI 디자이너 1명을 찾습니다! 포트폴리오가
-          있으신 분 환영합니다.
-        </p>
+        {/* 내용 (지금은 summary 사용) */}
+        <p className={css.body}>{post.summary}</p>
 
-        <div className={css.media}>
+        {/* 위쪽 회색 큰 박스 */}
+        <div className={css.mediaBox}>
           <span className={css.mediaHint}>사진이나 링크 첨부됨</span>
+        </div>
 
-          <button className={css.heartBtn}
-                  aria-label={liked ? "관심 해제" : "관심 추가"}
-                  aria-pressed={liked}
-                  onClick={() => setLiked(v=>!v)}>
-            <img className={`${css.heartIcon} ${liked ? css.on : css.off}`} src={Heart} alt="" />
+        {/* 하트 + 공유 */}
+        <div className={css.mediaActions}>
+          <button
+            className={css.heartBtn}
+            aria-label={liked ? "관심 해제" : "관심 추가"}
+            aria-pressed={liked}
+            onClick={() => setLiked((v) => !v)}
+          >
+            <img
+              className={`${css.heartIcon} ${liked ? css.on : css.off}`}
+              src={Heart}
+              alt=""
+            />
           </button>
 
           <button className={css.shareBtn} aria-label="공유">
@@ -105,7 +140,9 @@ export default function RecruitDetail({ onBack, onJoin = () => {} }) {
 
       <div className={css.bottomSpace} />
       <footer className={css.footer}>
-        <button className={css.cta} onClick={onJoin}>참여하기</button>
+        <button className={css.cta} onClick={onJoin}>
+          참여하기
+        </button>
       </footer>
     </div>
   );

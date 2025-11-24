@@ -44,46 +44,46 @@ const LEADER_LIST = [
 
 /* ───────── 신청 내역 탭 목업 데이터 ───────── */
 const APPLY_LIST = [
-  // {
-  //   id: 1,
-  //   tag: "#디자이너",
-  //   desc: "AI 해커톤 같이 나갈 디자이너/개발자",
-  //   role: "공모전",
-  //   date: "2025-09-25~09-30",
-  //   status: "approved", // 승인
-  // },
-  // {
-  //   id: 2,
-  //   tag: "#스터디",
-  //   desc: "AI 해커톤 같이 나갈 디자이너/개발자",
-  //   role: "개발자",
-  //   date: "2025-09-25~09-30",
-  //   status: "rejected", // 거절
-  // },
-  // {
-  //   id: 3,
-  //   tag: "#스터디",
-  //   desc: "AI 해커톤 같이 나갈 디자이너/개발자",
-  //   role: "개발자",
-  //   date: "2025-11-13",
-  //   status: "rejected",
-  // },
-  // {
-  //   id: 4,
-  //   tag: "#스터디",
-  //   desc: "AI 해커톤 같이 나갈 디자이너/개발자",
-  //   role: "개발자",
-  //   date: "2025-11-13",
-  //   status: "pending", // 보류
-  // },
-  // {
-  //   id: 5,
-  //   tag: "#디자이너",
-  //   desc: "AI 해커톤 같이 나갈 디자이너/개발자",
-  //   role: "디자인",
-  //   date: "2025-11-13",
-  //   status: "approved",
-  // },
+  {
+    id: 1,
+    tag: "#디자이너",
+    desc: "AI 해커톤 같이 나갈 디자이너/개발자",
+    role: "공모전",
+    date: "2025-09-25~09-30",
+    status: "approved", // 승인
+  },
+  {
+    id: 2,
+    tag: "#스터디",
+    desc: "AI 해커톤 같이 나갈 디자이너/개발자",
+    role: "개발자",
+    date: "2025-09-25~09-30",
+    status: "rejected", // 거절
+  },
+  {
+    id: 3,
+    tag: "#스터디",
+    desc: "AI 해커톤 같이 나갈 디자이너/개발자",
+    role: "개발자",
+    date: "2025-11-13",
+    status: "rejected",
+  },
+  {
+    id: 4,
+    tag: "#스터디",
+    desc: "AI 해커톤 같이 나갈 디자이너/개발자",
+    role: "개발자",
+    date: "2025-11-13",
+    status: "pending", // 보류
+  },
+  {
+    id: 5,
+    tag: "#디자이너",
+    desc: "AI 해커톤 같이 나갈 디자이너/개발자",
+    role: "디자인",
+    date: "2025-11-13",
+    status: "approved",
+  },
 ];
 
 function statusLabel(status) {

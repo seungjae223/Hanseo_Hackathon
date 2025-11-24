@@ -46,11 +46,11 @@ export default function BaseLayout() {
         minHeight: "100vh",
       }}
     >
-      <main style={{ flex: 1, paddingBottom: !hideFooter ? "120px" : "0" }}>
+      <main style={{ flex: 1, paddingBottom: !hideFooter ? "0px" : "0" }}>
         <Outlet />
       </main>
 
-      {/* ✅ TeamApply 포함 hideFooter가 true일 땐 푸터 숨김 */}
+      {/*  TeamApply 포함 hideFooter가 true일 땐 푸터 숨김 */}
       {!hideFooter && <FooterNav active={active} />}
     </div>
   );

@@ -7,13 +7,13 @@
   --pill:#eef3f7;
   --yellow:#ffd400;
   --shadow:0 8px 22px rgba(16,24,40,.08);
-    --global-footer-height: 80px;
-     --cta-fixed-offset: 76px; 
+  --global-footer-height: 80px;
+  --cta-fixed-offset: 76px; 
 }
 
 /* 전체 */
 .page{
-  min-height:100vh;
+  min-height:110vh;
   background:#efefef;
   padding:10px 12px 120px;
   color:var(--ink);
@@ -96,32 +96,69 @@
 .title{font-size:18px;font-weight:800;line-height:1.45;margin:10px 0}
 .body{font-size:13px;line-height:1.7;color:#39424e;margin:0 0 14px}
 
-/* 미디어 박스 */
-.media{
-  position:relative;
-  height:140px;border-radius:16px;border:1px solid var(--line);
-  background:#eef1f4; display:flex;align-items:center;justify-content:center;
+/* ===== 미디어 박스 & 아이콘 (디자인 2번처럼) ===== */
+.mediaBox{
+  margin-top:24px;
+  padding:40px 16px;
+  border-radius:26px;
+  background:#f2f2f2;      /* 연한 회색 큰 박스 */
+  text-align:center;
 }
-.mediaHint{color:#98a0a7;font-size:14px}
-.heartBtn,.shareBtn
-{
-    width: 16px;
-    position:absolute;
-    bottom:14px;
-    display:grid;
-    place-items:center;
-    border:0;
-    background:transparent;
-    cursor:pointer
+.mediaHint{
+  font-size:18px;
+  color:#101010;           /* 검은 글자 */
 }
-.shareBtn{right:16px; width:36px; height:36px; border-radius:12px; background:#fff; border:1px solid #e7e9ed}
-.shareBtn img{width:18px;height:18px}
 
-/* 하트: 배경 투명, 아이콘만 토글 */
-.heartBtn{right:62px;width:36px;height:36px;border-radius:12px}
-.heartIcon{width:20px;height:20px;transition:filter .18s ease,opacity .18s ease}
-.heartIcon.off{filter:grayscale(100%) saturate(0%) brightness(.65); opacity:.85}
-.heartIcon.on{filter:none;opacity:1}
+/* 아이콘은 박스 밖, 아래쪽 오른쪽 정렬 */
+.mediaActions{
+  margin-top:14px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:12px;
+}
+
+/* 하트 / 공유 버튼 공통 */
+.heartBtn,
+.shareBtn{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 공유 아이콘 */
+.shareBtn{
+  width:32px;
+  height:32px;
+}
+.shareBtn img{
+  width:20px;
+  height:20px;
+}
+
+/* 하트 아이콘 */
+.heartBtn{
+  width:32px;
+  height:32px;
+}
+.heartIcon{
+  width:22px;
+  height:22px;
+  transition:filter .18s ease,opacity .18s ease;
+}
+.heartIcon.off{
+  filter:grayscale(100%) saturate(0%) brightness(.65);
+  opacity:.85;
+}
+.heartIcon.on{
+  filter:none;
+  opacity:1;
+}
+
 /* 섹션 타이틀 */
 .block{margin-top:24px}
 .blockTitle{font-size:14px;font-weight:700;color:#222;margin:0 6px 10px}
@@ -140,12 +177,17 @@
 .portBtn{
   display:block;margin:0 auto;height:36px;padding:0 16px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:13px;cursor:pointer
 }
-
+.kindPillImg {
+  position: relative;
+  left: 120px;
+  height: 24px;         /* 디자인에 맞게 숫자 조절 */
+  width: auto;
+}
 /* 현재 구하는 팀원 */
 .rolesWrap{
   background:#f6f7f9;
   border:1px solid var(--line);
-  border-radius:20px;
+  border-radius:50px;
   padding:14px 18px; 
   display:flex; 
   gap:10px; 
@@ -183,10 +225,11 @@
 .cta{
   position: relative;
   top: 100px;
-  width:100%;
-  height:50px;
-  border-radius:10px
-  ;border:0;
+  left: 20px;
+  width:270px;
+  height:60px;
+  border-radius:30px;
+  border:0;
   cursor:pointer;
   background:var(--yellow);
   color:#0d0d0d;

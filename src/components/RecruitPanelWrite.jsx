@@ -2,32 +2,20 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../css/RecruitPanelWrite.css";
 
-/* 역할별 아바타 */
-import Bear from "../assets/캐릭터.png"; // 개발자
-import Cat from "../assets/캐릭터2.png"; // 디자이너
-/* 업로드 아이콘 */
-import UploadIcon from "../assets/Share Box.png";
+/* 역할별 아바타 (경로는 실제 프로젝트에 맞게 확인 필요) */
+import Bear from "../assets/캐릭터.png"; 
+import Cat from "../assets/캐릭터2.png"; 
+import UploadIcon from "../assets/share box.png";
 
-/* 날짜 휠 피커 */
-import DateWheelPicker from "./DateWheelPicker";
-
-/* ✅ 해시태그 옵션 목록 */
 const HASHTAG_OPTIONS = [
-  "포스터/웹툰/콘텐츠",
-  "사진/영상/UCC",
-  "아이디어/기획",
-  "IT/학술/논문",
-  "네이밍/슬로건",
-  "에세이/수필/문학",
-  "스포츠/음악",
-  "미술/디자인/건축",
+  "포스터/웹툰/콘텐츠", "사진/영상/UCC", "아이디어/기획", "IT/학술/논문",
+  "네이밍/슬로건", "에세이/수필/문학", "스포츠/음악", "미술/디자인/건축",
 ];
 
-/* ✅ 파일 이름에서 확장자(PDF, PNG 등)만 추출 */
 const getFileExt = (name = "") => {
   const dot = name.lastIndexOf(".");
   if (dot === -1) return "";
-  return name.slice(dot + 1).toUpperCase(); // pdf -> PDF
+  return name.slice(dot + 1).toUpperCase(); 
 };
 
 export default function RecruitPanelWrite() {
@@ -35,33 +23,30 @@ export default function RecruitPanelWrite() {
     title: "",
     content: "",
     period: "",
-    members: [], // [{id, role, src}]
-    hashtags: [], // ✅ 선택된 해시태그들
+    members: [], 
+    hashtags: [], 
   });
 
   const [openCalendar, setOpenCalendar] = useState(false);
-
-  // ✅ 팀원 추가용 팝업 on/off
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
-  // ✅ 팝업 안에서 선택된 캐릭터 / 직책 텍스트
-  const [selectedAvatar, setSelectedAvatar] = useState("bear"); // "bear" | "cat" | "bear2"
+  const [selectedAvatar, setSelectedAvatar] = useState("bear");
   const [newRoleText, setNewRoleText] = useState("");
-
-  // ✅ 해시태그 패널 on/off
   const [tagPanelOpen, setTagPanelOpen] = useState(false);
 
-  // 🔔 시작일 / 마감일 상태
   const [startDate, setStartDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => {
     const d = new Date();
-    d.setDate(d.getDate() + 7); // 기본값: 일주일 뒤
+    d.setDate(d.getDate() + 7);
     return d;
   });
-  const [activeField, setActiveField] = useState("start"); // "start" | "end"
+  const [activeField, setActiveField] = useState("start");
 
-  // ⬇ 파일 업로드 상태
-  const [files, setFiles] = useState([]); // [{id,name,url,file}]
+  const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
+
+  const yearScrollRef = useRef(null);
+  const monthScrollRef = useRef(null);
+  const dayScrollRef = useRef(null);
 
   const fmt = (d) => {
     const y = d.getFullYear();
@@ -70,73 +55,113 @@ export default function RecruitPanelWrite() {
     return `${y}/${m}/${dd}`;
   };
 
-  // 휠에서 날짜가 바뀔 때(시작/마감 전환해서 사용)
-  const handleWheelChange = (nextDate) => {
-    if (activeField === "start") {
-      setStartDate(nextDate);
-    } else {
-      setEndDate(nextDate);
-    }
+  const fmtForServer = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${dd}`;
   };
 
-  // 시작/마감 날짜가 바뀔 때마다 form.period 문자열 동기화
+  const handleSubmit = () => {
+    const formattedStart = fmtForServer(startDate);
+    const formattedEnd = fmtForServer(endDate);
+    const payload = {
+      title: form.title,
+      content: form.content,
+      hashtags: form.hashtags,
+      members: form.members,
+      startDate: formattedStart,
+      endDate: formattedEnd,
+    };
+    console.log("📤 백엔드 전송 데이터:", payload);
+    alert("작성 완료! 콘솔을 확인하세요.");
+  };
+
+  // --- 휠 UI 상수 ---
+  const itemHeight = 40; 
+  const wheelHeight = 200; 
+  const paddingY = (wheelHeight - itemHeight) / 2;
+
+  const handleDateChange = (type, value) => {
+    const current = activeField === "start" ? startDate : endDate;
+    let newDate = new Date(current);
+
+    if (type === "year") newDate.setFullYear(value);
+    if (type === "month") newDate.setMonth(value - 1);
+    if (type === "day") newDate.setDate(value);
+
+    if (activeField === "start") setStartDate(newDate);
+    else setEndDate(newDate);
+  };
+
   useEffect(() => {
     setForm((prev) => ({
       ...prev,
-      period: `${fmt(startDate)}  ~  ${fmt(endDate)}`,
+      period: `${fmt(startDate)} ~ ${fmt(endDate)}`,
     }));
   }, [startDate, endDate]);
 
-  /* ===== 해시태그 토글 (항상 한 개만 선택) ===== */
+  useEffect(() => {
+    if (!openCalendar) return;
+    const activeDate = activeField === "start" ? startDate : endDate;
+    const year = activeDate.getFullYear();
+    const month = activeDate.getMonth() + 1;
+    const day = activeDate.getDate();
+
+    const scrollToValue = (ref, value) => {
+      if (ref.current) {
+        const children = Array.from(ref.current.children);
+        const selectedBtn = children.find(
+          (child) => parseInt(child.getAttribute("data-value")) === value
+        );
+        if (selectedBtn) {
+          const parent = ref.current;
+          const targetTop =
+            selectedBtn.offsetTop -
+            parent.clientHeight / 2 +
+            selectedBtn.clientHeight / 2;
+          parent.scrollTo({ top: targetTop, behavior: "smooth" });
+        }
+      }
+    };
+
+    setTimeout(() => {
+      scrollToValue(yearScrollRef, year);
+      scrollToValue(monthScrollRef, month);
+      scrollToValue(dayScrollRef, day);
+    }, 100);
+  }, [openCalendar, activeField, startDate, endDate]);
+
+  const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => 2022 + i);
+  const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1);
+  const DAY_OPTIONS = Array.from({ length: 31 }, (_, i) => i + 1);
+
   const toggleHashtag = (tag) => {
     setForm((prev) => {
-      // 이미 선택된 걸 한 번 더 누르면 해제
-      if (prev.hashtags[0] === tag) {
-        return { ...prev, hashtags: [] };
-      }
-      // 그 외에는 항상 이 태그 하나만 유지
+      if (prev.hashtags[0] === tag) return { ...prev, hashtags: [] };
       return { ...prev, hashtags: [tag] };
     });
   };
 
-  /* ===== 구하는 팀원(+) ===== */
-
-  // 아바타 타입에 맞는 이미지 반환
   const getAvatarSrc = (type) => {
     switch (type) {
-      case "cat":
-        return Cat;
-      default:
-        // "bear", "bear2" 등은 전부 곰 이미지
-        return Bear;
+      case "cat": return Cat;
+      default: return Bear;
     }
   };
 
-  // 모달 닫을 때 공통 처리
   const closeRolePicker = () => {
     setRolePickerOpen(false);
     setNewRoleText("");
     setSelectedAvatar("bear");
   };
 
-  // ✅ 새 팀원 저장
   const saveNewMember = () => {
     if (!newRoleText.trim()) return;
-
-    const src = getAvatarSrc(selectedAvatar);
-
     setForm((p) => ({
       ...p,
-      members: [
-        ...p.members,
-        {
-          id: Date.now(),
-          role: newRoleText.trim(),
-          src,
-        },
-      ],
+      members: [...p.members, { id: Date.now(), role: newRoleText.trim(), src: getAvatarSrc(selectedAvatar) }],
     }));
-
     closeRolePicker();
   };
 
@@ -144,13 +169,11 @@ export default function RecruitPanelWrite() {
     setForm((p) => ({ ...p, members: p.members.filter((m) => m.id !== id) }));
   };
 
-  /* ===== 파일 업로드 핸들러 ===== */
   const openPicker = () => fileInputRef.current?.click();
 
   const onFilesSelected = (e) => {
     const selected = Array.from(e.target.files || []);
     if (!selected.length) return;
-
     const mapped = selected.map((f) => ({
       id: crypto?.randomUUID ? crypto.randomUUID() : `${Date.now()}-${f.name}`,
       name: f.name,
@@ -158,8 +181,6 @@ export default function RecruitPanelWrite() {
       file: f,
     }));
     setFiles((prev) => [...prev, ...mapped]);
-
-    // 같은 파일을 다시 선택할 수 있도록 초기화
     e.target.value = "";
   };
 
@@ -171,20 +192,45 @@ export default function RecruitPanelWrite() {
     });
   };
 
-  // 언마운트 시 blob URL 정리
   useEffect(() => {
-    return () => {
-      files.forEach((f) => URL.revokeObjectURL(f.url));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => { files.forEach((f) => URL.revokeObjectURL(f.url)); };
   }, []);
 
-  // 모달에서 사용할 아바타 카드 3개 정보
+  // 아바타 옵션
   const avatarOptions = [
-    { key: "bear", bg: "#C4F59A" }, // 연초록
-    { key: "cat", bg: "#FFCBCB" },  // 연분홍
-    { key: "bear2", bg: "#FFCBCB" } // 세 번째 카드도 연분홍
+    { key: "bear" },
+    { key: "cat" },
+    { key: "bear2" },
   ];
+
+  const activeDate = activeField === "start" ? startDate : endDate;
+
+  // 🌟 3D 회전 스타일 계산
+  const get3DStyle = (index, selectedIndex) => {
+    const offset = index - selectedIndex;
+    const absOffset = Math.abs(offset);
+    
+    if (offset === 0) {
+      return {
+        opacity: 1,
+        transform: `rotateX(0deg) translateZ(0px) scale(1.1)`,
+        color: "#000",
+        fontWeight: "700",
+        fontSize: "1.25rem",
+        filter: "none",
+      };
+    }
+
+    const rotateX = offset * 25; 
+    return {
+      opacity: Math.max(0.2, 1 - absOffset * 0.3),
+      transform: `rotateX(${rotateX * -1}deg) translateZ(${-absOffset * 5}px) scale(0.95)`,
+      color: "#9ca3af",
+      fontWeight: "500",
+      fontSize: "1.125rem",
+      filter: `blur(${absOffset * 0.5}px)`,
+    };
+  };
 
   return (
     <main className="rpw">
@@ -192,13 +238,10 @@ export default function RecruitPanelWrite() {
         {/* 해시태그 */}
         <div className="rpw-row">
           <label className="rpw-label">해시태그</label>
-
           <div className="rpw-hashArea">
             <button
               type="button"
-              className={`rpw-hashPill ${
-                form.hashtags.length ? "__filled" : ""
-              }`}
+              className={`rpw-hashPill ${form.hashtags.length ? "__filled" : ""}`}
               onClick={() => setTagPanelOpen((v) => !v)}
             >
               {form.hashtags.length === 0 ? (
@@ -207,25 +250,19 @@ export default function RecruitPanelWrite() {
                 <span className="rpw-hashText">{form.hashtags[0]}</span>
               )}
             </button>
-
             {tagPanelOpen && (
               <div className="rpw-hashPanel">
                 <div className="rpw-hashGrid">
-                  {HASHTAG_OPTIONS.map((tag) => {
-                    const active = form.hashtags[0] === tag;
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        className={`rpw-hashBtn ${
-                          active ? "__active" : ""
-                        }`}
-                        onClick={() => toggleHashtag(tag)}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
+                  {HASHTAG_OPTIONS.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={`rpw-hashBtn ${form.hashtags[0] === tag ? "__active" : ""}`}
+                      onClick={() => toggleHashtag(tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
@@ -239,9 +276,7 @@ export default function RecruitPanelWrite() {
             <input
               className="rpw-input"
               value={form.title}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, title: e.target.value }))
-              }
+              onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
               aria-label="제목"
             />
             <div className="rpw-underline" />
@@ -251,38 +286,24 @@ export default function RecruitPanelWrite() {
         {/* 내용 */}
         <div className="rpw-row">
           <label className="rpw-label">내용</label>
-
           <div className="rpw-bottomWrite">
             <textarea
               className="rpw-bottomTA"
               placeholder="내용을 입력하세요"
               value={form.content}
               onChange={(e) => {
-                e.currentTarget.style.height = "auto";
-                e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.currentTarget.scrollHeight}px`;
                 setForm((p) => ({ ...p, content: e.target.value }));
-              }}
-              ref={(el) => {
-                if (el) {
-                  el.style.height = "auto";
-                  el.style.height = `${el.scrollHeight}px`;
-                }
               }}
             />
           </div>
-
-          <div className="rpw-underline" />
         </div>
 
         {/* 사진/포트폴리오 첨부 */}
         <div className="rpw-row">
           <label className="rpw-label">사진/포트폴리오 첨부</label>
-
-          <div
-            className="rpw-fileBox"
-            aria-label="파일 업로드 영역"
-            style={{ position: "relative" }}
-          >
+          <div className="rpw-fileBox">
             <input
               ref={fileInputRef}
               type="file"
@@ -291,259 +312,213 @@ export default function RecruitPanelWrite() {
               onChange={onFilesSelected}
               style={{ display: "none" }}
             />
-
             {files.length === 0 ? (
               <button
                 type="button"
                 onClick={openPicker}
-                title="파일 첨부"
-                className="rpw-fileEmptyBtn"
+                style={{ position: "absolute", inset: 0, margin: "auto", width: 64, height: 64, borderRadius: "50%", display: "grid", placeItems: "center", background: "transparent", border: 0, cursor: "pointer" }}
               >
-                <img
-                  src={UploadIcon}
-                  alt="파일 첨부"
-                  className="rpw-fileEmptyIcon"
+                <img 
+                  src={UploadIcon} 
+                  alt="첨부" 
+                  className="rpw-upload-icon-static" 
                 />
               </button>
             ) : (
               <>
-                <div className="rpw-fileGrid">
+                <div style={{ padding: 12, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(88px, 1fr))", gap: 12 }}>
                   {files.map((f) => {
                     const isImage = f.file?.type?.startsWith("image/");
                     const ext = getFileExt(f.name);
-
                     return (
-                      <div
-                        key={f.id}
-                        className="rpw-fileItem"
-                        title={f.name}
-                      >
+                      <div key={f.id} style={{ position: "relative", background: "#f7f7f7", borderRadius: 10, overflow: "hidden", height: 88 }}>
                         {isImage ? (
-                          <img
-                            src={f.url}
-                            alt={f.name}
-                            className="rpw-fileThumb"
-                          />
+                          <img src={f.url} alt={f.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
-                          <div className="rpw-fileNonImg">
-                            <span className="rpw-fileExt">
-                              {ext || "FILE"}
-                            </span>
-                            <span className="rpw-fileName">{f.name}</span>
+                          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+                            <span style={{ fontSize: 18, fontWeight: 700 }}>{ext || "FILE"}</span>
+                            <span style={{ fontSize: 11, opacity: 0.6 }}>{f.name}</span>
                           </div>
                         )}
-
-                        <button
-                          type="button"
-                          onClick={() => removeFile(f.id)}
-                          aria-label="첨부 삭제"
-                          className="rpw-fileDelete"
-                          title="삭제"
-                        >
-                          ×
-                        </button>
+                        <button onClick={() => removeFile(f.id)} style={{ position: "absolute", top: 6, right: 6, width: 22, height: 22, borderRadius: "50%", background: "#fff", border: "1px solid #ddd", cursor: "pointer" }}>×</button>
                       </div>
                     );
                   })}
                 </div>
-
-                <button
-                  type="button"
-                  onClick={openPicker}
-                  aria-label="파일 추가"
-                  title="파일 추가"
-                  className="rpw-fileAddBtn"
-                >
-                  <img
-                    src={UploadIcon}
-                    alt=""
-                    className="rpw-fileAddIcon"
-                  />
+                <button onClick={openPicker} style={{ position: "absolute", right: 12, bottom: 12, width: 44, height: 44, borderRadius: "50%", border: "1px solid #e0e0e0", background: "#fff", display: "grid", placeItems: "center", cursor: "pointer" }}>
+                  <img src={UploadIcon} alt="" style={{ width: 22, height: 22, opacity: 0.65 }} />
                 </button>
               </>
             )}
           </div>
         </div>
 
-        {/* ===== 구하는 팀원 ===== */}
+        {/* 구하는 팀원 */}
         <div className="rpw-row">
           <label className="rpw-label">구하는 팀원</label>
-
           {form.members.length === 0 ? (
             <div className="rpw-teamEmpty">
-              <button
-                type="button"
-                className="rpw-teamAddCircle"
-                aria-label="팀원 추가"
-                onClick={() => setRolePickerOpen(true)}
-              >
-                +
-              </button>
+              <button type="button" className="rpw-teamAddCircle" onClick={() => setRolePickerOpen(true)}>+</button>
             </div>
           ) : (
             <div className="rpw-teamWrap">
               <div className="rpw-teamRow">
                 {form.members.map((m) => (
                   <div key={m.id} className="rpw-chip">
-                    <button
-                      type="button"
-                      className="rpw-chipAvatar"
-                      onClick={() => removeMember(m.id)}
-                      title="클릭하여 삭제"
-                    >
+                    <button type="button" className="rpw-chipAvatar" onClick={() => removeMember(m.id)}>
                       <img src={m.src} alt={m.role} />
                     </button>
                     <span className="rpw-chipLabel">{m.role}</span>
                   </div>
                 ))}
-
                 <div className="rpw-chipAdd">
-                  <button
-                    type="button"
-                    className="rpw-teamAddCircle"
-                    aria-label="팀원 추가"
-                    onClick={() => setRolePickerOpen(true)}
-                  >
-                    +
-                  </button>
+                  <button type="button" className="rpw-teamAddCircle" onClick={() => setRolePickerOpen(true)}>+</button>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* ✅ 캐릭터 + 직책 입력 모달 (목업 스타일) */}
+        {/* ✨ 팀원 추가 모달 (업데이트됨) */}
         {rolePickerOpen && (
-          <div
-            className="rpw-roleOverlay"
-            role="dialog"
-            aria-modal="true"
-            onClick={closeRolePicker}
-          >
-            <div
-              className="rpw-roleModal"
+          <div className="rpw-roleOverlay" onClick={closeRolePicker}>
+            <div 
+              className="rpw-roleCard" 
               onClick={(e) => e.stopPropagation()}
+              style={{ 
+                width: 320, 
+                background: "#f7f7f7", 
+                borderRadius: 24, 
+                padding: 24 
+              }}
             >
-              <h4 className="rpw-roleTitle">구하는 팀원 추가</h4>
+              <h4 style={{ margin: "0 0 18px", fontSize: 20, fontWeight: 700 }}>
+                구하는 팀원 추가
+              </h4>
 
-              {/* 아바타 카드 3개 */}
-              <div className="rpw-avatarRow">
-                {avatarOptions.map((opt) => (
-                  <button
-                    key={opt.key}
-                    type="button"
-                    onClick={() => setSelectedAvatar(opt.key)}
-                    className={`rpw-avatarCard rpw-avatarCard--${opt.key} ${
-                      selectedAvatar === opt.key ? "is-active" : ""
-                    }`}
-                  >
-                    <img
-                      src={getAvatarSrc(opt.key)}
-                      alt="역할 아바타"
-                      className="rpw-avatarImg"
-                    />
-                  </button>
-                ))}
+              {/* ✅ 아바타 선택 UI */}
+              <div className="rpw-avatar-container">
+                {avatarOptions.map((opt) => {
+                  const isSelected = selectedAvatar === opt.key;
+                  return (
+                    <div 
+                      key={opt.key} 
+                      className="rpw-avatar-group"
+                      onClick={() => setSelectedAvatar(opt.key)}
+                    >
+                      {/* 아바타 버튼 */}
+                      <button 
+                        type="button"
+                        className={`rpw-avatar-btn ${isSelected ? "selected" : ""}`}
+                      >
+                        <img 
+                          src={getAvatarSrc(opt.key)} 
+                          alt="역할 아바타" 
+                          className="rpw-avatar-img" 
+                        />
+                      </button>
+
+                      {/* 하단 인디케이터 (V 체크 / 빈 박스) */}
+                      <div className="rpw-avatar-indicator">
+                        {isSelected ? (
+                          <span className="rpw-indicator-check">∨</span>
+                        ) : (
+                          <div className="rpw-indicator-box" />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* 카드 밑 체크박스 줄 */}
-              <div className="rpw-avatarChecks">
-                {avatarOptions.map((opt) => (
-                  <label key={opt.key} className="rpw-checkWrap">
-                    <input
-                      type="checkbox"
-                      checked={selectedAvatar === opt.key}
-                      onChange={() => setSelectedAvatar(opt.key)}
-                      className="rpw-avatarCheck"
-                    />
-                  </label>
-                ))}
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 6, color: "#4b5563" }}>구하는 직책</label>
+                <input className="rpw-roleInput" placeholder="구하는 역할을 입력하세요." value={newRoleText} onChange={(e) => setNewRoleText(e.target.value)} />
               </div>
-
-              {/* 구하는 직책 입력 */}
-              <div className="rpw-roleField">
-                <label className="rpw-roleFieldLabel">구하는 직책</label>
-                <div className="rpw-roleFieldBox">
-                  <input
-                    className="rpw-roleInput"
-                    placeholder="구하는 역할을 입력하세요."
-                    value={newRoleText}
-                    onChange={(e) => setNewRoleText(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* 큰 추가하기 버튼 */}
-              <button
-                type="button"
-                onClick={saveNewMember}
-                className="rpw-roleSubmit"
-              >
-                추가하기
-              </button>
+              <button onClick={saveNewMember} style={{ display: "block", width: "70%", margin: "0 auto", padding: "12px 0", borderRadius: 16, border: "none", background: "#dcdcdc", fontSize: 16, fontWeight: 600, cursor: "pointer" }}>추가하기</button>
             </div>
           </div>
         )}
 
-        {/* 기한 */}
+        {/* 기한 (3D 휠 피커) */}
         <div className="rpw-row">
           <label className="rpw-label">기한</label>
-          <div className="rpw-period">
-            <button
-              type="button"
-              className={`rpw-periodBtn ${form.period ? "__filled" : ""}`}
-              onClick={() => setOpenCalendar((v) => !v)}
-              aria-label="마감일 선택"
-            >
-              {form.period || `${fmt(startDate)}  ~  ${fmt(endDate)}`}
-            </button>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <div className="rpw-period">
+              <button type="button" className={`rpw-periodBtn ${form.period ? "__filled" : ""}`} onClick={() => setOpenCalendar((v) => !v)}>
+                {form.period || `${fmt(startDate)} ~ ${fmt(endDate)}`}
+              </button>
+            </div>
 
             {openCalendar && (
-              <div className="rpw-dateSheet">
-                <div className="rpw-dateTabs">
-                  <button
-                    type="button"
-                    onClick={() => setActiveField("start")}
-                    className={`rpw-dateTab ${
-                      activeField === "start" ? "__active" : ""
-                    }`}
-                  >
-                    시작일
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveField("end")}
-                    className={`rpw-dateTab ${
-                      activeField === "end" ? "__active" : ""
-                    }`}
-                  >
-                    마감일
-                  </button>
+              <div className="rpw-calendar-popup">
+                <div className="rpw-tab-buttons">
+                  <button type="button" onClick={() => setActiveField("start")} className={`rpw-tab-btn ${activeField === "start" ? "active" : ""}`}>시작일</button>
+                  <button type="button" onClick={() => setActiveField("end")} className={`rpw-tab-btn ${activeField === "end" ? "active" : ""}`}>마감일</button>
                 </div>
 
-                <DateWheelPicker
-                  label="기한"
-                  value={activeField === "start" ? startDate : endDate}
-                  onChange={handleWheelChange}
-                />
+                <div className="rpw-wheel-wrapper" style={{ height: `${wheelHeight}px` }}>
+                  <div className="rpw-wheel-highlight" style={{ height: `${itemHeight}px`, marginTop: `-${itemHeight / 2}px` }} />
+                  <div className="rpw-wheel-label">기한</div>
+                  <div className="rpw-wheel-cols">
+                    
+                    <div ref={yearScrollRef} className="rpw-wheel-col align-right">
+                      <div style={{ height: `${paddingY}px` }} />
+                      {YEAR_OPTIONS.map((y, idx) => {
+                        const isSelected = y === activeDate.getFullYear();
+                        const selectedIndex = YEAR_OPTIONS.findIndex(opt => opt === activeDate.getFullYear());
+                        const style3D = get3DStyle(idx, selectedIndex);
+                        return (
+                          <div key={y} data-value={y} onClick={() => handleDateChange("year", y)} className="rpw-wheel-item justify-end" style={{ height: `${itemHeight}px`, scrollSnapAlign: "center", ...style3D }}>
+                            <span>{y}</span>{isSelected && <span className="rpw-wheel-unit">년</span>}
+                          </div>
+                        );
+                      })}
+                      <div style={{ height: `${paddingY}px` }} />
+                    </div>
 
-                <div className="rpw-dateDoneRow">
-                  <button
-                    type="button"
-                    onClick={() => setOpenCalendar(false)}
-                    className="rpw-dateDoneBtn"
-                  >
-                    완료
-                  </button>
+                    <div ref={monthScrollRef} className="rpw-wheel-col align-center">
+                      <div style={{ height: `${paddingY}px` }} />
+                      {MONTH_OPTIONS.map((m, idx) => {
+                        const isSelected = m === activeDate.getMonth() + 1;
+                        const selectedIndex = MONTH_OPTIONS.findIndex(opt => opt === activeDate.getMonth() + 1);
+                        const style3D = get3DStyle(idx, selectedIndex);
+                        return (
+                          <div key={m} data-value={m} onClick={() => handleDateChange("month", m)} className="rpw-wheel-item justify-center" style={{ height: `${itemHeight}px`, scrollSnapAlign: "center", ...style3D }}>
+                            <span>{m}</span>{isSelected && <span className="rpw-wheel-unit">월</span>}
+                          </div>
+                        );
+                      })}
+                      <div style={{ height: `${paddingY}px` }} />
+                    </div>
+
+                    <div ref={dayScrollRef} className="rpw-wheel-col align-left">
+                      <div style={{ height: `${paddingY}px` }} />
+                      {DAY_OPTIONS.map((d, idx) => {
+                        const isSelected = d === activeDate.getDate();
+                        const selectedIndex = DAY_OPTIONS.findIndex(opt => opt === activeDate.getDate());
+                        const style3D = get3DStyle(idx, selectedIndex);
+                        return (
+                          <div key={d} data-value={d} onClick={() => handleDateChange("day", d)} className="rpw-wheel-item justify-start" style={{ height: `${itemHeight}px`, scrollSnapAlign: "center", ...style3D }}>
+                            <span>{d}</span>{isSelected && <span className="rpw-wheel-unit">일</span>}
+                          </div>
+                        );
+                      })}
+                      <div style={{ height: `${paddingY}px` }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rpw-complete-btn-wrap">
+                  <button type="button" onClick={() => setOpenCalendar(false)} className="rpw-complete-btn">완료</button>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* 하단 버튼 */}
         <div className="rpw-bottom">
-          <button type="button" className="rpw-submit">
+          <button type="button" className="rpw-submit" onClick={handleSubmit}>
             작성완료
           </button>
         </div>

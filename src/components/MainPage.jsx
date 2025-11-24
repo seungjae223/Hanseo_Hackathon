@@ -4,15 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../css/MainPage.module.css";
 import { RECRUIT_POSTS } from "./data/recruitMock";
 import SearchIcon from "../assets/Search.png";
-
+import newIcon from "../assets/new.png";
 import TeamManagePanel from "./TeamManagePanel";
 import RecruitListPanel from "./RecruitListPanel";
 import Contest from "./Contest";
 import Matching from "./Matching";
 
-import TeamIcon from "../assets/team.png";
+import TeamIcon from "../assets/팀관리.png";
 import RecruitIcon from "../assets/Recruit.png";
-import MatchingIcon from "../assets/matching.png";
+import MatchingIcon from "../assets/장소.png";
 
 import CalendarCard from "../components/CalendarCard";
 import TeamProjectsCarousel from "../components/TeamProjectsCarousel";
@@ -40,26 +40,60 @@ export default function MainPage() {
     { date: "2025-10-12", title: "기획 리뷰", place: "창업보육센터" },
   ];
 
-  const mockContestRecruit = RECRUIT_POSTS.map(({ id, tags, title, period }) => ({
-    id,
-    tags,
-    title,
-    period,
-  }));
+  const mockContestRecruit = RECRUIT_POSTS.map(
+    ({ id, tags, title, period }) => ({
+      id,
+      tags,
+      title,
+      period,
+    })
+  );
 
-  // 🔸 마감기한 임박글 리스트 (D-day 오름차순 상위 6개 + New 플래그)
-  const deadlineList = RECRUIT_POSTS
-    .filter((p) => typeof p.dday === "number")
-    .slice()
-    .sort((a, b) => a.dday - b.dday)
-    .slice(0, 6)
-    .map((p, idx) => ({
-      rank: idx + 1,
-      id: p.id,
-      title: p.title,
-      dday: p.dday,
-      isNew: typeof p.isNew === "boolean" ? p.isNew : p.dday <= 3,
-    }));
+  // ✅ 마감기한 임박글 New 목업용 리스트 (디자인 확인용)
+  const deadlineList = [
+    {
+      rank: 1,
+      id: 101,
+      title: "AI 해커톤 같이 나갈 디자이너/개발자",
+      dday: 1,
+      isNew: false, // New 표시
+    },
+    {
+      rank: 2,
+      id: 102,
+      title: "캡스톤 공모전 팀원 모집",
+      dday: 2,
+      isNew: false, // New 표시
+    },
+    {
+      rank: 3,
+      id: 103,
+      title: "알고리즘 스터디 3기 모집",
+      dday: 3,
+      isNew: false, // New 표시
+    },
+    {
+      rank: 4,
+      id: 104,
+      title: "UX 동아리 신입 디자이너 모집",
+      dday: 5,
+      isNew: true,
+    },
+    {
+      rank: 5,
+      id: 105,
+      title: "교내 서비스 백엔드 개발자 모집",
+      dday: 7,
+      isNew: true,
+    },
+    {
+      rank: 6,
+      id: 106,
+      title: "스타트업 프론트엔드 인턴 모집",
+      dday: 10,
+      isNew: true,
+    },
+  ];
 
   return (
     <main className={styles.frame}>
@@ -129,7 +163,7 @@ export default function MainPage() {
         </section>
       ) : (
         <>
-          {/* ▽ 마감기한 임박글 영역 */}
+          {/* ▽ 마감기한 임박글 영역 (New 목업용) */}
           <section className={styles.signalBox}>
             <div className={styles.deadlineCard}>
               <h2 className={styles.deadlineTitle}>마감기한 임박글</h2>
@@ -137,32 +171,36 @@ export default function MainPage() {
               <ul className={styles.deadlineList}>
                 {deadlineList.map(({ id, rank, title, dday, isNew }) => (
                   <li key={id} className={styles.deadlineItem}>
-                    {/* 1. 번호 */}
-                    <div className={styles.deadlineRank}>{rank}</div>
-
-                    {/* 2. 제목(한 줄, 길면 …) */}
-                    <button
-                      type="button"
-                      className={styles.deadlineTitleBtn}
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                      onClick={() => navigate(`/recruit/${id}`)}
-                    >
-                      {title}
-                    </button>
-
-                    {/* 3. New 뱃지 */}
-                    <div className={styles.deadlineNewWrap}>
-                      {isNew && (
-                        <span className={styles.deadlineNew}>New</span>
-                      )}
+                    {/* 왼쪽 번호 */}
+                    <div className={styles.deadlineLeft}>
+                      <span className={styles.deadlineRank}>{rank}</span>
                     </div>
 
-                    {/* 4. D-day */}
-                    <div className={styles.deadlineDday}>{`D-${dday}`}</div>
+                    {/* 가운데 제목 + New 뱃지 */}
+                    <div className={styles.deadlineCenter}>
+                      <button
+                        type="button"
+                        className={styles.deadlineTitleBtn}
+                        onClick={() => navigate(`/recruit/${id}`)}
+                      >
+                        {title}
+                      </button>
+
+                     
+                     {isNew && (
+                        <img 
+                          src={newIcon} 
+                          alt="New" 
+                          className={styles.newIcon} 
+                        />
+                      )}
+                  
+                    </div>
+
+                    {/* 오른쪽 D-day */}
+                    <div className={styles.deadlineRight}>
+                      <span className={styles.deadlineDday}>{`D-${dday}`}</span>
+                    </div>
                   </li>
                 ))}
               </ul>

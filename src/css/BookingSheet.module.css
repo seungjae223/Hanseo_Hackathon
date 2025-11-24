@@ -151,8 +151,9 @@
 
 /* ===== footer ===== */
 .footer{
-  position:sticky; bottom:0;
-  background:#fff;
+  position:relative; 
+  bottom:0;
+  background:#F5F5F5;
   margin-top:18px;
   padding:14px 0 6px;
   display:flex; gap:10px;
@@ -204,13 +205,57 @@
 }
 .peopleChips{ display:flex; flex-wrap:wrap; gap:10px; }
 
-/* 칩 스타일 재사용(없으면 추가) */
-.chip{
-  height:36px; padding:0 12px;
-  display:inline-flex; align-items:center; justify-content:center;
-  font-size:13px; color:var(--chip-ink);
-  background:var(--chip-bg);
-  border-radius:12px; border:1px solid #e7eaee;
-  cursor:pointer;
+/* ===== 시간 선택 한 줄 레이아웃 ===== */
+.timeInputRow {
+  display: flex;
+  margin: 15px 10 24px;
 }
-.chipActive{ background:#fff; outline:2px solid #111; }
+
+.timeInline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;          /* 화면 좁으면 자동 줄바꿈 */
+}
+.timeLabelInline{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.timeLabelText {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.timeTilde {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0 4px;
+}
+
+/* 시/분 셀렉트 칩 스타일 */
+.timeSelectRow {
+  display: flex;
+  align-items: center;
+  gap: 1px 10px;
+  padding: 4px 10px;
+  background: #ffffff;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+}
+
+.timeInput {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 2px 4px;
+  outline: none;
+}
+
+.timeColon {
+  font-size: 14px;
+  color: #4b5563;
+}

@@ -1,5 +1,6 @@
 // src/components/TeamProjectsCarousel.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";   // ✅ 그냥 이거 하나만
 import styles from "../css/TeamProjectsCarousel.module.css";
 
 /** items 예시
@@ -8,8 +9,10 @@ import styles from "../css/TeamProjectsCarousel.module.css";
 export default function TeamProjectsCarousel({
   items = [],
   intervalMs = 4000,
-  onCardClick,               //  메인에서 넘겨줄 클릭 콜백 (예: id => navigate(`/recruit/${id}`))
+  onCardClick, // 선택: 부모에서 직접 콜백 넘기고 싶을 때
 }) {
+  const navigate = useNavigate();                // ✅ 조건 없이 딱 한 번 호출
+
   // 내부에서 3개씩 보여줌
   const [slice, setSlice] = React.useState([]);
 
@@ -29,15 +32,23 @@ export default function TeamProjectsCarousel({
     setSlice(pick3());
   }, [pick3]);
 
-  //  자동 순환(유지)
+  // 자동 순환
   React.useEffect(() => {
     if (!items.length) return;
     const t = setInterval(() => setSlice(pick3()), intervalMs);
     return () => clearInterval(t);
   }, [items.length, pick3, intervalMs]);
 
-  const onPrev = () => setSlice(pick3());
-  const onNext = () => setSlice(pick3());
+  // ❌ onPrev / onNext 는 안 쓰이니 삭제 (no-unused-vars 해결)
+
+  // 카드 클릭 시 공통 동작
+  const handleCardClick = (id) => {
+    if (onCardClick) {
+      onCardClick(id);          // 부모에서 콜백 넘기면 그거 우선
+    } else {
+      navigate(`/recruit/${id}`); // 기본: 상세 페이지로 이동
+    }
+  };
 
   if (!items.length) {
     return <div className={styles.empty}>불러올 팀 프로젝트가 없습니다.</div>;
@@ -50,16 +61,16 @@ export default function TeamProjectsCarousel({
           <li
             key={it.id}
             className={styles.card}
-            role="button"               //  접근성
+            role="button"
             tabIndex={0}
-            onClick={() => onCardClick && onCardClick(it.id)}  // ✅ 카드 클릭 → 콜백
+            onClick={() => handleCardClick(it.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                onCardClick && onCardClick(it.id);
+                handleCardClick(it.id);
               }
             }}
-            style={{ cursor: onCardClick ? "pointer" : "default" }} // 커서 표시
+            style={{ cursor: "pointer" }}
             title="상세 보기"
           >
             <div className={styles.hash}>

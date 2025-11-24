@@ -1,67 +1,17 @@
+/* src/App.css */
+
 .App {
+  font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
-}
+  background-color: #f5f5f5;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  /* 🚨 height 대신 다시 min-height로 변경 */
+  /* 내용이 많으면 쭉 늘어나게 둡니다. 그래야 스크롤이 됩니다. */
+ min-height: 100vh;
+  
+  /* 내부 스크롤 관련 코드 모두 삭제 (브라우저 스크롤 사용) */
+  /* overflow 관련 설정 삭제 */
+  
+  /* 하단바 가림 방지 패딩만 유지 */
+  padding-bottom: 120px; 
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* ===== emergency scroll fix ===== */
-/* 문서 스크롤 강제 허용 */
-html, body, #root {
-  position: static !important;
-  height: auto !important;
-  min-height: 100% !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-
-/* 루트 직속 자식들이 100vh/overflow로 막는 경우 해제 */
-#root > * {
-  height: auto !important;
-  min-height: auto !important;
-  overflow: visible !important;
-}
-
-/* 흔한 가해자들: .App/.page/.wrapper 등에서 100vh + hidden */
-.App, .page, .wrapper {
-  height: auto !important;
-  min-height: 100dvh !important;
-  overflow: visible !important;
-}
-
-/* 인라인 스타일이나 컴포넌트 CSS에서 overflow: hidden이 남아있는 경우 무력화 */
-*[style*="overflow: hidden"] { overflow: visible !important; }
-
-/* 모달 열릴 때 body 잠금이 남아있다면, 그때만 이 클래스를 쓰고 평소엔 해제 */
-body.scroll-lock { overflow: hidden !important; }

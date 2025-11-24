@@ -3,9 +3,9 @@ import React from "react";
 import styles from "../css/FooterNav.module.css";
 
 import HomeIcon from "../assets/home.png";
-import TeamIcon from "../assets/team.png";
+import TeamIcon from "../assets/팀관리.png";
 import RecruitIcon from "../assets/Recruit.png"; // 실제 파일명 대소문자 반드시 일치
-import MatchingIcon from "../assets/matching.png";
+import MatchingIcon from "../assets/장소.png";
 
 function FooterNavInner({ active }) {
   // active prop을 사용하거나 기본값 설정
