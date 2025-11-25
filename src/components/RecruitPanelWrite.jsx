@@ -297,6 +297,7 @@ export default function RecruitPanelWrite() {
                 setForm((p) => ({ ...p, content: e.target.value }));
               }}
             />
+            <div className="rpw-underline" />
           </div>
         </div>
 

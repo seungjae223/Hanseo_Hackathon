@@ -8,10 +8,21 @@ import HeartFilled from "../assets/하트.png"; // 노란 하트
 import SearchIcon from "../assets/Search.png";
 import PencilIcon from "../assets/pencil.png";
 
-/** ✅ 메인 캐러셀(mockContestRecruit)과 id/제목/기간을 완전히 동일하게 맞춘 목업 */
+/** ✅ 카테고리 목록 정의 */
+const CATEGORIES = [
+  "전체",
+  "포스터/웹툰/콘텐츠",
+  "사진/영상/UCC",
+  "IT/학술논문",
+  "기획/아이디어",
+  "네이밍/슬로건"
+];
+
+/** ✅ 메인 캐러셀(mockContestRecruit)과 id/제목/기간을 완전히 동일하게 맞춘 목업 (+ category 추가) */
 export const RECRUIT_MOCKS = [
   {
     id: 1,
+    category: "IT/학술논문", // 👈 카테고리 추가
     tags: ["공모전", "디자이너"],
     period: "2025-09-27 ~ 10-4",
     title: "AI 해커톤 같이 나갈 디자이너/개발자",
@@ -22,6 +33,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 2,
+    category: "포스터/웹툰/콘텐츠", // 👈 카테고리 추가
     tags: ["공모전", "기획"],
     period: "2025-10-02 ~ 10-10",
     title: "캡스톤 포스터 제작 팀원 모집",
@@ -32,6 +44,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 3,
+    category: "IT/학술논문", // 👈 카테고리 추가
     tags: ["스터디", "한서대"],
     period: "2025-10-05 ~ 12-20",
     title: "웹접근성 리뉴얼 스터디",
@@ -42,6 +55,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 4,
+    category: "사진/영상/UCC", // 👈 카테고리 추가
     tags: ["공모전", "콘텐츠"],
     period: "2025-10-07 ~ 10-30",
     title: "숏폼 공모전 촬영·편집 팀",
@@ -52,6 +66,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 5,
+    category: "IT/학술논문", // 👈 카테고리 추가
     tags: ["공모전", "개발자"],
     period: "2025-10-12 ~ 11-1",
     title: "대학생 앱개발 공모전 팀업",
@@ -62,6 +77,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 6,
+    category: "사진/영상/UCC", // 👈 카테고리 추가
     tags: ["공모전", "콘텐츠"],
     period: "2025-10-07 ~ 10-30",
     title: "숏폼 공모전 촬영·편집 팀",
@@ -89,6 +105,9 @@ const HIGHLIGHT_PLACEHOLDER = "찜한 게시물을 추가하면 여기 제목이
 export default function RecruitListPanel() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  
+  // ✅ 카테고리 선택 상태 추가
+  const [selectedCategory, setSelectedCategory] = useState("전체");
 
   // 어떤 글이 찜됐는지 (id Set)
   const [saved, setSaved] = useState(() => new Set([1]));
@@ -127,16 +146,25 @@ export default function RecruitListPanel() {
     return () => clearInterval(timer);
   }, [heroSource.length]);
 
+  // ✅ 필터링 로직 수정 (검색어 + 카테고리)
   const filteredPosts = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return RECRUIT_MOCKS;
-    return RECRUIT_MOCKS.filter((post) =>
-      [displayTag(post.tags), post.title, post.summary, post.period]
-        .join(" ")
-        .toLowerCase()
-        .includes(q)
-    );
-  }, [query]);
+    return RECRUIT_MOCKS.filter((post) => {
+      // 1. 카테고리 일치 여부 확인
+      const isCategoryMatch =
+        selectedCategory === "전체" || post.category === selectedCategory;
+
+      // 2. 검색어 일치 여부 확인
+      const q = query.trim().toLowerCase();
+      const isSearchMatch =
+        !q ||
+        [displayTag(post.tags), post.title, post.summary, post.period]
+          .join(" ")
+          .toLowerCase()
+          .includes(q);
+
+      return isCategoryMatch && isSearchMatch;
+    });
+  }, [query, selectedCategory]);
 
   const toggleSave = (id) => {
     setSaved((prev) => {
@@ -161,7 +189,6 @@ export default function RecruitListPanel() {
               aria-label={LABELS.heartList}
             >
               <div className={styles.heroStack}>
-              
                 {/* 흰 카드(제목)들만 위/아래로 애니메이션 */}
                 {heroSource.map((item, idx) => {
                   const title = item.title ?? HIGHLIGHT_PLACEHOLDER;
@@ -275,6 +302,21 @@ export default function RecruitListPanel() {
           </div>
         </div>
 
+        {/* ✅ 카테고리 버튼 영역 추가 */}
+        <div className={styles.categoryList}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`${styles.categoryBtn} ${
+                selectedCategory === cat ? styles.active : ""
+              }`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         {/* List */}
         <div className={styles.list}>
           {filteredPosts.map((post) => {
@@ -296,6 +338,7 @@ export default function RecruitListPanel() {
                 }}
               >
                 <div className={styles.cardHeader}>
+                  {/* 카테고리나 태그 표시 */}
                   <span className={styles.cardTag}>
                     {displayTag(post.tags)}
                   </span>
@@ -333,7 +376,7 @@ export default function RecruitListPanel() {
           })}
 
           {filteredPosts.length === 0 && (
-            <div className={styles.empty}>검색 결과가 없습니다.</div>
+            <div className={styles.empty}>해당 게시물이 없습니다.</div>
           )}
         </div>
       </div>

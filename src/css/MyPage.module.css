@@ -5,7 +5,7 @@
 }
 
 .page{
-  min-height:100dvh;
+  height: 100%;
   background:#fff;
   color:var(--ink);
 }
@@ -75,12 +75,7 @@
   cursor: pointer;
 }
 
-/* 컨테이너(사용 중이면 유지) */
-.container{
-  max-width:480px; margin:0 auto; padding:12px;
-  font-family:sans-serif; box-sizing:border-box;
-  position:relative; height:902px;
-}
+
 
 /* 절대위치로 따로 쓰는 화살표가 필요하면 이 클래스를 사용하세요 */
 .pfBack{
@@ -214,4 +209,83 @@
   .row{ grid-template-columns:84px 1fr; }
   .value{ font-size:17px; }
   .tagChip{ width:80px; height:34px; }
+}
+@media screen and (min-width: 481px) {
+  body {
+    background-color: #F5F5F5; /* PC 배경 회색 */
+    margin: 0;
+  }
+  .page {
+    max-width: 480px;      /* 앱 너비 제한 */
+    margin: 0 auto;        /* 중앙 정렬 */
+    min-height: 100vh;
+    
+  }
+  .topbar {
+    max-width: 480px;      /* 상단바도 같이 중앙 정렬 */
+    margin: 0 auto;
+    left: 0; right: 0;
+  }
+  /* 모달도 중앙 정렬 */
+  .intOverlay {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* 3. 일반 모바일 (대부분의 스마트폰) */
+@media screen and (max-width: 480px) {
+  .container {
+    min-height: 100vh;
+  }
+  
+  /* 절대 위치로 잡힌 요소들이 있다면 상대 위치로 변경 권장 */
+  /* (기존 코드가 절대 위치를 많이 써서, 화면이 작아지면 겹칠 수 있음 방지) */
+  .logout-btn {
+    position: relative; /* 흐름에 따르도록 변경 */
+    transform: none;
+    margin: 40px auto 20px; /* 여백으로 위치 잡기 */
+    display: block;
+    top: 10px;
+  }
+  
+  /* 정보 리스트 간격 조절 */
+  .row {
+    grid-template-columns: 90px 1fr; /* 라벨 너비 살짝 축소 */
+    padding: 12px 0;
+  }
+}
+
+/* 4. 작은 화면 (갤럭시 폴드 커버, 아이폰 SE 등) */
+@media screen and (max-width: 360px) {
+  /* 아바타 크기 축소 */
+  .avatar {
+    max-width: 200px; 
+  }
+  
+  /* 폰트 크기 조절 */
+  .label { font-size: 14px; }
+  .value { font-size: 16px; }
+  
+  /* 상단바 제목 크기 조절 */
+  .title { font-size: 18px; }
+  
+  /* 태그 칩 크기 조절 */
+  .itChip {
+    font-size: 12px;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 8px;
+  }
+}
+
+/* 5. 아이폰 노치 및 하단 바 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .page {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .intCard {
+    /* 모달이 하단 바에 너무 붙지 않게 */
+    margin-bottom: env(safe-area-inset-bottom);
+  }
 }

@@ -1,17 +1,30 @@
-/* src/App.css */
+/* 상단에 폰트 불러오기 (필요 시 유지) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
 .App {
+  /* 1. 폰트 및 정렬 설정 */
   font-family: 'Noto Sans KR', sans-serif;
   text-align: center;
+  
+  /* 2. 배경색 설정 (끊김 방지) */
   background-color: #f5f5f5;
-
-  /* 🚨 height 대신 다시 min-height로 변경 */
-  /* 내용이 많으면 쭉 늘어나게 둡니다. 그래야 스크롤이 됩니다. */
- min-height: 100vh;
   
-  /* 내부 스크롤 관련 코드 모두 삭제 (브라우저 스크롤 사용) */
-  /* overflow 관련 설정 삭제 */
+  /* 3. 높이 설정 (가장 중요!) */
+  /* 내용이 적어도 화면 꽉 채우고(min), 많으면 늘어나게(auto) */
+  /* 100dvh는 모바일 주소창 높이까지 계산한 최신 단위입니다 */
+  min-height: 100vh;
+  height: auto;
   
-  /* 하단바 가림 방지 패딩만 유지 */
-  padding-bottom: 120px; 
+  /* 4. 모바일/PC 대응 레이아웃 */
+  width: 100%;
+  max-width: 480px; /* PC에서는 앱 모양 유지 */
+  margin: 0 auto;   /* 중앙 정렬 */
+  
+  /* 5. 하단바(Footer) 가림 방지 패딩 */
+  /* Footer 높이가 110px 정도라면 여유있게 120px */
+  padding-bottom: 120px;
+  
+  /* 6. PC에서 입체감 (선택 사항) */
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  position: relative;
 }

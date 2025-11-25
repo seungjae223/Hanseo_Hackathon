@@ -1,8 +1,8 @@
 /* src/css/FooterNav.module.css */
 
 .footer {
-position: fixed;
-  bottom: 0;
+position: relative;
+  top:10px;
   
   /* 2. 중앙 정렬 (앱 너비 430px 유지) */
   left: 50%;
@@ -25,7 +25,7 @@ position: fixed;
   display: flex;
   align-items: flex-start; /* 내용을 위쪽(패딩 제외 영역)으로 정렬 */
   justify-content: center;
-  padding-top: 20px; /* 아이콘들이 수직 중앙에 오도록 살짝 조정 (필요시 조절) */
+  padding-top: 40px; /* 아이콘들이 수직 중앙에 오도록 살짝 조정 (필요시 조절) */
   
   z-index: 500;
   box-sizing: border-box; /* 패딩 포함 크기 계산 */               /* ✅ overlay(예: 2000)보다 낮게 */

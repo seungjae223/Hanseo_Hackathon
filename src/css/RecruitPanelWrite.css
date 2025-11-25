@@ -22,7 +22,7 @@
   margin-top: 0;
   background: #F6F6F6;
   border-radius: 30px 30px 0 0;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, .08);
+ 
   padding: 22px 24px 80px; /* 하단 여백 추가 */
   position: relative;
   overflow-y: auto; /* 스크롤 가능하게 */
@@ -42,7 +42,13 @@
 
 .rpw-row { margin: 20px 0 22px; }
 .rpw-row:first-of-type { margin-top: 10px; }
-.rpw-label { display: block; font-size: 16px; color: #6d6d6d; letter-spacing: -.2px; margin-bottom: 12px; }
+.rpw-label { display: block; font-size: 15px; 
+  position: relative;
+  top: 8px;
+  color: #6d6d6d; 
+  letter-spacing: .5px; 
+  margin-bottom: 12px; 
+}
 
 /* ================== 해시태그 ================== */
 .rpw-hashArea { 
@@ -79,8 +85,8 @@
 /* ================== 입력 필드 ================== */
 .rpw-underlineField { position: relative; }
 .rpw-input { width: 100%; border: 0; background: transparent; outline: none; font-size: 18px; color: #222; padding: 0 2px 12px; }
-.rpw-underline { height: 2px; width: 100%; background: var(--line); border-radius: 2px; }
-.rpw-bottomWrite { min-height: 220px; display: flex; flex-direction: column; justify-content: flex-end; }
+.rpw-underline { height: 2px; width: 100%; background: #FED800; border-radius: 2px; }
+.rpw-bottomWrite { min-height: 130px; display: flex; flex-direction: column; justify-content: flex-end; }
 .rpw-bottomTA { width: 100%; min-height: 36px; max-height: 220px; resize: none; border: 0; outline: none; background: transparent; font-size: 18px; line-height: 1.6; color: #222; padding: 0 2px; overflow: hidden; }
 
 /* ================== 파일 업로드 ================== */
@@ -290,3 +296,116 @@
 /* 하단 작성완료 버튼 */
 .rpw-bottom { display: flex; justify-content: center; margin-top: 32px; padding-bottom: 30px; }
 .rpw-submit { width: 86%; height: 48px; border-radius: 12px; border: 0; background: var(--yellow); color: #111; font-weight: 800; cursor: pointer; box-shadow: 0 8px 18px rgba(0, 0, 0, .08); }
+/* src/css/RecruitPanelWrite.css */
+
+/* ... (위쪽 코드는 그대로 두세요) ... */
+
+
+/* 👇👇👇 파일 맨 아래의 미디어 쿼리 부분을 이걸로 덮어쓰세요 👇👇👇 */
+
+/* =========================================
+   [모바일 & 달력(3D 휠) 완벽 대응 패치]
+   ========================================= */
+
+/* 1. 일반 모바일 (가로 420px 이하) */
+@media screen and (max-width: 420px) {
+  /* --- 기존 레이아웃 대응 --- */
+  .rpw-hashGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 12px;
+  }
+  .rpw-panel {
+    padding: 22px 20px 80px;
+  }
+
+  /* --- 📅 달력/기간 설정 대응 --- */
+  .rpw-period {
+    gap: 12px; /* 버튼과 라벨 사이 간격 축소 */
+  }
+  
+  .rpw-calendar-popup {
+    padding: 14px; /* 팝업 내부 여백 줄여서 공간 확보 */
+  }
+
+  /* 휠 피커 글자 크기 살짝 조절 (너무 크면 잘림) */
+  .rpw-wheel-item {
+    font-size: 15px;
+  }
+  
+  /* 년/월/일 단위 글자 */
+  .rpw-wheel-unit {
+    font-size: 11px;
+  }
+}
+
+/* 2. 초소형 스마트폰 (가로 360px 이하: 갤럭시 폴드 커버, 아이폰 SE) */
+@media screen and (max-width: 360px) {
+  /* --- 기존 패딩 축소 --- */
+  .rpw-panel {
+    padding: 20px 16px 80px;
+  }
+
+  /* --- 해시태그/버튼 대응 --- */
+  .rpw-hashBtn {
+    width: 100%;
+    font-size: 11px;
+  }
+  .rpw-hashPill {
+    min-width: auto;
+    padding: 0 16px;
+  }
+  .rpw-avatar-btn {
+    width: 64px; height: 64px;
+  }
+  .rpw-avatar-img {
+    width: 40px; height: 40px;
+  }
+
+  /* --- 📅 달력 초소형 화면 대응 --- */
+  .rpw-periodBtn {
+    font-size: 13px; /* 날짜 텍스트 줄임 (줄바꿈 방지) */
+    padding: 0 12px;
+    height: 38px;    /* 높이 살짝 축소 */
+  }
+
+  /* 휠 피커 3열(년/월/일)이 좁은 화면에 다 들어가도록 조절 */
+  .rpw-wheel-item {
+    font-size: 14px; /* 숫자 크기 축소 */
+  }
+  
+  .rpw-calendar-popup {
+    padding: 12px 10px; /* 팝업 여백 최소화 */
+  }
+
+  .rpw-wheel-col {
+    /* 각 컬럼(년/월/일) 간격 좁히기 */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .rpw-wheel-col.align-right { padding-right: 4px !important; }
+  .rpw-wheel-col.align-left { padding-left: 4px !important; }
+}
+
+/* 3. 높이가 짧은 화면 (가로모드 등) */
+@media screen and (max-height: 700px) {
+  .rpw-panel {
+    min-height: auto;
+    padding-bottom: 100px;
+  }
+}
+
+/* 4. 아이폰 노치 및 하단 바 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .rpw-panel {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+  .rpw-bottom {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom));
+  }
+  
+  /* 달력 팝업이 하단에 뜰 경우 가림 방지 (필요 시) */
+  .rpw-calendar-popup {
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+}

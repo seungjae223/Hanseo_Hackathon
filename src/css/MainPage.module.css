@@ -568,38 +568,127 @@ button{ font: inherit; color: inherit; background: none; border: none; padding: 
   white-space: nowrap;  /* 줄바꿈 방지 */
 }
 /* 모바일일 때 살짝 축소 */
-@media (max-width: 600px) {
-   .deadlineItem {
-    padding: 8px 2px;
-    gap:0px;
+/* 2. PC/태블릿 대응: 화면이 넓을 때 앱 형태 유지 */
+@media screen and (min-width: 604px) {
+  .frame {
+    margin: 0 auto;
+    box-shadow: 0 0 40px rgba(0,0,0,0.05); /* 앱 주변 그림자 */
+    min-height: 100vh;
   }
-  .deadlineRank {
-    position: relative;
-    bottom: -3px;
-    left: 10px;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
-  .deadlineTitleBtn {
-    font-size: 12px;
-  }
-  .deadlineNewWrap,
-  .deadlineDday {
-    position: relative;
-    font-size: 11px;
-    right: 10px;
-
+  body {
+    background-color: #e0e2e5; /* PC 배경색 구분 */
   }
 }
 
-/* 모션 최소화 환경 배려 */
-@media (prefers-reduced-motion: reduce){
-  .pill,
-  .pill:hover,
-  .pill:active{ transition:none; }
-  .pill.isPulsing,
-  .pill.isPulsing::before,
-  .pill.isPulsing::after{ animation:none; }
-  .rail{ scroll-behavior: auto; }
+/* 3. 모바일 일반 (대부분의 스마트폰: ~480px) */
+@media screen and (max-width: 603px) {
+  /* 캐러셀 너비 자동 맞춤 */
+  .carouselInner {
+    width: 100%;
+    padding: 0 16px;
+  }
+  
+  .carousel {
+    padding: 24px 0; /* 좌우 패딩 제거 (화면 꽉 채우기) */
+  }
+  
+  .rail {
+    padding: 0 20px; /* 카드 시작점 여백 */
+    gap: 16px;       /* 카드 사이 간격 축소 */
+  }
+
+  /* 마감기한 임박글 카드 (좌우 꽉 채우기) */
+  .deadlineCard {
+    border-radius: 24px;
+    padding: 24px 20px; /* 패딩 축소 */
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 리스트 아이템 (한 줄 유지 + 말줄임) */
+  .deadlineItem {
+    width: 100%;       /* 고정폭(308px) 해제 -> 꽉 채우기 */
+    padding: 10px 16px;
+    gap: 8px;          /* 요소 간격 */
+  }
+
+  /* 왼쪽 순위 */
+  .deadlineLeft {
+    flex: 0 0 24px;    /* 너비 고정 */
+    justify-content: flex-start;
+  }
+  .deadlineRank {
+    font-size: 14px;
+    position: static;  /* 기존 relative 해제 */
+    left: auto; bottom: auto;
+  }
+
+  /* 가운데 제목 (공간 남는 만큼 차지 + 말줄임) */
+  .deadlineCenter {
+    flex: 1;           /* 남은 공간 다 차지 */
+    min-width: 0;      /* 🚨 중요: Flex 안에서 말줄임 작동하게 함 */
+    display: flex;
+    align-items: center;
+  }
+
+  .deadlineTitleBtn {
+    font-size: 14px;
+    width: 100%;       /* 부모 크기에 맞춤 */
+    display: block;    /* 블록 처리 */
+  }
+
+  /* New 뱃지 위치 보정 */
+  .newIcon {
+    width: 20px; 
+    height: auto;
+    margin-left: 6px;
+    position: static;  /* relative 해제 */
+    margin-top: 0;
+  }
+
+  /* 오른쪽 D-day */
+  .deadlineRight {
+    flex: 0 0 auto;    /* 내용물 크기만큼만 */
+  }
+  .deadlineDday {
+    font-size: 12px;
+    position: static;
+    right: auto;
+  }
+}
+
+/* 4. 초소형 스마트폰 (갤럭시 폴드 커버, 아이폰 SE 등: ~360px) */
+@media screen and (max-width: 360px) {
+  /* 아이콘 섹션 간격 좁히기 */
+  .featureRow {
+    gap: 8px;
+  }
+  .featureCircle {
+    width: 60px; height: 60px;
+  }
+  .featureCircle img {
+    width: 32px;
+  }
+  
+  /* 알약(Pill) 크기 축소 */
+  .pill {
+    width: 70px; height: 70px;
+    font-size: 13px;
+  }
+  
+  /* 리스트 더 콤팩트하게 */
+  .deadlineItem {
+    padding: 8px 12px;
+  }
+  .deadlineTitleBtn {
+    font-size: 13px;
+  }
+}
+
+/* 5. 아이폰 노치 및 하단 바 안전 영역 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .frame {
+    /* 하단 갤러리 등이 잘리지 않도록 여백 확보 */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
 }
