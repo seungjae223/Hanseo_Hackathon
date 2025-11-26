@@ -10,36 +10,36 @@ import NoteImg from "../assets/note.png";  // 빈 상태 일러스트
 /* ───────── 팀장 탭 목업 데이터 ───────── */
 const LEADER_LIST = [
   
-  // {
-  //   id: 1,
-  //   role: "디자인",
-  //   date: "2025-09-25~09-30",
-  //   email: "a64122639@gmail.com",
-  // },
-  // {
-  //   id: 2,
-  //   role: "개발자",
-  //   date: "2025-09-25~09-30",
-  //   email: "a64122639@gmail.com",
-  // },
-  // {
-  //   id: 3,
-  //   role: "개발자",
-  //   date: "2025-11-13",
-  //   email: "a64122639@gmail.com",
-  // },
-  // {
-  //   id: 4,
-  //   role: "개발자",
-  //   date: "2025-11-13",
-  //   email: "a64122639@gmail.com",
-  // },
-  // {
-  //   id: 5,
-  //   role: "디자인",
-  //   date: "2025-11-13",
-  //   email: "a64122639@gmail.com",
-  // },
+  {
+    id: 1,
+    role: "디자인",
+    date: "2025-09-25~09-30",
+    email: "a64122639@gmail.com",
+  },
+  {
+    id: 2,
+    role: "개발자",
+    date: "2025-09-25~09-30",
+    email: "a64122639@gmail.com",
+  },
+  {
+    id: 3,
+    role: "개발자",
+    date: "2025-11-13",
+    email: "a64122639@gmail.com",
+  },
+  {
+    id: 4,
+    role: "개발자",
+    date: "2025-11-13",
+    email: "a64122639@gmail.com",
+  },
+  {
+    id: 5,
+    role: "디자인",
+    date: "2025-11-13",
+    email: "a64122639@gmail.com",
+  },
 ];
 
 /* ───────── 신청 내역 탭 목업 데이터 ───────── */

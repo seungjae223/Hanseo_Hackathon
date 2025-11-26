@@ -51,44 +51,154 @@
 }
 
 /* ================== 해시태그 ================== */
+
+/* 전체 영역 : 위 줄(pill들) + 아래 패널 */
 .rpw-hashArea { 
   flex: 1; 
   display: flex; 
-  flex-direction: column; 
-  gap: 12px; }
+  flex-direction: column;   /* 위에 pill 줄, 아래 패널 */
+  gap: 10px; 
+}
+
+/* 위 줄 : 선택된 pill들 + + 버튼 (가로 정렬, 여러 줄 허용) */
+.rpw-hashRow {
+  display: flex;
+  flex-wrap: wrap;          /* 3개 넘으면 다음 줄로 */
+  gap: 8px 12px;
+  align-items: center;
+}
+
+/* 위쪽 pill(선택된 해시태그 / + 버튼 공통) */
 .rpw-hashPill {
   align-self: flex-start;
-   min-width: 120px; 
-   height: 44px; 
-   padding: 0 24px;
-  border-radius: 999px;
-  border: 1px solid #e3e3e3; 
+  flex: 0 0 calc((100% - 24px) / 3);  /* 한 줄에 3개 */
+  min-width: 90px;
+  height: 44px;
+  padding: 0 7px;
+  border-radius: 30px;
+  border: 1px solid #e3e3e3;
   background: #f1f1f1;
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
-.rpw-hashPlus { font-size: 22px; font-weight: 800; color: #9a9a9a; line-height: 1; }
-.rpw-hashPill.__filled { justify-content: flex-start; background: #fdfdfd; }
-.rpw-hashText { font-size: 1px; color: #6f6f6f; white-space: nowrap; }
-.rpw-hashPanel { margin-top: 10px; padding: 22px 24px 20px; border-radius: 26px; background: #f5f5f5; }
-.rpw-hashGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 20px; row-gap: 16px; justify-items: center; }
-.rpw-hashBtn {
-  width: 69px; height: 32px; border-radius: 10px; border: none; background: #ffffff;
-  padding: 0; font-size: 11px; color: #4b5563; display: flex; align-items: center;
-  justify-content: center; text-align: center; cursor: pointer;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, .08); line-height: 1.35;
+
+/* + 전용 (필요하면 색만 살짝 다르게) */
+.rpw-hashPill--plus {
+  background: #f8f8f8;
 }
-.rpw-hashBtn.__active { background: #ffd400; color: #111111; box-shadow: 0 2px 6px rgba(148, 106, 0, .25); }
+
+/* 텍스트가 들어있는 pill (선택된 해시태그) */
+.rpw-hashPill.__filled {
+  justify-content: center;
+  background: #fdfdfd;   /* 살짝 더 밝은 회색 */
+}
+
+/* pill 안 텍스트 */
+.rpw-hashText {
+  font-size: 11px;
+  font-weight: 500;
+  color: #111111;
+  white-space: nowrap;
+}
+
+/* 아래 회색 카드(태그 선택 패널) */
+.rpw-hashPanel {
+  margin-top: 4px;
+  padding: 22px 24px 20px;
+  border-radius: 26px;
+  background: #f5f5f5;
+}
+
+/* 패널 안 노란/흰 태그 그리드 */
+.rpw-hashGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 20px;
+  row-gap: 16px;
+  justify-items: center;
+}
+
+/* 하얀 태그 버튼 */
+.rpw-hashBtn {
+  width: 69px;
+  height: 32px;
+  border-radius: 10px;
+  border: none;
+  background: #ffffff;
+  padding: 0;
+  font-size: 11px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+  line-height: 1.35;
+}
+
+/* 선택된 노란 태그 */
+.rpw-hashBtn.__active {
+  background: #ffd400;
+  color: #111111;
+  box-shadow: 0 2px 6px rgba(148, 106, 0, .25);
+}
 
 /* ================== 입력 필드 ================== */
-.rpw-underlineField { position: relative; }
-.rpw-input { width: 100%; border: 0; background: transparent; outline: none; font-size: 18px; color: #222; padding: 0 2px 12px; }
-.rpw-underline { height: 2px; width: 100%; background: #FED800; border-radius: 2px; }
-.rpw-bottomWrite { min-height: 130px; display: flex; flex-direction: column; justify-content: flex-end; }
-.rpw-bottomTA { width: 100%; min-height: 36px; max-height: 220px; resize: none; border: 0; outline: none; background: transparent; font-size: 18px; line-height: 1.6; color: #222; padding: 0 2px; overflow: hidden; }
+/* 내용 입력 영역 감싸는 박스 */
+.rpw-bottomWrite {
+  width: 100%;
+}
 
+/* 기본 textarea 스타일(있으면 그대로 두고) 위에 덮어써도 됨 */
+/* 제목 한 줄 입력 영역(라벨 오른쪽) */
+.rpw-underlineField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 제목 input : 테두리/배경 없애고 밑줄만 쓰기 */
+.rpw-input {
+  width: 100%;
+  border: none;              /* ✅ 박스 테두리 제거 */
+  outline: none;
+  background: transparent;   /* 배경 투명 */
+  font-size: 18px;
+  line-height: 1.5;
+  color: #111;
+  padding: 4px 0 2px;        /* 위아래 여백만 살짝 */
+}
+
+/* 노란 밑줄 (제목 아래) */
+.rpw-underline {
+  width: 100%;
+  height: 1px;
+  background: #ffd400;       /* 노란색 */
+  border-radius: 999px;
+  margin-top: 6px;
+}
+
+/* 검정 테두리 + 고정 높이 + 스크롤 */
+.rpw-bottomTA--boxed {
+  width: 100%;
+  min-height: 160px;
+  max-height: 160px;          /* 항상 160px 높이 */
+  border: 1px solid #111111;  /* 검정 테두리 */
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+  background: #ffffff;
+
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+
+  resize: none;               /* 사용자가 크기 못 바꾸게 */
+  overflow-y: auto;           /* 내용 많아지면 세로 스크롤 */
+}
 /* ================== 파일 업로드 ================== */
 .rpw-fileBox { height: 160px; border-radius: 16px; background: #fff; box-shadow: 0 1px 8px rgba(0, 0, 0, .06) inset, 0 0 0 1px #f1f1f1; position: relative; }
 @keyframes rpw-float {
@@ -108,13 +218,14 @@
   height: 100px;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 10px;
   background: #f9fafb;
   border-radius: 12px;
 }
 .rpw-teamAddCircle {
   position: relative;
-  top: 20px;
+  top: 0px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -147,6 +258,7 @@
   background: #fff;
   padding: 4px 10px 4px 4px;
   border-radius: 999px;
+  flex-direction: column;
 }
 .rpw-chipAvatar {
   width: 120px;
@@ -156,10 +268,12 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  background-color: transparent;
 }
 .rpw-chipAvatar img {
   position: relative;
-  left: 7px;
+  left: 2px;
+  top: 5px;
   width: 50px;
   height: 50px;
   object-fit: contain;
@@ -167,9 +281,9 @@
 .rpw-chipLabel {
   position: relative;
   display: nowrap;
-  top: 30px;
-  right: 45px;
-  font-size: 15px;
+  top: 10px;
+  left: 3px;
+  font-size: 12px;
   font-weight: 800;
   color: #374151;
 }
@@ -318,7 +432,7 @@
     padding: 22px 20px 80px;
   }
 
-  /* --- 📅 달력/기간 설정 대응 --- */
+  /* --- 달력/기간 설정 대응 --- */
   .rpw-period {
     gap: 12px; /* 버튼과 라벨 사이 간격 축소 */
   }

@@ -11,7 +11,7 @@ export const RECRUIT_POSTS = [
       "AI 해커톤 참가 팀원 모집. 기획 완료, 백엔드 1 · UX/UI 1 찾습니다. 포트폴리오 환영!",
     content:
       "이번에 열리는 Dacon AI 해커톤에 참가할 팀원을 구합니다. 기획은 완료되었고, 함께 서비스를 구현할 백엔드 개발자 1명, UX/UI 디자이너 1명을 찾습니다! 포트폴리오가 있으신 분 환영합니다.",
-    highlight: "",
+    highlight: "zoom 미팅 가능자 우대",
   },
   {
     id: 2,

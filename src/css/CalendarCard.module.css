@@ -60,9 +60,9 @@
 /* 날짜 버튼 */
 .day{
   height:60px;
-  min-width:36px;
+  width:36px;
   border:none;
-  border-radius:16px;
+  border-radius:80px;
   background:#f3f3f3;
   color:var(--ink);
   font-weight:800;
@@ -77,12 +77,12 @@
 .day.hasEvent::after{
   content:"";
   position:absolute;
-  right:6px;
-  top:6px;
-  width:5px;
-  height:5px;
+  left:25px;
+  top:-2px;
+  width:10px;
+  height:10px;
   border-radius:50%;
-  background:var(--dot);
+  background:#F8A580;
 }
 
 /* 선택된 날짜 – 살짝만 강조 */
@@ -226,4 +226,22 @@
   font-size:14px;
   opacity:.6;
   margin-top:4px;
+}
+@media screen and (max-width: 360px) {
+  .title {
+    font-size: 16px;
+  }
+  .day {
+    font-size: 12px;
+    border-radius: 999px;
+  }
+  .day.hasEvent::after {
+    width: 4px; 
+    height: 4px;
+    top: 4px; 
+    right: 4px;
+  }
+  .detailInput {
+    font-size: 16px; /* 줌인 방지 */
+  }
 }

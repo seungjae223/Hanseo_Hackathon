@@ -148,9 +148,13 @@
 }
 
 /* 하단 버튼(일반) */
-.bottomSpace{ height:28px; }
+.bottomSpace{ height:98px; }
 .logout{
-  display:block; width:156px; margin:0 auto 24px; height:36px;
+  display:block;
+  position: relative; 
+  left: 110px;
+  width:156px; 
+   height:36px;
   border:none; border-radius:16px; background:#FED800; color:var(--yellow-ink);
   font-weight:800; font-size:18px; cursor:pointer;
 }

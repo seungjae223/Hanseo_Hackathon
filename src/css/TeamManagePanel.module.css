@@ -92,6 +92,13 @@
   column-gap: 24px;
   row-gap: 32px;
 }
+
+.chipImage {
+  display: block;
+  height: 26px;        /* 필요하면 조절 */
+  width: auto;
+  margin-bottom: 6px;  /* 제목과 간격 */
+}
 /* 좁은 화면에서 간격만 축소 */
 @media (max-width:560px){
   .grid{ column-gap:16px; row-gap:18px; }

@@ -169,10 +169,10 @@
 }
 .categoryList {
   position: relative;
-  bottom: 18px;
+  bottom: 10px;
   display: flex;             /* 가로 나열 필수 */
   gap: 5px;                 /* 버튼 사이 간격 (사진처럼 넓게) */
-  padding: 0 20px 10px;      /* 좌우 여백 */
+  padding: 0 10px 5px;      /* 좌우 여백 */
   margin-top: 24px;          /* 검색창과 거리 벌림 */       
   
   overflow-x: auto;          /* 가로 스크롤 */
@@ -189,18 +189,18 @@
 .categoryBtn {
   flex: 0 0 auto;            /* 찌그러짐 방지 */
   
-  /* 🚨 핵심 1: 사진처럼 넉넉한 크기 */
+  /* 핵심 1: 사진처럼 넉넉한 크기 */
   padding: 15px 10px;        
   width: 100px;           /* 최소 너비 확보 */
   text-align: center;
   align-items: center;       /* 세로(상하) 중앙 정렬 */
   justify-content: center;
-  /* 🚨 핵심 2: 알약(999px) 아니고 '둥근 사각형' (8~12px) */
+  /* 핵심 2: 알약(999px) 아니고 '둥근 사각형' (8~12px) */
   border-radius: 10px;       
   
   border: none;
   
-  /* 🚨 핵심 3: 사진과 동일한 회색 배경 */
+  /*  핵심 3: 사진과 동일한 회색 배경 */
   background-color: #E9E9E9; 
   color: #333;               /* 글자색 */
   
@@ -212,7 +212,7 @@
 
 /* 선택된 버튼 (노란색) */
 .active {
-  background-color: var(--yellow) !important; /* 노란색 배경 */
+  background-color: #FED800; /* 노란색 배경 */
   color: #000 !important;                     /* 진한 검정 글씨 */
   font-weight: 600;                           /* 글씨 굵게 */
   

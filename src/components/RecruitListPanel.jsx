@@ -3,6 +3,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/RecruitListPanel.module.css";
 
+/* 🚨 Toast 훅 추가 */
+import { useToast } from "./Toast";
+
+/* ✅ 요청하신 로컬 이미지 경로 유지 */
 import HeartOutline from "../assets/Heart.png"; // 빈 하트
 import HeartFilled from "../assets/하트.png"; // 노란 하트
 import SearchIcon from "../assets/Search.png";
@@ -18,11 +22,11 @@ const CATEGORIES = [
   "네이밍/슬로건"
 ];
 
-/** ✅ 메인 캐러셀(mockContestRecruit)과 id/제목/기간을 완전히 동일하게 맞춘 목업 (+ category 추가) */
+/** ✅ 메인 캐러셀 목업 데이터 */
 export const RECRUIT_MOCKS = [
   {
     id: 1,
-    category: "IT/학술논문", // 👈 카테고리 추가
+    category: "IT/학술논문",
     tags: ["공모전", "디자이너"],
     period: "2025-09-27 ~ 10-4",
     title: "AI 해커톤 같이 나갈 디자이너/개발자",
@@ -33,7 +37,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 2,
-    category: "포스터/웹툰/콘텐츠", // 👈 카테고리 추가
+    category: "포스터/웹툰/콘텐츠",
     tags: ["공모전", "기획"],
     period: "2025-10-02 ~ 10-10",
     title: "캡스톤 포스터 제작 팀원 모집",
@@ -44,7 +48,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 3,
-    category: "IT/학술논문", // 👈 카테고리 추가
+    category: "IT/학술논문",
     tags: ["스터디", "한서대"],
     period: "2025-10-05 ~ 12-20",
     title: "웹접근성 리뉴얼 스터디",
@@ -55,7 +59,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 4,
-    category: "사진/영상/UCC", // 👈 카테고리 추가
+    category: "사진/영상/UCC",
     tags: ["공모전", "콘텐츠"],
     period: "2025-10-07 ~ 10-30",
     title: "숏폼 공모전 촬영·편집 팀",
@@ -66,7 +70,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 5,
-    category: "IT/학술논문", // 👈 카테고리 추가
+    category: "IT/학술논문",
     tags: ["공모전", "개발자"],
     period: "2025-10-12 ~ 11-1",
     title: "대학생 앱개발 공모전 팀업",
@@ -77,7 +81,7 @@ export const RECRUIT_MOCKS = [
   },
   {
     id: 6,
-    category: "사진/영상/UCC", // 👈 카테고리 추가
+    category: "사진/영상/UCC",
     tags: ["공모전", "콘텐츠"],
     period: "2025-10-07 ~ 10-30",
     title: "숏폼 공모전 촬영·편집 팀",
@@ -88,7 +92,6 @@ export const RECRUIT_MOCKS = [
   },
 ];
 
-/** 리스트에서 쓰기 편하도록 표시용 태그 문자열 생성 */
 const displayTag = (tags = []) => tags.map((t) => `#${t}`).join(" ");
 
 const LABELS = {
@@ -104,24 +107,20 @@ const HIGHLIGHT_PLACEHOLDER = "찜한 게시물을 추가하면 여기 제목이
 
 export default function RecruitListPanel() {
   const navigate = useNavigate();
-  const [query, setQuery] = useState("");
   
-  // ✅ 카테고리 선택 상태 추가
+  // 🔔 Toast 훅 사용
+  const { show } = useToast();
+
+  const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("전체");
-
-  // 어떤 글이 찜됐는지 (id Set)
   const [saved, setSaved] = useState(() => new Set([1]));
-
-  // 상단 박스 펼침 여부
   const [isHeroOpen, setIsHeroOpen] = useState(false);
 
-  // 찜한 글들
   const savedPosts = useMemo(
     () => RECRUIT_MOCKS.filter((post) => saved.has(post.id)),
     [saved]
   );
 
-  // 회색 박스 안에서 돌릴 데이터(없으면 플레이스홀더 1개)
   const heroSource = useMemo(
     () =>
       savedPosts.length
@@ -130,7 +129,6 @@ export default function RecruitListPanel() {
     [savedPosts]
   );
 
-  // 자동 순환 인덱스
   const [highlightIndex, setHighlightIndex] = useState(0);
 
   useEffect(() => {
@@ -146,14 +144,10 @@ export default function RecruitListPanel() {
     return () => clearInterval(timer);
   }, [heroSource.length]);
 
-  // ✅ 필터링 로직 수정 (검색어 + 카테고리)
   const filteredPosts = useMemo(() => {
     return RECRUIT_MOCKS.filter((post) => {
-      // 1. 카테고리 일치 여부 확인
       const isCategoryMatch =
         selectedCategory === "전체" || post.category === selectedCategory;
-
-      // 2. 검색어 일치 여부 확인
       const q = query.trim().toLowerCase();
       const isSearchMatch =
         !q ||
@@ -161,17 +155,27 @@ export default function RecruitListPanel() {
           .join(" ")
           .toLowerCase()
           .includes(q);
-
       return isCategoryMatch && isSearchMatch;
     });
   }, [query, selectedCategory]);
 
+  // 🟢 [수정됨] 찜하기 토글 + 토스트 알림
   const toggleSave = (id) => {
+    const isCurrentlySaved = saved.has(id); // 현재 저장 여부 확인
+
     setSaved((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
+    });
+
+    // 🔔 토스트 띄우기
+    show({
+      message: !isCurrentlySaved ? "관심 목록에 추가되었습니다!" : "관심 목록에서 삭제되었습니다.",
+      icon: "bell",
+      duration: 1500,
+      confetti: !isCurrentlySaved, // 추가될 때만 폭죽 효과
     });
   };
 
@@ -180,7 +184,6 @@ export default function RecruitListPanel() {
       {/* ===== 상단 노란 영역 ===== */}
       <div className={styles.hero}>
         <div className={styles.heroGraphic}>
-          {/* 접힌 상태: 밑 카드가 자동으로 올라오는 애니메이션 (회색 박스는 1개) */}
           {!isHeroOpen ? (
             <button
               type="button"
@@ -189,24 +192,18 @@ export default function RecruitListPanel() {
               aria-label={LABELS.heartList}
             >
               <div className={styles.heroStack}>
-                {/* 흰 카드(제목)들만 위/아래로 애니메이션 */}
                 {heroSource.map((item, idx) => {
                   const title = item.title ?? HIGHLIGHT_PLACEHOLDER;
+                  const isActive = idx === highlightIndex;
+                  const isNext = idx === (highlightIndex + 1) % heroSource.length;
 
-                  const isActive = idx === highlightIndex; // 위에 보이는 카드
-                  const isNext =
-                    idx === (highlightIndex + 1) % heroSource.length; // 바로 밑 카드
-
-                  // 나머지는 렌더하지 않음
                   if (!isActive && !isNext) return null;
 
                   return (
                     <div
                       key={item.id}
                       className={`${styles.heroItem} ${
-                        isActive
-                          ? styles.heroItemActive
-                          : styles.heroItemNext
+                        isActive ? styles.heroItemActive : styles.heroItemNext
                       }`}
                     >
                       <div className={styles.heroCardMain}>
@@ -217,14 +214,12 @@ export default function RecruitListPanel() {
                           aria-label={LABELS.heartList}
                           title={LABELS.heartList}
                           onClick={(e) => {
-                            e.stopPropagation(); // 카드 전체 말고 하트만
+                            e.stopPropagation();
                             setIsHeroOpen(true);
                           }}
                         >
                           <img
-                            src={
-                              savedPosts.length ? HeartFilled : HeartOutline
-                            }
+                            src={savedPosts.length ? HeartFilled : HeartOutline}
                             alt=""
                             className={styles.heroHeartImg}
                           />
@@ -236,7 +231,6 @@ export default function RecruitListPanel() {
               </div>
             </button>
           ) : (
-            /* 펼친 상태: 같은 자리에서 흰 패널 + 회색 박스들 */
             <div className={styles.heroDropdown}>
               {heroSource.map((item) => {
                 const isPlaceholder = item.id === "placeholder";
@@ -275,9 +269,9 @@ export default function RecruitListPanel() {
         </div>
       </div>
 
-      {/* ===== 흰 패널 영역 (검색 + 리스트) ===== */}
+      {/* ===== 흰 패널 영역 ===== */}
       <div className={styles.body}>
-        {/* Search */}
+        {/* 검색 */}
         <div className={styles.searchSection}>
           <div className={styles.searchBox}>
             <img src={SearchIcon} alt="" className={styles.searchIcon} />
@@ -289,7 +283,6 @@ export default function RecruitListPanel() {
               placeholder={LABELS.searchPlaceholder}
               aria-label={LABELS.searchAria}
             />
-            {/* 글쓰기(연필) 버튼 */}
             <button
               type="button"
               className={styles.shareBtn}
@@ -302,7 +295,7 @@ export default function RecruitListPanel() {
           </div>
         </div>
 
-        {/* ✅ 카테고리 버튼 영역 추가 */}
+        {/* 카테고리 버튼 */}
         <div className={styles.categoryList}>
           {CATEGORIES.map((cat) => (
             <button
@@ -317,7 +310,7 @@ export default function RecruitListPanel() {
           ))}
         </div>
 
-        {/* List */}
+        {/* 리스트 */}
         <div className={styles.list}>
           {filteredPosts.map((post) => {
             const isSaved = saved.has(post.id);
@@ -338,7 +331,6 @@ export default function RecruitListPanel() {
                 }}
               >
                 <div className={styles.cardHeader}>
-                  {/* 카테고리나 태그 표시 */}
                   <span className={styles.cardTag}>
                     {displayTag(post.tags)}
                   </span>
@@ -350,7 +342,7 @@ export default function RecruitListPanel() {
                     aria-label={isSaved ? LABELS.unSave : LABELS.save}
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleSave(post.id);
+                      toggleSave(post.id); // 여기서도 토스트 실행됨
                     }}
                   >
                     <img
