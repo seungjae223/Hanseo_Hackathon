@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import refresh from "../assets/새로고침.png";
+import refresh from "../assets/refresh_gray.gif";
 import css from "../css/BookingSheet.module.css";
 
 /* ===== date utils ===== */

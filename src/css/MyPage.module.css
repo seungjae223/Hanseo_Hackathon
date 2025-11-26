@@ -148,10 +148,11 @@
 }
 
 /* 하단 버튼(일반) */
-.bottomSpace{ height:98px; }
+.bottomSpace{ height:48px; }
 .logout{
   display:block;
   position: relative; 
+  bottom: 10px;
   left: 110px;
   width:156px; 
    height:36px;

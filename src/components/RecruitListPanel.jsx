@@ -282,6 +282,7 @@ export default function RecruitListPanel() {
               type="search"
               placeholder={LABELS.searchPlaceholder}
               aria-label={LABELS.searchAria}
+              style={{ outline: "none", boxShadow: "none" }}
             />
             <button
               type="button"

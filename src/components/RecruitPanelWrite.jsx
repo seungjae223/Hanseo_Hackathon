@@ -47,13 +47,13 @@ export default function RecruitPanelWrite() {
   const [tagPanelOpen, setTagPanelOpen] = useState(false);
   const [editingTagIndex, setEditingTagIndex] = useState(null); // 몇 번째 pill을 수정 중인지
 
-  const [startDate, setStartDate] = useState(() => new Date());
+  // 시작일은 오늘로 고정, 마감일은 7일 뒤로 초기화
+  const [startDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
     return d;
   });
-  const [activeField, setActiveField] = useState("start");
 
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
@@ -79,6 +79,12 @@ export default function RecruitPanelWrite() {
     if (!form.content.trim()) {
       show({ message: "내용을 입력해주세요!", duration: 2000 });
       return;
+    }
+
+    // 마감일이 시작일보다 빠른지 체크 (선택사항)
+    if (endDate < startDate) {
+        show({ message: "마감일은 오늘보다 늦어야 합니다!", duration: 2000 });
+        return;
     }
 
     const newPost = {
@@ -111,22 +117,22 @@ export default function RecruitPanelWrite() {
     }, 1500);
   };
 
-  /* ================== 날짜 휠 ================== */
+  /* ================== 날짜 휠 (마감일만 설정) ================== */
 
   const itemHeight = 40;
   const wheelHeight = 200;
   const paddingY = (wheelHeight - itemHeight) / 2;
 
   const handleDateChange = (type, value) => {
-    const current = activeField === "start" ? startDate : endDate;
+    // 무조건 endDate 기준으로 변경
+    const current = endDate;
     let newDate = new Date(current);
 
     if (type === "year") newDate.setFullYear(value);
     if (type === "month") newDate.setMonth(value - 1);
     if (type === "day") newDate.setDate(value);
 
-    if (activeField === "start") setStartDate(newDate);
-    else setEndDate(newDate);
+    setEndDate(newDate);
   };
 
   useEffect(() => {
@@ -138,7 +144,9 @@ export default function RecruitPanelWrite() {
 
   useEffect(() => {
     if (!openCalendar) return;
-    const activeDate = activeField === "start" ? startDate : endDate;
+    
+    // 휠의 기준은 항상 endDate (마감일)
+    const activeDate = endDate;
     const year = activeDate.getFullYear();
     const month = activeDate.getMonth() + 1;
     const day = activeDate.getDate();
@@ -165,9 +173,9 @@ export default function RecruitPanelWrite() {
       scrollToValue(monthScrollRef, month);
       scrollToValue(dayScrollRef, day);
     }, 100);
-  }, [openCalendar, activeField, startDate, endDate]);
+  }, [openCalendar, endDate]); // activeField 제거됨
 
-  const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => 2022 + i);
+  const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => 2025 + i);
   const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1);
   const DAY_OPTIONS = Array.from({ length: 31 }, (_, i) => i + 1);
 
@@ -274,7 +282,8 @@ export default function RecruitPanelWrite() {
     { key: "ttoki" },
   ];
 
-  const activeDate = activeField === "start" ? startDate : endDate;
+  // 휠 렌더링용 변수 (항상 마감일 기준)
+  const activeDate = endDate;
 
   const get3DStyle = (index, selectedIndex) => {
     const offset = index - selectedIndex;
@@ -369,25 +378,27 @@ export default function RecruitPanelWrite() {
               }
               aria-label="제목"
               placeholder="제목을 입력하세요"
+              style={{ outline: "none", boxShadow: "none" }}
             />
             <div className="rpw-underline" />
           </div>
         </div>
 
-     {/* ================= 내용 ================= */}
-<div className="rpw-row">
-  <label className="rpw-label">내용</label>
-  <div className="rpw-bottomWrite">
-    <textarea
-      className="rpw-bottomTA rpw-bottomTA--boxed"
-      placeholder="내용을 입력하세요"
-      value={form.content}
-      onChange={(e) =>
-        setForm((p) => ({ ...p, content: e.target.value }))
-      }
-    />
-  </div>
-</div>
+      {/* ================= 내용 ================= */}
+      <div className="rpw-row">
+        <label className="rpw-label">내용</label>
+        <div className="rpw-bottomWrite">
+          <textarea
+            className="rpw-bottomTA rpw-bottomTA--boxed"
+            placeholder="내용을 입력하세요"
+            value={form.content}
+            onChange={(e) =>
+              setForm((p) => ({ ...p, content: e.target.value }))
+            }
+            style={{ outline: "none", boxShadow: "none" }}
+          />
+        </div>
+      </div>
 
         {/* ================= 파일 첨부 ================= */}
         <div className="rpw-row">
@@ -666,7 +677,7 @@ export default function RecruitPanelWrite() {
           </div>
         )}
 
-        {/* ================= 기한 ================= */}
+        {/* ================= 기한 (마감일만 수정) ================= */}
         <div className="rpw-row">
           <label className="rpw-label">기한</label>
           <div
@@ -686,25 +697,15 @@ export default function RecruitPanelWrite() {
 
             {openCalendar && (
               <div className="rpw-calendar-popup">
-                <div className="rpw-tab-buttons">
-                  <button
-                    type="button"
-                    onClick={() => setActiveField("start")}
-                    className={`rpw-tab-btn ${
-                      activeField === "start" ? "active" : ""
-                    }`}
-                  >
-                    시작일
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveField("end")}
-                    className={`rpw-tab-btn ${
-                      activeField === "end" ? "active" : ""
-                    }`}
-                  >
-                    마감일
-                  </button>
+                {/* 탭 버튼 삭제하고 단순 타이틀로 변경 */}
+                <div style={{
+                  padding: "12px 0 0 0",
+                  textAlign: "center",
+                  fontWeight: "700",
+                  color: "#333",
+                  fontSize: "1rem"
+                }}>
+                  마감일 설정
                 </div>
 
                 <div
@@ -718,7 +719,7 @@ export default function RecruitPanelWrite() {
                       marginTop: `-${itemHeight / 2}px`,
                     }}
                   />
-                  <div className="rpw-wheel-label">기한</div>
+                  <div className="rpw-wheel-label">마감</div>
                   <div className="rpw-wheel-cols">
                     <div
                       ref={yearScrollRef}
