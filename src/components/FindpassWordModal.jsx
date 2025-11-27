@@ -25,10 +25,12 @@ export default function FindPasswordModal({ onClose }) {
 
         {/* 입력 폼 */}
         <div className={styles.inputGroup}>
-          <input type="password" placeholder="비밀번호" />
+          <h>비밀번호</h>
+          <input type="password"  />
         </div>
         <div className={styles.inputGroup}>
-          <input type="password" placeholder="비밀번호 확인" />
+          <h>비밀번호 확인</h>
+          <input type="password"  />
         </div>
 
         {/* 완료 버튼 */}

@@ -41,7 +41,43 @@
   background: #f7f7f7;
   color: #888;
 }
+/* 오른쪽 작은 버튼 (인증요청 / 확인하기 공통) */
+.rightBtn {
+  padding: 8px 14px;
+  min-width: 72px;
 
+  border-radius: 8px;
+  border: 1px solid #d7d7d7;
+  background: #f0f0f0;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+/* hover / active (PC에서만 체감) */
+.rightBtn:hover:not(:disabled) {
+  background: #e3e3e3;
+}
+
+.rightBtn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* disabled 상태 (흐리게) */
+.rightBtn:disabled {
+  background: #e9e9e9;
+  border-color: #e9e9e9;
+  color: #b7b7b7;
+  cursor: default;
+}
 .actionBtn {
   position: absolute;
   right: 8px;

@@ -47,7 +47,7 @@ export default function RecruitPanelWrite() {
   const [tagPanelOpen, setTagPanelOpen] = useState(false);
   const [editingTagIndex, setEditingTagIndex] = useState(null); // 몇 번째 pill을 수정 중인지
 
-  // 시작일은 오늘로 고정, 마감일은 7일 뒤로 초기화
+  // ⭐ 시작일은 오늘로 고정 (수정 불가), 마감일은 기본 7일 뒤
   const [startDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => {
     const d = new Date();
@@ -81,22 +81,34 @@ export default function RecruitPanelWrite() {
       return;
     }
 
-    // 마감일이 시작일보다 빠른지 체크 (선택사항)
+    // 마감일이 시작일보다 빠른지 체크
     if (endDate < startDate) {
-        show({ message: "마감일은 오늘보다 늦어야 합니다!", duration: 2000 });
-        return;
+      show({ message: "마감일은 오늘보다 늦어야 합니다!", duration: 2000 });
+      return;
     }
 
+    // ⭐ 실제 작성 시점 기준으로 시작일/createdAt 고정
+    const createdAt = new Date();
+    const startStr = fmt(createdAt);       // 작성한 날짜
+    const endStr = fmt(endDate);           // 사용자가 휠로 맞춘 마감일
+
     const newPost = {
-      id: Date.now(),
+      id: createdAt.getTime(),
       title: form.title,
       content: form.content,
       hashtags: form.hashtags,
       members: form.members,
-      period: form.period || `${fmt(startDate)} ~ ${fmt(endDate)}`,
-      dday: Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)),
+
+      // ⭐ period는 "작성 날짜 ~ 마감 날짜" 로 고정
+      period: `${startStr} ~ ${endStr}`,
+
+      // D-day도 작성 시점 기준으로 계산
+      dday: Math.ceil(
+        (endDate - createdAt) / (1000 * 60 * 60 * 24)
+      ),
+
       files: files.map((f) => f.name),
-      createdAt: new Date().toISOString(),
+      createdAt: createdAt.toISOString(),
     };
 
     const existingPosts = JSON.parse(
@@ -124,7 +136,7 @@ export default function RecruitPanelWrite() {
   const paddingY = (wheelHeight - itemHeight) / 2;
 
   const handleDateChange = (type, value) => {
-    // 무조건 endDate 기준으로 변경
+    // 무조건 endDate(마감일) 기준으로만 변경
     const current = endDate;
     let newDate = new Date(current);
 
@@ -135,6 +147,7 @@ export default function RecruitPanelWrite() {
     setEndDate(newDate);
   };
 
+  // 화면에 보이는 period 텍스트: "오늘 ~ 선택한 마감일"
   useEffect(() => {
     setForm((prev) => ({
       ...prev,
@@ -144,7 +157,7 @@ export default function RecruitPanelWrite() {
 
   useEffect(() => {
     if (!openCalendar) return;
-    
+
     // 휠의 기준은 항상 endDate (마감일)
     const activeDate = endDate;
     const year = activeDate.getFullYear();
@@ -173,7 +186,7 @@ export default function RecruitPanelWrite() {
       scrollToValue(monthScrollRef, month);
       scrollToValue(dayScrollRef, day);
     }, 100);
-  }, [openCalendar, endDate]); // activeField 제거됨
+  }, [openCalendar, endDate]);
 
   const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => 2025 + i);
   const MONTH_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -181,13 +194,11 @@ export default function RecruitPanelWrite() {
 
   /* ================== 해시태그 로직 ================== */
 
-  // 위쪽 pill 또는 + 버튼 클릭 → 패널 열기
   const openTagPanel = (index) => {
     setEditingTagIndex(index);
     setTagPanelOpen(true);
   };
 
-  // 패널 안에서 태그 클릭
   const handleSelectTag = (tag) => {
     setForm((prev) => {
       const hashtags = [...prev.hashtags];
@@ -235,7 +246,11 @@ export default function RecruitPanelWrite() {
       ...p,
       members: [
         ...p.members,
-        { id: Date.now(), role: newRoleText.trim(), src: getAvatarSrc(selectedAvatar) },
+        {
+          id: Date.now(),
+          role: newRoleText.trim(),
+          src: getAvatarSrc(selectedAvatar),
+        },
       ],
     }));
     closeRolePicker();
@@ -276,11 +291,7 @@ export default function RecruitPanelWrite() {
     };
   }, []);
 
-  const avatarOptions = [
-    { key: "bear" },
-    { key: "cat" },
-    { key: "ttoki" },
-  ];
+  const avatarOptions = [{ key: "bear" }, { key: "cat" }, { key: "ttoki" }];
 
   // 휠 렌더링용 변수 (항상 마감일 기준)
   const activeDate = endDate;
@@ -303,7 +314,7 @@ export default function RecruitPanelWrite() {
     const rotateX = offset * 25;
     return {
       opacity: Math.max(0.2, 1 - absOffset * 0.3),
-      transform: `rotateX(${rotateX * -1}deg) translateZ(${-absOffset * 5}px) scale(0.95)`,
+      transform: `rotateX(${-rotateX}deg) translateZ(${-absOffset * 5}px) scale(0.95)`,
       color: "#9ca3af",
       fontWeight: "500",
       fontSize: "1.125rem",
@@ -318,7 +329,6 @@ export default function RecruitPanelWrite() {
         <div className="rpw-row">
           <label className="rpw-label">해시태그</label>
           <div className="rpw-hashArea">
-            {/* 위 줄: 선택된 pill들 + + 버튼 */}
             <div className="rpw-hashRow">
               {form.hashtags.map((tag, idx) => (
                 <button
@@ -339,7 +349,6 @@ export default function RecruitPanelWrite() {
               </button>
             </div>
 
-            {/* + 버튼 바로 밑에 나오는 선택 패널 */}
             {tagPanelOpen && (
               <div className="rpw-hashPanel">
                 <div className="rpw-hashGrid">
@@ -353,7 +362,9 @@ export default function RecruitPanelWrite() {
                       <button
                         key={tag}
                         type="button"
-                        className={`rpw-hashBtn ${isActive ? "__active" : ""}`}
+                        className={`rpw-hashBtn ${
+                          isActive ? "__active" : ""
+                        }`}
                         onClick={() => handleSelectTag(tag)}
                       >
                         {tag}
@@ -384,21 +395,21 @@ export default function RecruitPanelWrite() {
           </div>
         </div>
 
-      {/* ================= 내용 ================= */}
-      <div className="rpw-row">
-        <label className="rpw-label">내용</label>
-        <div className="rpw-bottomWrite">
-          <textarea
-            className="rpw-bottomTA rpw-bottomTA--boxed"
-            placeholder="내용을 입력하세요"
-            value={form.content}
-            onChange={(e) =>
-              setForm((p) => ({ ...p, content: e.target.value }))
-            }
-            style={{ outline: "none", boxShadow: "none" }}
-          />
+        {/* ================= 내용 ================= */}
+        <div className="rpw-row">
+          <label className="rpw-label">내용</label>
+          <div className="rpw-bottomWrite">
+            <textarea
+              className="rpw-bottomTA rpw-bottomTA--boxed"
+              placeholder="내용을 입력하세요"
+              value={form.content}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, content: e.target.value }))
+              }
+              style={{ outline: "none", boxShadow: "none" }}
+            />
+          </div>
         </div>
-      </div>
 
         {/* ================= 파일 첨부 ================= */}
         <div className="rpw-row">
@@ -442,7 +453,8 @@ export default function RecruitPanelWrite() {
                   style={{
                     padding: 12,
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(88px, 1fr))",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(88px, 1fr))",
                     gap: 12,
                   }}
                 >
@@ -697,14 +709,15 @@ export default function RecruitPanelWrite() {
 
             {openCalendar && (
               <div className="rpw-calendar-popup">
-                {/* 탭 버튼 삭제하고 단순 타이틀로 변경 */}
-                <div style={{
-                  padding: "12px 0 0 0",
-                  textAlign: "center",
-                  fontWeight: "700",
-                  color: "#333",
-                  fontSize: "1rem"
-                }}>
+                <div
+                  style={{
+                    padding: "12px 0 0 0",
+                    textAlign: "center",
+                    fontWeight: "700",
+                    color: "#333",
+                    fontSize: "1rem",
+                  }}
+                >
                   마감일 설정
                 </div>
 
@@ -736,7 +749,9 @@ export default function RecruitPanelWrite() {
                           <div
                             key={y}
                             data-value={y}
-                            onClick={() => handleDateChange("year", y)}
+                            onClick={() =>
+                              handleDateChange("year", y)
+                            }
                             className="rpw-wheel-item justify-end"
                             style={{
                               height: `${itemHeight}px`,
@@ -746,7 +761,9 @@ export default function RecruitPanelWrite() {
                           >
                             <span>{y}</span>
                             {isSelected && (
-                              <span className="rpw-wheel-unit">년</span>
+                              <span className="rpw-wheel-unit">
+                                년
+                              </span>
                             )}
                           </div>
                         );
@@ -760,7 +777,8 @@ export default function RecruitPanelWrite() {
                     >
                       <div style={{ height: `${paddingY}px` }} />
                       {MONTH_OPTIONS.map((m, idx) => {
-                        const isSelected = m === activeDate.getMonth() + 1;
+                        const isSelected =
+                          m === activeDate.getMonth() + 1;
                         const selectedIndex = MONTH_OPTIONS.findIndex(
                           (opt) => opt === activeDate.getMonth() + 1
                         );
@@ -769,7 +787,9 @@ export default function RecruitPanelWrite() {
                           <div
                             key={m}
                             data-value={m}
-                            onClick={() => handleDateChange("month", m)}
+                            onClick={() =>
+                              handleDateChange("month", m)
+                            }
                             className="rpw-wheel-item justify-center"
                             style={{
                               height: `${itemHeight}px`,
@@ -779,7 +799,9 @@ export default function RecruitPanelWrite() {
                           >
                             <span>{m}</span>
                             {isSelected && (
-                              <span className="rpw-wheel-unit">월</span>
+                              <span className="rpw-wheel-unit">
+                                월
+                              </span>
                             )}
                           </div>
                         );
@@ -802,7 +824,9 @@ export default function RecruitPanelWrite() {
                           <div
                             key={d}
                             data-value={d}
-                            onClick={() => handleDateChange("day", d)}
+                            onClick={() =>
+                              handleDateChange("day", d)
+                            }
                             className="rpw-wheel-item justify-start"
                             style={{
                               height: `${itemHeight}px`,
@@ -812,7 +836,9 @@ export default function RecruitPanelWrite() {
                           >
                             <span>{d}</span>
                             {isSelected && (
-                              <span className="rpw-wheel-unit">일</span>
+                              <span className="rpw-wheel-unit">
+                                일
+                              </span>
                             )}
                           </div>
                         );

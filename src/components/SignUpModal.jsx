@@ -227,7 +227,7 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        {/* 상단 헤더 */}
+       
         <header className={styles.header}>
           <button
             onClick={handleBackToLogin}
@@ -239,7 +239,7 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
           <span className={styles.title}>회원가입</span>
         </header>
 
-        {/* 이메일 인증 단계 JSX는 일단 주석 처리
+        
         {!emailVerified ? (
           <EmailVerifyModal
             onVerified={(info) => {
@@ -254,9 +254,8 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
             }}
           />
         ) : (
-        */}
         <>
-          {/* 지금 보고 있는 2단계: 이름/닉네임/학년/학과 화면 */}
+          
           <main className={styles.body}>
            <img src={Lightlogo} className={styles.Lightlogo} alt="로고"/>
             <img src={Word} className={styles.subText} alt="회원가입"/>
@@ -351,7 +350,7 @@ export default function SignUpModal({ onClose, onOpenLogin }) {
             </button>
           </footer>
         </>
-        {/* )}  // 이메일 인증 분기 닫는 괄호 (현재는 사용 X) */}
+        )}
 
         {/* 3단계: 비밀번호 설정 모달 (다음 눌렀을 때 뜸) */}
         {showPwModal && (
